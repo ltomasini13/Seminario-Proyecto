@@ -4,6 +4,7 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.StateException;
 
 public interface IApi {
@@ -31,4 +32,6 @@ public interface IApi {
 	void activarUsuario(String username) throws StateException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
+	
+	List<ViviendaDTO> obtenerViviendas(); //recupera todas las viviendas registradas
 }

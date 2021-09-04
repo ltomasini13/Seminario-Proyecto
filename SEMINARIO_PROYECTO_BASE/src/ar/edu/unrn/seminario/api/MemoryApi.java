@@ -9,7 +9,9 @@ import java.util.Set;
 
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.modelo.RegistroVivienda;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
@@ -17,6 +19,7 @@ public class MemoryApi implements IApi {
 
 	private Map<Integer, Rol> roles = new HashMap<>();
 	private Set<Usuario> usuarios = new HashSet();
+	private Set<RegistroVivienda> viviendas = new HashSet();
 
 	public MemoryApi() {
 
@@ -126,6 +129,14 @@ public class MemoryApi implements IApi {
 			if (u.getUsuario().equals(usuario))
 				u.desactivar();
 
+		}
+	}
+
+	@Override
+	public List<ViviendaDTO> obtenerViviendas() {
+		List<ViviendaDTO> viviendasDTO=new ArrayList<ViviendaDTO>();
+		for(RegistroVivienda viv : this.viviendas) {
+			
 		}
 	}
 
