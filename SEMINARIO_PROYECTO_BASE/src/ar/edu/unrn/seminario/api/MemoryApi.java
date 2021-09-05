@@ -136,7 +136,7 @@ public class MemoryApi implements IApi {
 	public List<ViviendaDTO> obtenerViviendas() {
 		List<ViviendaDTO> viviendasDTO=new ArrayList<ViviendaDTO>();
 		for(RegistroVivienda viv : this.viviendas) {
-			
+			viviendasDTO.add(new ViviendaDTO())
 		}
 	}
 

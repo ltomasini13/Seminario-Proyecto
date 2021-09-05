@@ -14,7 +14,7 @@ public class RegistroVivienda {
 	}
 
 
-	public LocalDateTime fechaYhora() {
+	public LocalDateTime obtenerFechaYhora() {
 		return fechaYhora;
 	}
 
@@ -24,7 +24,7 @@ public class RegistroVivienda {
 	}
 
 
-	public Vivienda vivienda() {
+	public Vivienda obtenerVivienda() {
 		return vivienda;
 	}
 
@@ -33,6 +33,28 @@ public class RegistroVivienda {
 		this.vivienda = vivienda;
 	}
 	
+	public String obtenerCalleVivienda() {
+		return vivienda.obtenerUbicacionCalle();
+	}
 	
+	public int obtenerNroVivienda() {
+		return vivienda.obtenerUbicacionNro();
+	}
+	
+	public String obtenerBarrioVivienda() {
+		return vivienda.obtenerUbicacionBarrio();
+	}
+	
+	public float obtenerLatitudVivienda() {
+		return vivienda.obtenerUbicacionLatitud();
+	}
+	
+	public float obtenerLongitudVivienda() {
+		return vivienda.obtenerUbicacionLongitud();
+	}
+	
+	public String obtenerNombreApellidoCiudadano() {
+		return vivienda.obtenerNombreApellidoCiudadano();
+	}
 	
 }

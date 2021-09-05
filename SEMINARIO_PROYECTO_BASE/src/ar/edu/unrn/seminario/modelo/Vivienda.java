@@ -10,17 +10,43 @@ public class Vivienda {
 		this.ciudadano = ciudadano;
 	}
 	
-	public Ubicacion ubicacion() {
+	public Ubicacion obtenerUbicacion() {
 		return ubicacion;
 	}
 	public void editarUbicacion(Ubicacion ubicacion) {
 		this.ubicacion = ubicacion;
 	}
-	public Ciudadano ciudadano() {
+	public Ciudadano obtenerCiudadano() {
 		return ciudadano;
 	}
 	public void editarCiudadano(Ciudadano ciudadano) {
 		this.ciudadano = ciudadano;
+	}
+	
+	
+	public String obtenerUbicacionCalle() {
+		return ubicacion.obetenerCalle();
+	}
+	
+	public int obtenerUbicacionNro() {
+		return ubicacion.obtenerNumero();
+	}
+	
+	public String obtenerUbicacionBarrio() {
+		return ubicacion.obeterBarrio();
+	}
+	
+	public float obtenerUbicacionLatitud() {
+		return ubicacion.obtenerLatitud();
+	}
+	
+	public float obtenerUbicacionLongitud() {
+		return ubicacion.obtenerLongitud();
+	}
+	
+	
+	public String obtenerNombreApellidoCiudadano() {
+		return ciudadano.nombre()+" "+ciudadano.apellido();
 	}
 	
 	
