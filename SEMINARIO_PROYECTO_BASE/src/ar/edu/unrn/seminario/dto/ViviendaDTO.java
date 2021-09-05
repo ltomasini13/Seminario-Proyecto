@@ -7,18 +7,18 @@ public class ViviendaDTO {
 		private int numero;
 		private String barrio;
 		private float latitud;
-		private float longitu;
+		private float longitud;
 		private String nomApeDueño;
 		private LocalDateTime fechaYhora;
 		
 		
-		public ViviendaDTO(String calle, int numero, String barrio, float latitud, float longitu, String nomApeDueño,
+		public ViviendaDTO(String calle, int numero, String barrio, float latitud, float longitud, String nomApeDueño,
 				LocalDateTime fechaYhora) {
 			this.calle = calle;
 			this.numero = numero;
 			this.barrio = barrio;
 			this.latitud = latitud;
-			this.longitu = longitu;
+			this.longitud = longitud;
 			this.nomApeDueño = nomApeDueño;
 			this.fechaYhora = fechaYhora;
 		}
@@ -65,12 +65,12 @@ public class ViviendaDTO {
 
 
 		public float obtenerLongitu() {
-			return longitu;
+			return longitud;
 		}
 
 
 		public void editarLongitu(float longitu) {
-			this.longitu = longitu;
+			this.longitud = longitu;
 		}
 
 
