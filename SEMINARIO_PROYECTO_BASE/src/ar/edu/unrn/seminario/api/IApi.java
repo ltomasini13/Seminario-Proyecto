@@ -10,6 +10,9 @@ import ar.edu.unrn.seminario.exception.StateException;
 public interface IApi {
 
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol);
+	
+	void registrarVivienda(String calle, int numero, String barrio, float latitud, float longitud, String nombreCiudadano, String apeCiudadano,
+			String dniCiudadano);
 
 	UsuarioDTO obtenerUsuario(String username);
 

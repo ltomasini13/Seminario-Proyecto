@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.api;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,9 +12,12 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.RegistroVivienda;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class MemoryApi implements IApi {
 
@@ -142,6 +146,18 @@ public class MemoryApi implements IApi {
 			viviendasDTO.add(vivienda);
 		}
 		return viviendasDTO;
+	}
+
+	@Override
+	public void registrarVivienda(String calle, int numero, String barrio, float latitud, float longitud,
+			String nombreCiudadano, String apeCiudadano, String dniCiudadano) {
+		Ubicacion ubicacion = new Ubicacion(calle,numero, barrio, latitud, longitud);
+		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano);
+		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
+		RegistroVivienda regVivienda = new RegistroVivienda(LocalDateTime.now(), vivienda); 
+		
+		viviendas.add(regVivienda);
+		
 	}
 
 }
