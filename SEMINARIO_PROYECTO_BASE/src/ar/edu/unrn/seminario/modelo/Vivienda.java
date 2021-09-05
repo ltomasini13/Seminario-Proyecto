@@ -46,7 +46,7 @@ public class Vivienda {
 	
 	
 	public String obtenerNombreApellidoCiudadano() {
-		return ciudadano.nombre()+" "+ciudadano.apellido();
+		return ciudadano.obtenerNombre()+" "+ciudadano.obtenerApellido();
 	}
 	
 	

@@ -13,19 +13,19 @@ public class Ciudadano {
 		this.dni = dni;
 	} 	
  
-	public String nombre() {
+	public String obtenerNombre() {
 		return nombre;
 	}
 	public void editarNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String apellido() {
+	public String obtenerApellido() {
 		return apellido;
 	}
 	public void editarApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	public String dni() {
+	public String obtenerDni() {
 		return dni;
 	}
 	public void editarDni(String dni) {
