@@ -32,7 +32,10 @@ public class MemoryApi implements IApi {
 		this.roles.put(2, new Rol(2, "COMUNIDAD"));
 		this.roles.put(3, new Rol(3, "GOBIERNO"));
 		inicializarUsuarios();
+		inicializarViviendas();
 	}
+
+	
 
 	private void inicializarUsuarios() {
 		registrarUsuario("mcambarieri", "1234", "mcambarieri@unrn.edu.ar", "Mauro", 3);
@@ -40,6 +43,14 @@ public class MemoryApi implements IApi {
 		registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
 
 	}
+	
+	
+	private void inicializarViviendas() {
+		this.registrarVivienda("Pedro Bronzetti", 450, null,(float) 40.4532, (float)60.7645, "Laura", "Tomasini", "39354863");
+		this.registrarVivienda("9 de julio", 222, null, (float)43.55, (float)54.6553, "Karen", "Ruiz", "39776583");
+		this.registrarVivienda("Hilario Lagos", 433, null, (float)56.7, (float)76.6553, "Ana", "Rangnau", "38645363");
+		
+	}	
 
 	@Override
 	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) {
@@ -151,6 +162,7 @@ public class MemoryApi implements IApi {
 	@Override
 	public void registrarVivienda(String calle, int numero, String barrio, float latitud, float longitud,
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano) {
+		
 		Ubicacion ubicacion = new Ubicacion(calle,numero, barrio, latitud, longitud);
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano);
 		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);

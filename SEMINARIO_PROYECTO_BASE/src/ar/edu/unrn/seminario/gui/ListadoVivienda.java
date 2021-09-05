@@ -2,6 +2,8 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,8 +13,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-
-public class ListadoViviendas extends JFrame {
+import ar.edu.unrn.seminario.dto.ViviendaDTO;
+public class ListadoVivienda extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -23,7 +25,7 @@ public class ListadoViviendas extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ListadoViviendas(IApi api) {
+	public ListadoVivienda(IApi api) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -38,6 +40,12 @@ public class ListadoViviendas extends JFrame {
 		String[] titulos = { "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD", "DUEÑO", "FECHA Y HORA"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
+		
+		List<ViviendaDTO> viviendas= api.obtenerViviendas();
+		for (ViviendaDTO viv : viviendas) {
+			modelo.addRow(new Object[] { viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+					viv.obtenerLatitud(), viv.obtenerLongitu(), viv.obtenerNomApeDueño(), viv.obtenerFechaYhora()});
+		}
 		table.setModel(modelo);
 
 		scrollPane.setViewportView(table);
