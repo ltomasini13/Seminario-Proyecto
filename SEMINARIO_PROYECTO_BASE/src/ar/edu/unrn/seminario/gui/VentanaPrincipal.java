@@ -79,6 +79,13 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(viviendasMenu);
 		
 		JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
+		altaModificacionMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AltaVivienda altaViv = new AltaVivienda(api);
+				altaViv.setLocationRelativeTo(null);
+				altaViv.setVisible(true);
+			}
+		});
 		viviendasMenu.add(altaModificacionMenuItem);
 		
 		JMenuItem listadoMenuItem = new JMenuItem("Listado");
