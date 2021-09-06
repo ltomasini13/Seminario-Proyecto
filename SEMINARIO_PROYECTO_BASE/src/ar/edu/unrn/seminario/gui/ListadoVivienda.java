@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import javax.swing.JButton;
 public class ListadoVivienda extends JFrame {
 
 	private JPanel contentPane;
