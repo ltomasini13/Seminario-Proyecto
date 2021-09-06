@@ -8,6 +8,8 @@ import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AltaVivienda extends JFrame {
 	private JTextField textFieldNombre;
@@ -139,10 +141,19 @@ public class AltaVivienda extends JFrame {
 		textFieldNro.setColumns(10);
 		
 		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnAceptar.setBounds(120, 432, 97, 25);
 		getContentPane().add(btnAceptar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+			}
+		});
 		btnCancelar.setBounds(249, 432, 97, 25);
 		getContentPane().add(btnCancelar);
 	}
