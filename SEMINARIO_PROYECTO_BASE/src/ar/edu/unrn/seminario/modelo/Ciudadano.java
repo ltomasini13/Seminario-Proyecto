@@ -1,13 +1,25 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+
 public class Ciudadano {
 
 	private String nombre;
 	private String apellido;
 	private String dni;
 	
-	public Ciudadano (String nombre, String apellido, String dni) {
+	public Ciudadano (String nombre, String apellido, String dni) throws NotNullException, DataEmptyException {
 		
+		if(nombre==null || apellido==null || dni==null) {
+			throw new NotNullException("Los datos ingresados son nulos");
+		}
+		if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
+			throw new DataEmptyException("Datos ingresados vacíos");
+		}
+		if(dni.matches("")) {
+			
+		}
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;

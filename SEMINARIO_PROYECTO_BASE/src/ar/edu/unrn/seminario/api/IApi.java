@@ -14,7 +14,7 @@ public interface IApi {
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException;
 	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
-			String dniCiudadano);
+			String dniCiudadano)throws NotNullException, DataEmptyException;
 
 	UsuarioDTO obtenerUsuario(String username);
 

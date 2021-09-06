@@ -44,7 +44,7 @@ public class MemoryApi implements IApi {
 
 	}
 
-	private void inicializarViviendas() {
+	private void inicializarViviendas() throws NotNullException, DataEmptyException {
 		this.registrarVivienda("Pedro Bronzetti", "450", null,"40.4532", "60.7645", "Laura", "Tomasini", "39354863");
 		this.registrarVivienda("9 de julio", "222", null, "43.55", "54.6553", "Karen", "Ruiz", "39776583");
 		this.registrarVivienda("Hilario Lagos", "433", null, "56.7", "76.6553", "Ana", "Rangnau", "38645363");
@@ -159,7 +159,7 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
-			String nombreCiudadano, String apeCiudadano, String dniCiudadano) {
+			String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException {
 		
 		int nro = Integer.parseInt(numero);
 		double lat= Double.parseDouble(latitud);
