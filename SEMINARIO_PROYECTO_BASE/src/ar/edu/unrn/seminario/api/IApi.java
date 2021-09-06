@@ -6,13 +6,14 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.StateException;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException;
+	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException;
 	
-	void registrarVivienda(String calle, int numero, String barrio, float latitud, float longitud, String nombreCiudadano, String apeCiudadano,
+	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
 			String dniCiudadano);
 
 	UsuarioDTO obtenerUsuario(String username);
@@ -23,7 +24,7 @@ public interface IApi {
 
 	List<RolDTO> obtenerRolesActivos();
 
-	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
+	void guardarRol(Integer codigo, String descripción, boolean estado) throws NotNullException, DataEmptyException; // crear el objeto de dominio “Rol”
 
 	RolDTO obtenerRolPorCodigo(Integer codigo); // recuperar el rol almacenado
 

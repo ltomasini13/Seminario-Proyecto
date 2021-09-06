@@ -4,10 +4,10 @@ public class Ubicacion {
       private String calle;
       private int numero;
       private String barrio;
-      private float latitud;
-      private float longitud;
+      private double latitud;
+      private double longitud;
       
-	public Ubicacion(String calle, int numero, String barrio, float latitud, float longitud) {
+	public Ubicacion(String calle, int numero, String barrio, double latitud, double longitud) {
 		this.calle = calle;
 		this.numero = numero;
 		this.barrio = barrio;
@@ -39,7 +39,7 @@ public class Ubicacion {
 		this.barrio = barrio;
 	}
 
-	public float obtenerLatitud() {
+	public double obtenerLatitud() {
 		return latitud;
 	}
 
@@ -47,7 +47,7 @@ public class Ubicacion {
 		this.latitud = latitud;
 	}
 
-	public float obtenerLongitud() {
+	public double obtenerLongitud() {
 		return longitud;
 	}
 

@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class AltaUsuario extends JFrame {
 
@@ -75,12 +76,16 @@ public class AltaUsuario extends JFrame {
 								nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
 						
 						JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
-					} catch (DataEmptyException e) {
+						setVisible(false);
+						dispose();
+					}catch (DataEmptyException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}catch (NotNullException e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 					
-					setVisible(false);
-					dispose();
+					
+					
 
 			}
 		});
