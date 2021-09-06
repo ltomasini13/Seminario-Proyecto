@@ -45,11 +45,11 @@ public class RegistroVivienda {
 		return vivienda.obtenerUbicacionBarrio();
 	}
 	
-	public float obtenerLatitudVivienda() {
+	public double obtenerLatitudVivienda() {
 		return vivienda.obtenerUbicacionLatitud();
 	}
 	
-	public float obtenerLongitudVivienda() {
+	public double obtenerLongitudVivienda() {
 		return vivienda.obtenerUbicacionLongitud();
 	}
 	

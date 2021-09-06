@@ -92,10 +92,10 @@ public class AltaVivienda extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				int nro = Integer.parseInt(textFieldNro.getText());
-				float latitud = Float.parseFloat(textFieldLatitud.getText());
-				float longitud = Float.parseFloat(textFieldLongitud.getText());
-				api.registrarVivienda(textFieldCalle.getText(), nro, textFieldBarrio.getText(), latitud, longitud,
+				
+				
+				
+				api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
 						textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
 				JOptionPane.showMessageDialog(null, "La Vivienda se registro con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);

@@ -12,6 +12,7 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.RegistroVivienda;
@@ -26,7 +27,7 @@ public class MemoryApi implements IApi {
 	private Set<Usuario> usuarios = new HashSet();
 	private Set<RegistroVivienda> viviendas = new HashSet();
 
-	public MemoryApi() throws DataEmptyException {
+	public MemoryApi() throws DataEmptyException, NotNullException {
 
 		// datos iniciales
 		this.roles.put(1, new Rol(1, "ADMIN"));
@@ -36,7 +37,7 @@ public class MemoryApi implements IApi {
 		inicializarViviendas();
 	}
 
-	private void inicializarUsuarios() throws DataEmptyException {
+	private void inicializarUsuarios() throws DataEmptyException, NotNullException {
 		registrarUsuario("mcambarieri", "1234", "mcambarieri@unrn.edu.ar", "Mauro", 3);
 		registrarUsuario("ldifabio", "1234", "ldifabio@unrn.edu.ar", "Lucas", 2);
 		registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
@@ -44,13 +45,13 @@ public class MemoryApi implements IApi {
 	}
 
 	private void inicializarViviendas() {
-		this.registrarVivienda("Pedro Bronzetti", 450, null,(float) 40.4532, (float)60.7645, "Laura", "Tomasini", "39354863");
-		this.registrarVivienda("9 de julio", 222, null, (float)43.55, (float)54.6553, "Karen", "Ruiz", "39776583");
-		this.registrarVivienda("Hilario Lagos", 433, null, (float)56.7, (float)76.6553, "Ana", "Rangnau", "38645363");
+		this.registrarVivienda("Pedro Bronzetti", "450", null,"40.4532", "60.7645", "Laura", "Tomasini", "39354863");
+		this.registrarVivienda("9 de julio", "222", null, "43.55", "54.6553", "Karen", "Ruiz", "39776583");
+		this.registrarVivienda("Hilario Lagos", "433", null, "56.7", "76.6553", "Ana", "Rangnau", "38645363");
 		
 	}	
 	@Override
-	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException {
+	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException {
 
 		Rol role = this.roles.get(rol);
 		Usuario usuario = new Usuario(username, password, nombre, email, role);
@@ -100,7 +101,7 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public void guardarRol(Integer codigo, String descripcion, boolean estado) {
+	public void guardarRol(Integer codigo, String descripcion, boolean estado) throws NotNullException, DataEmptyException {
 		// TODO Auto-generated method stub
 		Rol rol = new Rol(codigo, descripcion);
 		this.roles.put(codigo, rol);
@@ -157,9 +158,14 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public void registrarVivienda(String calle, int numero, String barrio, float latitud, float longitud,
+	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano) {
-		Ubicacion ubicacion = new Ubicacion(calle,numero, barrio, latitud, longitud);
+		
+		int nro = Integer.parseInt(numero);
+		double lat= Double.parseDouble(latitud);
+		double longi= Double.parseDouble(longitud);
+		
+		Ubicacion ubicacion = new Ubicacion(calle,nro, barrio, lat, longi);
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano);
 		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
 		RegistroVivienda regVivienda = new RegistroVivienda(LocalDateTime.now(), vivienda); 

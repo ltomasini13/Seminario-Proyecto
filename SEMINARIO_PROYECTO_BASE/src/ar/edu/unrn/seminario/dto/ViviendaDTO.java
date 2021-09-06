@@ -6,13 +6,13 @@ public class ViviendaDTO {
 		private String calle;
 		private int numero;
 		private String barrio;
-		private float latitud;
-		private float longitud;
+		private double latitud;
+		private double longitud;
 		private String nomApeDueño;
 		private LocalDateTime fechaYhora;
 		
 		
-		public ViviendaDTO(String calle, int numero, String barrio, float latitud, float longitud, String nomApeDueño,
+		public ViviendaDTO(String calle, int numero, String barrio, double latitud, double longitud, String nomApeDueño,
 				LocalDateTime fechaYhora) {
 			this.calle = calle;
 			this.numero = numero;
@@ -54,7 +54,7 @@ public class ViviendaDTO {
 		}
 
 
-		public float obtenerLatitud() {
+		public double obtenerLatitud() {
 			return latitud;
 		}
 
@@ -64,7 +64,7 @@ public class ViviendaDTO {
 		}
 
 
-		public float obtenerLongitu() {
+		public double obtenerLongitu() {
 			return longitud;
 		}
 

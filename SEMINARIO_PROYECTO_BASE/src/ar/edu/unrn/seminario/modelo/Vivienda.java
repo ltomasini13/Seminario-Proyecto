@@ -36,11 +36,11 @@ public class Vivienda {
 		return ubicacion.obeterBarrio();
 	}
 	
-	public float obtenerUbicacionLatitud() {
+	public double obtenerUbicacionLatitud() {
 		return ubicacion.obtenerLatitud();
 	}
 	
-	public float obtenerUbicacionLongitud() {
+	public double obtenerUbicacionLongitud() {
 		return ubicacion.obtenerLongitud();
 	}
 	

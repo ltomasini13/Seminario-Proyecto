@@ -1,5 +1,8 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+
 public class Rol {
 	private Integer codigo;
 	private String nombre;
@@ -9,8 +12,15 @@ public class Rol {
 
 	}
 
-	public Rol(Integer codigo, String nombre) {
-		super();
+	public Rol(Integer codigo, String nombre) throws NotNullException, DataEmptyException{
+		if (codigo==null || nombre==null) {
+			throw new NotNullException("Alguno de los datos es nulo");
+		}
+		
+		if(nombre.isEmpty()) {
+			throw new DataEmptyException("Uno o mas campos incompletos");
+		}
+		
 		this.codigo = codigo;
 		this.nombre = nombre;
 	}
