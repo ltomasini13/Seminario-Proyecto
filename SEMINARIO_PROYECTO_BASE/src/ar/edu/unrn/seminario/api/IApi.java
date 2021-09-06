@@ -5,11 +5,12 @@ import java.util.List;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.StateException;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol);
+	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException;
 	
 	void registrarVivienda(String calle, int numero, String barrio, float latitud, float longitud, String nombreCiudadano, String apeCiudadano,
 			String dniCiudadano);

@@ -11,6 +11,7 @@ import java.util.Set;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.RegistroVivienda;
@@ -25,7 +26,7 @@ public class MemoryApi implements IApi {
 	private Set<Usuario> usuarios = new HashSet();
 	private Set<RegistroVivienda> viviendas = new HashSet();
 
-	public MemoryApi() {
+	public MemoryApi() throws DataEmptyException {
 
 		// datos iniciales
 		this.roles.put(1, new Rol(1, "ADMIN"));
@@ -35,7 +36,7 @@ public class MemoryApi implements IApi {
 		inicializarViviendas();
 	}
 
-	private void inicializarUsuarios() {
+	private void inicializarUsuarios() throws DataEmptyException {
 		registrarUsuario("mcambarieri", "1234", "mcambarieri@unrn.edu.ar", "Mauro", 3);
 		registrarUsuario("ldifabio", "1234", "ldifabio@unrn.edu.ar", "Lucas", 2);
 		registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
@@ -49,12 +50,12 @@ public class MemoryApi implements IApi {
 		
 	}	
 	@Override
-	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) {
+	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException {
 
 		Rol role = this.roles.get(rol);
 		Usuario usuario = new Usuario(username, password, nombre, email, role);
 		this.usuarios.add(usuario);
-
+		
 	}
 
 	@Override
