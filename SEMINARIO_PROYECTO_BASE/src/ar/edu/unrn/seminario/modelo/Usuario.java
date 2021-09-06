@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.StateException;
 
 public class Usuario {
@@ -10,8 +11,13 @@ public class Usuario {
 	private Rol rol;
 	private boolean activo;
 
-	public Usuario(String usuario, String contrasena, String nombre, String email, Rol rol) {
+	public Usuario(String usuario, String contrasena, String nombre, String email, Rol rol) throws DataEmptyException {
 
+		if(usuario.isEmpty() || contrasena.isEmpty()){
+			throw new DataEmptyException("Falta completar uno o mas campos");
+		}
+		
+		
 		this.usuario = usuario;
 		this.contrasena = contrasena;
 		this.nombre = nombre;
