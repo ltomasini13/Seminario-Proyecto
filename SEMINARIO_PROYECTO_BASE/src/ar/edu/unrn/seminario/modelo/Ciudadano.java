@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.modelo;
 
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class Ciudadano {
 
@@ -9,7 +10,7 @@ public class Ciudadano {
 	private String apellido;
 	private String dni;
 	
-	public Ciudadano (String nombre, String apellido, String dni) throws NotNullException, DataEmptyException {
+	public Ciudadano (String nombre, String apellido, String dni) throws NotNullException, DataEmptyException, NumbersException {
 		
 		if(nombre==null || apellido==null || dni==null) {
 			throw new NotNullException("Los datos ingresados son nulos");
@@ -17,8 +18,8 @@ public class Ciudadano {
 		if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
 			throw new DataEmptyException("Datos ingresados vacíos");
 		}
-		if(dni.matches("")) {
-			
+		if(dni.matches("[0-9]+")) {
+			throw new NumbersException("El dni ingresado es incorrecto");
 		}
 		this.nombre = nombre;
 		this.apellido = apellido;

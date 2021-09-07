@@ -13,6 +13,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.RegistroVivienda;
@@ -27,7 +28,7 @@ public class MemoryApi implements IApi {
 	private Set<Usuario> usuarios = new HashSet();
 	private Set<RegistroVivienda> viviendas = new HashSet();
 
-	public MemoryApi() throws DataEmptyException, NotNullException {
+	public MemoryApi() throws DataEmptyException, NotNullException, NumbersException {
 
 		// datos iniciales
 		this.roles.put(1, new Rol(1, "ADMIN"));
@@ -44,7 +45,7 @@ public class MemoryApi implements IApi {
 
 	}
 
-	private void inicializarViviendas() throws NotNullException, DataEmptyException {
+	private void inicializarViviendas() throws NotNullException, DataEmptyException, NumbersException {
 		this.registrarVivienda("Pedro Bronzetti", "450", null,"40.4532", "60.7645", "Laura", "Tomasini", "39354863");
 		this.registrarVivienda("9 de julio", "222", null, "43.55", "54.6553", "Karen", "Ruiz", "39776583");
 		this.registrarVivienda("Hilario Lagos", "433", null, "56.7", "76.6553", "Ana", "Rangnau", "38645363");
@@ -159,7 +160,7 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
-			String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException {
+			String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException {
 		
 		int nro = Integer.parseInt(numero);
 		double lat= Double.parseDouble(latitud);

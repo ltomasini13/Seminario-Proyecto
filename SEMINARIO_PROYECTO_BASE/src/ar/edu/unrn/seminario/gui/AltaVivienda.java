@@ -15,6 +15,9 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 
 import java.awt.Color;
 import java.awt.SystemColor;
@@ -91,15 +94,22 @@ public class AltaVivienda extends JFrame {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+								
+				try {
+	
+					api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
+								textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
+					
+					JOptionPane.showMessageDialog(null, "La Vivienda se registro con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
+					dispose();
+				} catch (NotNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (DataEmptyException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NumbersException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);					}
 				
-				
-				
-				api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
-						textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
-				JOptionPane.showMessageDialog(null, "La Vivienda se registro con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
-				setVisible(false);
-				dispose();
 			}
 		});
 		btnAceptar.setBounds(313, 52, 92, 30);
