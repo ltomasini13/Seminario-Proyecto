@@ -1,5 +1,9 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
+
 public class Ubicacion {
       private String calle;
       private int numero;
@@ -7,12 +11,23 @@ public class Ubicacion {
       private double latitud;
       private double longitud;
       
-	public Ubicacion(String calle, int numero, String barrio, double latitud, double longitud) {
+	public Ubicacion(String calle, int numero, String barrio, double latitud, double longitud) throws DataEmptyException, NumbersException, NotNullException {
+		
 		this.calle = calle;
 		this.numero = numero;
 		this.barrio = barrio;
 		this.latitud = latitud;
 		this.longitud = longitud;
+		
+		if(calle==null) {
+			throw new NotNullException("La calle no puede ser nula");
+		}
+		if(calle.isEmpty()) {
+			throw new DataEmptyException("La calle no se completo correctamente");
+		}
+		if(latitud < 0 || longitud < 0 ) {
+			throw new NumbersException("Latitud y/o longitud deben ser valores mayores a 0");	
+		}
 	}
 
 	public String obetenerCalle() {
@@ -53,10 +68,5 @@ public class Ubicacion {
 
 	public void editarLongitud(int longitud) {
 		this.longitud = longitud;
-	}
-	
-	
-	
-
-      
+	}  
 }

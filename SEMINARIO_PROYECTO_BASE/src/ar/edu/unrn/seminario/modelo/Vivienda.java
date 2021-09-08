@@ -1,13 +1,19 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.exception.NotNullException;
+
 public class Vivienda {
 	private Ubicacion ubicacion;
 	private Ciudadano ciudadano;
 	
 	
-	public Vivienda(Ubicacion ubicacion, Ciudadano ciudadano) {
+	public Vivienda(Ubicacion ubicacion, Ciudadano ciudadano) throws NotNullException {
 		this.ubicacion = ubicacion;
 		this.ciudadano = ciudadano;
+		
+		if (ubicacion == null || ciudadano == null) {
+			throw new NotNullException("Ubicacion y ciudadano no pueden ingresar nulos");
+		}
 	}
 	
 	public Ubicacion obtenerUbicacion() {
@@ -43,7 +49,6 @@ public class Vivienda {
 	public double obtenerUbicacionLongitud() {
 		return ubicacion.obtenerLongitud();
 	}
-	
 	
 	public String obtenerNombreApellidoCiudadano() {
 		return ciudadano.obtenerNombre()+" "+ciudadano.obtenerApellido();

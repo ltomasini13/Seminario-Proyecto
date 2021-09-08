@@ -18,7 +18,7 @@ public class Ciudadano {
 		if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
 			throw new DataEmptyException("Datos ingresados vacíos");
 		}
-		if(dni.matches("[0-9]+")) {
+		if(!dni.matches("[0-9]+")) {
 			throw new NumbersException("El dni ingresado es incorrecto");
 		}
 		this.nombre = nombre;
