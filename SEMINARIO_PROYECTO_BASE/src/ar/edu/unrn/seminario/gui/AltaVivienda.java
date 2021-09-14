@@ -14,12 +14,10 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
-import java.awt.Color;
 import java.awt.SystemColor;
 
 public class AltaVivienda extends JFrame {

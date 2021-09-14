@@ -25,8 +25,8 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class MemoryApi implements IApi {
 
 	private Map<Integer, Rol> roles = new HashMap<>();
-	private Set<Usuario> usuarios = new HashSet();
-	private Set<RegistroVivienda> viviendas = new HashSet();
+	private Set<Usuario> usuarios = new HashSet<Usuario>();
+	private Set<RegistroVivienda> viviendas = new HashSet<RegistroVivienda>();
 
 	public MemoryApi() throws DataEmptyException, NotNullException, NumbersException {
 
