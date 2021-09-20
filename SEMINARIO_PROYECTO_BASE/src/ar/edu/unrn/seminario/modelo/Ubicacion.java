@@ -5,6 +5,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class Ubicacion {
+	private Long id;
       private String calle;
       private int numero;
       private String barrio;
@@ -69,4 +70,8 @@ public class Ubicacion {
 	public void editarLongitud(int longitud) {
 		this.longitud = longitud;
 	}  
+	
+	public Long obtenerId() {
+		return id;
+	}
 }

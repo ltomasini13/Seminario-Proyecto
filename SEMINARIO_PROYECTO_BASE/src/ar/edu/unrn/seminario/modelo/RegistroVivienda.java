@@ -54,7 +54,7 @@ public class RegistroVivienda {
 	}
 	
 	public String obtenerNombreApellidoCiudadano() {
-		return vivienda.obtenerNombreApellidoCiudadano();
+		return vivienda.obtenerNombreCiudadano()+vivienda.obtenerApellidoCiudadano();
 	}
 	
 }

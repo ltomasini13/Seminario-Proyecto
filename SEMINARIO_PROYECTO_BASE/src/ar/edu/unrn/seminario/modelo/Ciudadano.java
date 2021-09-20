@@ -5,7 +5,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class Ciudadano {
-
+	private Long id;
 	private String nombre;
 	private String apellido;
 	private String dni;
@@ -43,6 +43,16 @@ public class Ciudadano {
 	}
 	public void editarDni(String dni) {
 		this.dni = dni;
+	}
+	
+	
+
+	public Long obtenerId() {
+		return id;
+	}
+
+	public void editarId(Long id) {
+		this.id = id;
 	}
 
 	@Override
