@@ -98,7 +98,7 @@ public class AltaVivienda extends JFrame {
 					api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
 								textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
 					
-					JOptionPane.showMessageDialog(null, "La Vivienda se registro con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "La vivienda y el ciudadano se registraron con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
 					dispose();
 				} catch (NotNullException e1) {

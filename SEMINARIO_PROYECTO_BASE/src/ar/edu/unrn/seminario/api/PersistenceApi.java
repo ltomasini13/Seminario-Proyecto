@@ -41,9 +41,24 @@ public class PersistenceApi implements IApi {
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano)
 			throws NotNullException, DataEmptyException, NumbersException {
 		
+		if(latitud.isEmpty() || longitud.isEmpty() || numero.isEmpty()) {
+			throw new DataEmptyException("Faltan completar campos");
+		}
+		
+		if(!numero.matches("[0-9]+")) {
+			throw new NumbersException("El valor ingresado para el campo 'Número' no es numérico");
+		}
 		int nro = Integer.parseInt(numero);
-		double lat= Double.parseDouble(latitud);
-		double longi= Double.parseDouble(longitud);
+		double lat=0;
+		double longi=0;
+		try {
+			lat= Double.parseDouble(latitud);
+			longi= Double.parseDouble(longitud);
+		}
+		catch(NumberFormatException e) {
+			throw new NumbersException("La latitud y/o longitud ingresadas no son correctas");
+		}
+		
 		
 		Ubicacion ubicacion = new Ubicacion(calle,nro, barrio, lat, longi);
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano);

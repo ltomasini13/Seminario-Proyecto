@@ -2,6 +2,8 @@ package ar.unrn.edu.ar.seminario.accesos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import ar.unrn.edu.ar.seminario.accesos.ConnectionManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -84,6 +86,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	public List<Vivienda> listarTodas() {
 
 		List<Vivienda> viviendas=new ArrayList<Vivienda>();
+		 List<Vivienda> viviendasOrdenadasPorBarrio=new ArrayList<Vivienda>();
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -92,32 +95,33 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			
 			ResultSet rs = statement.executeQuery();
 			
-			if(rs.next()) {
+			while(rs.next()) {
 //				System.out.println("Nombre y apellido: "+rs.getString("nombre")+" "+rs.getString("apellido")+"Dni: "+rs.getString("dni"));
 				Ciudadano ciudadano = new Ciudadano(rs.getString("nombre"), rs.getString("apellido"), rs.getString("dni"));
 				Ubicacion ubicacion = new Ubicacion(rs.getString("calle"), rs.getInt("numero"), rs.getString("barrio"), rs.getDouble("latitud"), rs.getDouble("longitud"));
 				viviendas.add(new Vivienda(ubicacion, ciudadano));
 			}
-
-		    
-		    
-		    
+		
+		   viviendasOrdenadasPorBarrio= viviendas.stream().sorted((v1, v2) -> 
+		   v1.obtenerUbicacionBarrio().compareTo(v2.obtenerUbicacionBarrio())).collect(Collectors.toList());
 
 		} catch (SQLException e) {
 			
 			System.out.println("Error al procesar consulta");
 			// TODO: disparar Exception propia
 		} catch (Exception e) {
-			System.out.println("Error al insertar un usuario");
+			System.out.println("Error al listar viviendas");
 			// TODO: disparar Exception propia
 		} finally {
 			ConnectionManager.disconnect();
-			return viviendas;
+			return viviendasOrdenadasPorBarrio;
 		}
 		
 		
 
 	}
+	
+	
 	
 	
 }

@@ -16,11 +16,12 @@ public class Ciudadano {
 			throw new NotNullException("Los datos ingresados son nulos");
 		}
 		if(nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
-			throw new DataEmptyException("Datos ingresados vacíos");
+			throw new DataEmptyException("Faltan completar campos");
 		}
-		if(!dni.matches("[0-9]+")) {
+		if(!dni.matches("[0-9]+") || (dni.length()<7||dni.length()>8)) {
 			throw new NumbersException("El dni ingresado es incorrecto");
 		}
+	
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
