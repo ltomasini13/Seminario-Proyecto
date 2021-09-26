@@ -1,6 +1,5 @@
 package ar.edu.unrn.seminario.api;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +7,12 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
-import ar.edu.unrn.seminario.modelo.RegistroVivienda;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDAOJDBC;
@@ -39,7 +39,7 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano)
-			throws NotNullException, DataEmptyException, NumbersException {
+			throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException {
 		
 		if(latitud.isEmpty() || longitud.isEmpty() || numero.isEmpty()) {
 			throw new DataEmptyException("Faltan completar campos");

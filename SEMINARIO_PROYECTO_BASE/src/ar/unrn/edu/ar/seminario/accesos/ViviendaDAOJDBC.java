@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import ar.unrn.edu.ar.seminario.accesos.ConnectionManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -18,10 +22,13 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class ViviendaDAOJDBC implements ViviendaDao {
 
 	@Override
-	public void crear(Vivienda vivienda) {
+	public void crear(Vivienda vivienda) throws SintaxisSQLException, DuplicateUniqueKeyException {
+		
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
+		
+			
 			PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO ciudadanos (nombre, apellido, dni)"
 							+ "VALUES (?, ?, ?)",  Statement.RETURN_GENERATED_KEYS);
@@ -32,8 +39,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			
 			int cantidad = statement.executeUpdate();
 			if (cantidad<1) {
-				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
+				throw new DuplicateUniqueKeyException("El ciudadano con dni "+vivienda.obtenerDniCiudadano()+"ya existe");
 			} 
 			
 			
@@ -55,21 +61,28 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		    statement2.setDouble(5, vivienda.obtenerUbicacionLatitud());
 		    statement2.setDouble(6, vivienda.obtenerUbicacionLongitud());
 			
-		    int cantidad2 = statement2.executeUpdate();
-		    if(cantidad2<1) {
-		    	//disparar excepcion
+		    try {
+		    	int cantidad2 = statement2.executeUpdate();
+		    	 if(cantidad2==1) {
+				    	System.out.println("La vivienda se creo correctamente");
+				  }
 		    }
-		    System.out.println("Se agrego correctamente la vivienda");
+		    catch(MySQLIntegrityConstraintViolationException e){
+		    	throw new DuplicateUniqueKeyException("La vivienda con dicha direccion ya existe");
+		    }
+		   
+		   
 		    
 		    
-
-		} catch (SQLException e) {
+		} catch (DuplicateUniqueKeyException e) {
+			throw new DuplicateUniqueKeyException(e.getMessage());
 			
-			System.out.println("Error al procesar consulta");
 			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al insertar un usuario");
-			// TODO: disparar Exception propia
+		} catch (SQLException e) {
+			System.out.println("Error al procesar la consulta");
+			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
+			
+		
 		} finally {
 			ConnectionManager.disconnect();
 		}
