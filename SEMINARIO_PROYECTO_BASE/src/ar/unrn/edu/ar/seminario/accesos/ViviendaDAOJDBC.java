@@ -1,17 +1,17 @@
 package ar.unrn.edu.ar.seminario.accesos;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
-import ar.unrn.edu.ar.seminario.accesos.ConnectionManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -37,10 +37,14 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			statement.setString(2, vivienda.obtenerApellidoCiudadano());
 			statement.setString(3, vivienda.obtenerDniCiudadano());
 			
-			int cantidad = statement.executeUpdate();
-			if (cantidad<1) {
-				throw new DuplicateUniqueKeyException("El ciudadano con dni "+vivienda.obtenerDniCiudadano()+"ya existe");
-			} 
+			try {
+				int cantidad = statement.executeUpdate();
+				if (cantidad==1) 
+					System.out.println("El ciudadano se creo correctamente.");
+			}
+			catch(MySQLIntegrityConstraintViolationException e){
+		    	throw new DuplicateUniqueKeyException("El ciudadano con dni: "+vivienda.obtenerDniCiudadano()+" ya existe");
+		    }
 			
 			
 			
@@ -77,7 +81,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		} catch (DuplicateUniqueKeyException e) {
 			throw new DuplicateUniqueKeyException(e.getMessage());
 			
-			// TODO: disparar Exception propia
+			
 		} catch (SQLException e) {
 			System.out.println("Error al procesar la consulta");
 			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
