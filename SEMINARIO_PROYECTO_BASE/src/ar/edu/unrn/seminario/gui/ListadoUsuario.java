@@ -64,6 +64,7 @@ public class ListadoUsuario extends JFrame {
 		// Agrega los usuarios en el model
 		for (UsuarioDTO u : usuarios) {
 			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			
 		}
 
 		table.setModel(modelo);

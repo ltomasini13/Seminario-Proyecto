@@ -25,9 +25,9 @@ public class Rol {
 		this.nombre = nombre;
 		this.activo=true;
 	}
-
 	
-	public Rol(String nombre) throws NotNullException, DataEmptyException {
+	
+	public Rol(String nombre, boolean activo) throws NotNullException, DataEmptyException {
 		if (nombre==null) {
 			throw new NotNullException("Alguno de los datos es nulo");
 		}
@@ -37,19 +37,20 @@ public class Rol {
 		}
 	}
 
-	public Integer getCodigo() {
+	
+	public Integer obtenerCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(Integer codigo) {
+	public void editarCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
 
-	public String getNombre() {
+	public String obtenerNombre() {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
+	public void editarNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -68,6 +69,9 @@ public class Rol {
 	public void desactivar() {
 		this.activo = false;
 	}
+	
+	
+	
 
 	@Override
 	public int hashCode() {

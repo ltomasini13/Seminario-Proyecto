@@ -15,25 +15,34 @@ import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
+import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import ar.unrn.edu.ar.seminario.accesos.RolDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.RolDao;
+import ar.unrn.edu.ar.seminario.accesos.UsuarioDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.UsuarioDao;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDao;
 
 public class PersistenceApi implements IApi {
 	private ViviendaDao viviendaDao;
 	private RolDao rolDao;
+	private UsuarioDao usuarioDao;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
-		
+		rolDao=new RolDAOJDBC();
+		usuarioDao=new UsuarioDAOJDBC();
 	}
 
 
 	@Override
 	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
-			throws DataEmptyException, NotNullException {
-		// TODO Auto-generated method stub
+			throws DataEmptyException, NotNullException, SintaxisSQLException {
+		Rol role = this.rolDao.obtenerRol(rol);
+		Usuario usuario = new Usuario(username, password, nombre, email, role);
+		
+		this.usuarioDao.crear(usuario);
 		
 	}
 
@@ -91,7 +100,13 @@ public class PersistenceApi implements IApi {
 		List<RolDTO> rolesDto=new ArrayList<RolDTO>();
 		
 		for(Rol r : rolDao.listarTodos()) {
-			rolesDto.add(new RolDTO(r.getNombre()));
+			if(r.isActivo()) {
+				rolesDto.add(new RolDTO(r.getCodigo(), r.getNombre(), "ACTIVO"));
+			}
+			else {
+				rolesDto.add(new RolDTO(r.getCodigo(),r.getNombre(), "INACTIVO"));
+			}
+			
 		}
 		
 		return rolesDto;

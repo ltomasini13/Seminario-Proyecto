@@ -4,10 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.modelo.Rol;
 
 public class Prueba {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SintaxisSQLException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -42,7 +48,13 @@ public class Prueba {
 		} finally {
 			ConnectionManager.disconnect();
 		}
-
+		
+		IApi api = new PersistenceApi();
+		api.obtenerRoles();
 	}
+	
+	
+	
+
 
 }

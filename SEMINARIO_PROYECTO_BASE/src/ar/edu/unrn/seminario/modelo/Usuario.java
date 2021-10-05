@@ -29,45 +29,50 @@ public class Usuario {
 		this.nombre = nombre;
 		this.email = email;
 		this.rol = rol;
+		this.activo=true;
 	}
 
-	public String getUsuario() {
+	public String obtenerUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(String usuario) {
+	public void editarUsuario(String usuario) {
 		this.usuario = usuario;
 	}
 
-	public String getContrasena() {
+	public String obtenerContrasena() {
 		return contrasena;
 	}
 
-	public void setContrasena(String contrasena) {
+	public void editarContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
 
-	public String getNombre() {
+	public String obtenerNombre() {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
+	public void editarNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
-	public String getEmail() {
+	public String obtenerEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void editarEmail(String email) {
 		this.email = email;
 	}
 
-	public Rol getRol() {
+	public Rol obtenerRol() {
 		return rol;
 	}
+	
+	public Integer obtenerCodigoRol() {
+		return this.rol.obtenerCodigo();
+	}
 
-	public void setRol(Rol rol) {
+	public void editarRol(Rol rol) {
 		this.rol = rol;
 	}
 

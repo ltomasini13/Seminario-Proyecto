@@ -10,4 +10,6 @@ public interface RolDao {
 	
 	List<Rol> listarTodos() throws SintaxisSQLException;
 	
+	
+	Rol obtenerRol(Integer codigo) throws SintaxisSQLException;
 }

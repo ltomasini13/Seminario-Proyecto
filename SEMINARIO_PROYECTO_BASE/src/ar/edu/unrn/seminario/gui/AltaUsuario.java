@@ -74,7 +74,7 @@ public class AltaUsuario extends JFrame {
 		aceptarButton.addActionListener((ActionEvent e) -> {
 
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
-
+				
 					try {
 						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),
 								nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());

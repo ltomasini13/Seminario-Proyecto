@@ -35,7 +35,15 @@ public class RolDAOJDBC implements RolDao{
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
-				Rol rol = new Rol(rs.getString("nombre"));
+				Rol rol=new Rol();
+				rol.setNombre(rs.getString("nombre"));
+				rol.setCodigo(rs.getInt("id_rol"));
+				if(rs.getString("estado").equals("ACTIVO")) {
+					rol.setActivo(true);
+				}
+				else {
+					rol.setActivo(true);
+				}
 				roles.add(rol);
 			}
 			
@@ -52,5 +60,49 @@ public class RolDAOJDBC implements RolDao{
 		return roles;
 		
 	}
+	
+	public Rol obtenerRol(Integer codigo) throws SintaxisSQLException {
+		Rol rol=new Rol();
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+		
+			
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM roles");
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				
+				if(rs.getInt("id_rol")==codigo) {
+					rol.setNombre(rs.getString("nombre"));
+					rol.setCodigo(rs.getInt("id_rol"));
+					if(rs.getString("estado").equals("ACTIVO")) {
+						rol.setActivo(true);
+					}
+					else {
+						rol.setActivo(true);
+					}	
+				}
+				
+				
+				
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Error al procesar la consulta");
+			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
+			
+		}catch (Exception e) { 
+				
+		}
+		finally {
+			ConnectionManager.disconnect();
+		}
+		
+		return rol;
+	}
+	
 
 }

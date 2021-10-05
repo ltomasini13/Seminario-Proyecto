@@ -4,7 +4,7 @@ public class RolDTO {
 
 	private Integer codigo;
 	private String nombre;
-	private boolean activo;
+	private String estado;
 
 	public RolDTO(Integer codigo, String nombre) {
 		
@@ -12,15 +12,16 @@ public class RolDTO {
 		this.nombre = nombre;
 	}
 	
-	public RolDTO(String nombre) {
+	public RolDTO(String nombre, String estado) {
 		this.nombre=nombre;
+		this.estado=estado;
 	}
 
-	public RolDTO(Integer codigo, String nombre, boolean activo) {
+	public RolDTO(Integer codigo, String nombre, String estado) {
 		
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.activo = activo;
+		this.estado = estado;
 	}
 
 	public Integer getCodigo() {
@@ -39,12 +40,12 @@ public class RolDTO {
 		this.nombre = nombre;
 	}
 
-	public boolean isActivo() {
-		return activo;
+	public String isActivo() {
+		return estado;
 	}
 
-	public void setActivo(boolean activo) {
-		this.activo = activo;
+	public void setActivo(String estado) {
+		this.estado = estado;
 	}
 
 }
