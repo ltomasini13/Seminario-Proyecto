@@ -58,11 +58,9 @@ public class ListadoVivienda extends JFrame {
 		
 		
 		JButton cerrarButton = new JButton("Cerrar");
-		cerrarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		cerrarButton.addActionListener((ActionEvent e) -> {
 				setVisible(false);
 				dispose();
-			}
 		});
 		
 		JPanel pnlBotonesOperaciones = new JPanel();

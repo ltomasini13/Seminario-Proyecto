@@ -92,8 +92,8 @@ public class AltaVivienda extends JFrame {
 		textFieldDni.setColumns(10);
 		
 		JButton btnAceptar = new JButton("Aceptar");
-		btnAceptar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnAceptar.addActionListener((ActionEvent e) -> {
+			
 								
 				try {
 	
@@ -115,17 +115,16 @@ public class AltaVivienda extends JFrame {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				
-			}
 		});
 		btnAceptar.setBounds(313, 52, 92, 30);
 		getContentPane().add(btnAceptar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnCancelar.addActionListener((ActionEvent e) -> {
+			
 				setVisible(false);
 				dispose();
-			}
+			
 		});
 		btnCancelar.setBounds(311, 103, 94, 30);
 		getContentPane().add(btnCancelar);

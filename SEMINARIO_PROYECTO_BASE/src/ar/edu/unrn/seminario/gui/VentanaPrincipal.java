@@ -65,14 +65,11 @@ public class VentanaPrincipal extends JFrame {
 		usuarioMenu.add(altaUsuarioMenuItem);
 
 		JMenuItem listadoUsuarioMenuItem = new JMenuItem("Listado");
-		listadoUsuarioMenuItem.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
+		listadoUsuarioMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoUsuario listado= new ListadoUsuario(api);
 				listado.setLocationRelativeTo(null);
 				listado.setVisible(true);
-			}
-			
+	
 		});
 		usuarioMenu.add(listadoUsuarioMenuItem);
 		
@@ -80,22 +77,18 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(viviendasMenu);
 		
 		JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
-		altaModificacionMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
 				AltaVivienda altaViv = new AltaVivienda(api);
 				altaViv.setLocationRelativeTo(null);
 				altaViv.setVisible(true);
-			}
 		});
 		viviendasMenu.add(altaModificacionMenuItem);
 		
 		JMenuItem listadoMenuItem = new JMenuItem("Listado");
-		listadoMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		listadoMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoVivienda listadoViv = new ListadoVivienda(api);
 				listadoViv.setLocationRelativeTo(null);
 				listadoViv.setVisible(true);
-			}
 		});
 		viviendasMenu.add(listadoMenuItem);
 
@@ -103,6 +96,10 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(configuracionMenu);
 
 		JMenuItem salirMenuItem = new JMenuItem("Salir");
+		salirMenuItem.addActionListener((ActionEvent e) -> {
+			setVisible(false);
+			dispose();
+		});
 		configuracionMenu.add(salirMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

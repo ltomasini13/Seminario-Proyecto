@@ -66,8 +66,7 @@ public class AltaUsuario extends JFrame {
 		contrasenaTextField.setColumns(10);
 
 		JButton aceptarButton = new JButton("Aceptar");
-		aceptarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		aceptarButton.addActionListener((ActionEvent e) -> {
 
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 
@@ -78,26 +77,20 @@ public class AltaUsuario extends JFrame {
 						JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
-					}catch (DataEmptyException e) {
-						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}catch (NotNullException e){
-						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}catch (DataEmptyException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}catch (NotNullException e2){
+						JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
-					
-					
-					
-
-			}
 		});
 		aceptarButton.setBounds(218, 215, 97, 25);
 		contentPane.add(aceptarButton);
 
 		JButton cancelarButton = new JButton("Cancelar");
-		cancelarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		cancelarButton.addActionListener((ActionEvent e) -> {
+			
 				setVisible(false);
 				dispose();
-			}
 		});
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
