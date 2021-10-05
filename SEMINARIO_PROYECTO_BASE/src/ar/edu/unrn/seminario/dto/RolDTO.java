@@ -7,13 +7,17 @@ public class RolDTO {
 	private boolean activo;
 
 	public RolDTO(Integer codigo, String nombre) {
-		super();
+		
 		this.codigo = codigo;
 		this.nombre = nombre;
 	}
+	
+	public RolDTO(String nombre) {
+		this.nombre=nombre;
+	}
 
 	public RolDTO(Integer codigo, String nombre, boolean activo) {
-		super();
+		
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.activo = activo;

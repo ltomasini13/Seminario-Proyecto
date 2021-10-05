@@ -13,14 +13,16 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
+import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import ar.unrn.edu.ar.seminario.accesos.RolDao;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDao;
 
 public class PersistenceApi implements IApi {
 	private ViviendaDao viviendaDao;
-	
+	private RolDao rolDao;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -85,9 +87,14 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<RolDTO> obtenerRoles() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RolDTO> obtenerRoles() throws SintaxisSQLException {
+		List<RolDTO> rolesDto=new ArrayList<RolDTO>();
+		
+		for(Rol r : rolDao.listarTodos()) {
+			rolesDto.add(new RolDTO(r.getNombre()));
+		}
+		
+		return rolesDto;
 	}
 
 

@@ -53,13 +53,10 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(usuarioMenu);
 
 		JMenuItem altaUsuarioMenuItem = new JMenuItem("Alta/Modificaci\u00F3n");
-		altaUsuarioMenuItem.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
+		altaUsuarioMenuItem.addActionListener((ActionEvent e) -> {
 				AltaUsuario alta = new AltaUsuario(api);
 				alta.setLocationRelativeTo(null);
 				alta.setVisible(true);
-			}
 			
 		});
 		usuarioMenu.add(altaUsuarioMenuItem);

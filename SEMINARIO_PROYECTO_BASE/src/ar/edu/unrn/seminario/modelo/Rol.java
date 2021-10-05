@@ -23,8 +23,19 @@ public class Rol {
 		
 		this.codigo = codigo;
 		this.nombre = nombre;
+		this.activo=true;
 	}
 
+	
+	public Rol(String nombre) throws NotNullException, DataEmptyException {
+		if (nombre==null) {
+			throw new NotNullException("Alguno de los datos es nulo");
+		}
+		
+		if(nombre.isEmpty()) {
+			throw new DataEmptyException("Uno o mas campos incompletos");
+		}
+	}
 
 	public Integer getCodigo() {
 		return codigo;

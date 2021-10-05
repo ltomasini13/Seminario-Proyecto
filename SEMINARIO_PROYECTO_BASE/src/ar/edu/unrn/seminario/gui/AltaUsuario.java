@@ -18,6 +18,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
 public class AltaUsuario extends JFrame {
 
@@ -36,7 +37,11 @@ public class AltaUsuario extends JFrame {
 	public AltaUsuario(IApi api) {
 
 		// Obtengo los roles
-		this.roles = api.obtenerRoles();
+		try {
+			this.roles = api.obtenerRoles();
+		} catch (SintaxisSQLException e3) {
+			JOptionPane.showMessageDialog(null, "Hubo un error en la conexion con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 
 		setTitle("Alta Usuario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

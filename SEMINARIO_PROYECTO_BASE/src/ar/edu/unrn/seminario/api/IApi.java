@@ -23,7 +23,7 @@ public interface IApi {
 
 	void eliminarUsuario(String username);
 
-	List<RolDTO> obtenerRoles();
+	List<RolDTO> obtenerRoles() throws SintaxisSQLException;
 
 	List<RolDTO> obtenerRolesActivos();
 
