@@ -39,6 +39,8 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
 			throws DataEmptyException, NotNullException, SintaxisSQLException {
+		
+		
 		Rol role = this.rolDao.obtenerRol(rol);
 		Usuario usuario = new Usuario(username, password, nombre, email, role);
 		
@@ -101,10 +103,10 @@ public class PersistenceApi implements IApi {
 		
 		for(Rol r : rolDao.listarTodos()) {
 			if(r.isActivo()) {
-				rolesDto.add(new RolDTO(r.getCodigo(), r.getNombre(), "ACTIVO"));
+				rolesDto.add(new RolDTO(r.obtenerCodigo(), r.obtenerNombre(), "ACTIVO"));
 			}
 			else {
-				rolesDto.add(new RolDTO(r.getCodigo(),r.getNombre(), "INACTIVO"));
+				rolesDto.add(new RolDTO(r.obtenerCodigo(),r.obtenerNombre(), "INACTIVO"));
 			}
 			
 		}
@@ -151,8 +153,16 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public List<UsuarioDTO> obtenerUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Usuario> usuarios = this.usuarioDao.listarTodos();
+		
+		List<UsuarioDTO> usuariosDTO = new ArrayList<UsuarioDTO>();
+		
+		for (Usuario u : usuarios) {
+			usuariosDTO.add(new UsuarioDTO(u.obtenerUsuario(), u.obtenerContrasena(), u.obtenerNombre(), u.obtenerEmail(), u.obtenerNombreRol(), u.obtenerEstado()));
+			
+		}
+		
+		return usuariosDTO;
 	}
 
 

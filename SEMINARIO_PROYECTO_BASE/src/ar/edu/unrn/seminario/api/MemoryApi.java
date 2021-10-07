@@ -64,8 +64,8 @@ public class MemoryApi implements IApi {
 	public List<UsuarioDTO> obtenerUsuarios() {
 		List<UsuarioDTO> dtos = new ArrayList<>();
 		for (Usuario u : this.usuarios) {
-			dtos.add(new UsuarioDTO(u.getUsuario(), u.getContrasena(), u.getNombre(), u.getEmail(),
-					u.getRol().getNombre(), u.isActivo(), u.obtenerEstado()));
+			dtos.add(new UsuarioDTO(u.obtenerUsuario(), u.obtenerContrasena(), u.obtenerNombre(), u.obtenerEmail(),
+					u.obtenerRol().obtenerNombre(),  u.obtenerEstado()));
 		}
 		return dtos;
 	}
@@ -86,7 +86,7 @@ public class MemoryApi implements IApi {
 	public List<RolDTO> obtenerRoles() {
 		List<RolDTO> dtos = new ArrayList<>();
 		for (Rol r : this.roles.values()) {
-			dtos.add(new RolDTO(r.getCodigo(), r.getNombre()));
+			dtos.add(new RolDTO(r.obtenerCodigo(), r.obtenerNombre()));
 		}
 		return dtos;
 	}
@@ -96,7 +96,7 @@ public class MemoryApi implements IApi {
 		List<RolDTO> dtos = new ArrayList<>();
 		for (Rol r : this.roles.values()) {
 			if (r.isActivo())
-				dtos.add(new RolDTO(r.getCodigo(), r.getNombre()));
+				dtos.add(new RolDTO(r.obtenerCodigo(), r.obtenerNombre()));
 		}
 		return dtos;
 	}
@@ -104,7 +104,7 @@ public class MemoryApi implements IApi {
 	@Override
 	public void guardarRol(Integer codigo, String descripcion, boolean estado) throws NotNullException, DataEmptyException {
 		// TODO Auto-generated method stub
-		Rol rol = new Rol(codigo, descripcion);
+		Rol rol = new Rol(codigo, descripcion, estado);
 		this.roles.put(codigo, rol);
 	}
 
@@ -129,7 +129,7 @@ public class MemoryApi implements IApi {
 	@Override
 	public void activarUsuario(String usuario) throws StateException {
 		for (Usuario u : usuarios) {
-			if (u.getUsuario().equals(usuario))
+			if (u.obtenerUsuario().equals(usuario))
 				u.activar();
 			//enviar mail
 			//..
@@ -140,7 +140,7 @@ public class MemoryApi implements IApi {
 	@Override
 	public void desactivarUsuario(String usuario) throws StateException {
 		for (Usuario u : usuarios) {
-			if (u.getUsuario().equals(usuario))
+			if (u.obtenerUsuario().equals(usuario))
 				u.desactivar();
 
 		}

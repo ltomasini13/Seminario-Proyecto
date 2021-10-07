@@ -19,17 +19,18 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import javax.swing.JPasswordField;
 
 public class AltaUsuario extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField usuarioTextField;
-	private JTextField contrasenaTextField;
 	private JTextField nombreTextField;
 	private JTextField emailTextField;
 	private JComboBox rolComboBox;
-
+	private JPasswordField contrasenaField;
 	private List<RolDTO> roles = new ArrayList<>();
+	
 
 	/**
 	 * Create the frame.
@@ -65,18 +66,13 @@ public class AltaUsuario extends JFrame {
 		contentPane.add(usuarioTextField);
 		usuarioTextField.setColumns(10);
 
-		contrasenaTextField = new JTextField();
-		contrasenaTextField.setBounds(148, 53, 160, 22);
-		contentPane.add(contrasenaTextField);
-		contrasenaTextField.setColumns(10);
-
 		JButton aceptarButton = new JButton("Aceptar");
 		aceptarButton.addActionListener((ActionEvent e) -> {
 
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 				
 					try {
-						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),
+						api.registrarUsuario(usuarioTextField.getText(), contrasenaField.getText(),
 								nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
 						
 						JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -84,9 +80,10 @@ public class AltaUsuario extends JFrame {
 						dispose();
 					}catch (DataEmptyException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}catch (NotNullException e2){
-						JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
+					}catch (NotNullException e1){
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					} catch (SintaxisSQLException e1){
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);					}
 		});
 		aceptarButton.setBounds(218, 215, 97, 25);
 		contentPane.add(aceptarButton);
@@ -125,6 +122,10 @@ public class AltaUsuario extends JFrame {
 		rolComboBox = new JComboBox();
 		rolComboBox.setBounds(148, 151, 160, 22);
 		contentPane.add(rolComboBox);
+		
+		contrasenaField = new JPasswordField();
+		contrasenaField.setBounds(148, 54, 160, 20);
+		contentPane.add(contrasenaField);
 
 		for (RolDTO rol : this.roles) {
 			rolComboBox.addItem(rol.getNombre());

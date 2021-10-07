@@ -5,13 +5,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.sun.media.jfxmedia.events.NewFrameEvent;
 
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.modelo.Ciudadano;
+import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class UsuarioDAOJDBC implements UsuarioDao{
 
@@ -30,7 +37,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 			statement.setString(2, usuario.obtenerContrasena());
 			statement.setString(3, usuario.obtenerNombre());
 			statement.setString(4, usuario.obtenerEmail());
-			statement.setInt(5, usuario.obtenerRol());
+			statement.setInt(5, usuario.obtenerCodigoRol());
 			
 			try {
 				int cantidad = statement.executeUpdate();
@@ -38,48 +45,10 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 					System.out.println("El ciudadano se creo correctamente.");
 			}
 			catch(MySQLIntegrityConstraintViolationException e){
-		    	throw new DuplicateUniqueKeyException("El ciudadano con dni: "+vivienda.obtenerDniCiudadano()+" ya existe");
+		    	
 		    }
-			
-			
-			
-			ResultSet miResult = statement.getGeneratedKeys();
-			miResult.next();
-		    int idCiudadano=miResult.getInt(1);
-		    
-		    //vivienda.obtenerCiudadano().editarId(Long.valueOf(idCiudadano));
-		    miResult.close();
-		    
-		    PreparedStatement statement2 = conn
-					.prepareStatement("INSERT INTO viviendas (id_ciudadano, calle, numero, barrio, latitud, longitud)"
-							+ "VALUES (?, ?, ?, ?, ?, ?)");
-		    statement2.setInt(1, idCiudadano);
-		    statement2.setString(2, vivienda.obtenerUbicacionCalle());
-		    statement2.setInt(3, vivienda.obtenerUbicacionNro());
-		    statement2.setString(4, vivienda.obtenerUbicacionBarrio());
-		    statement2.setDouble(5, vivienda.obtenerUbicacionLatitud());
-		    statement2.setDouble(6, vivienda.obtenerUbicacionLongitud());
-			
-		    try {
-		    	int cantidad2 = statement2.executeUpdate();
-		    	 if(cantidad2==1) {
-				    	System.out.println("La vivienda se creo correctamente");
-				  }
-		    }
-		    catch(MySQLIntegrityConstraintViolationException e){
-		    	throw new DuplicateUniqueKeyException("La vivienda con dicha direccion ya existe");
-		    }
-		   
-		   
-		    
-		    
-		} catch (DuplicateUniqueKeyException e) {
-			throw new DuplicateUniqueKeyException(e.getMessage());
-			
-			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
+				   
+		}catch (Exception e) {
 			
 		
 		} finally {
@@ -90,8 +59,50 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 
 	@Override
 	public List<Usuario> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Usuario> usuarios=new ArrayList<Usuario>();
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("select * from usuarios u join roles r on (u.id_rol=r.id_rol)");
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				
+				
+				Rol rol = new Rol(rs.getInt("id_rol"), rs.getString("r.nombre"));
+				
+				String estadoRol = rs.getString("estado_rol");
+				if(estadoRol.equals("ACTIVO")) {
+					rol.setActivo(true);
+				}
+				else {
+					rol.setActivo(false);
+				}
+				
+				Usuario usuario = new Usuario(rs.getString("usuario"),rs.getString("contrasena"), rs.getString("nombre"),
+						rs.getString("email"), rol);
+				
+				usuarios.add(usuario);
+				
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viviendas");
+			// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		return usuarios;
+		
 	}
 
 }
