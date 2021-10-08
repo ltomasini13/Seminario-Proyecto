@@ -14,6 +14,7 @@ import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.RegistroVivienda;
@@ -173,6 +174,12 @@ public class MemoryApi implements IApi {
 		
 		viviendas.add(regVivienda);
 		
+	}
+
+	@Override
+	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

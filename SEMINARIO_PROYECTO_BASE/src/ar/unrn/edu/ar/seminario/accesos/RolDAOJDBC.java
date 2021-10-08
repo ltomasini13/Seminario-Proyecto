@@ -38,7 +38,7 @@ public class RolDAOJDBC implements RolDao{
 				Rol rol=new Rol();
 				rol.editarNombre(rs.getString("nombre"));
 				rol.editarCodigo(rs.getInt("id_rol"));
-				if(rs.getString("estado_rol").equals("ACTIVO")) {
+				if(rs.getString("estado").equals("ACTIVO")) {
 					rol.setActivo(true);
 				}
 				else {
@@ -78,7 +78,7 @@ public class RolDAOJDBC implements RolDao{
 				if(rs.getInt("id_rol")==codigo) {
 					rol.editarNombre(rs.getString("nombre"));
 					rol.editarCodigo(rs.getInt("id_rol"));
-					if(rs.getString("estado_rol").equals("ACTIVO")) {
+					if(rs.getString("estado").equals("ACTIVO")) {
 						rol.setActivo(true);
 					}
 					else {

@@ -74,7 +74,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 				
 				Rol rol = new Rol(rs.getInt("id_rol"), rs.getString("r.nombre"));
 				
-				String estadoRol = rs.getString("estado_rol");
+				String estadoRol = rs.getString("r.estado");
 				if(estadoRol.equals("ACTIVO")) {
 					rol.setActivo(true);
 				}
@@ -82,7 +82,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 					rol.setActivo(false);
 				}
 				
-				Usuario usuario = new Usuario(rs.getString("usuario"),rs.getString("contrasena"), rs.getString("nombre"),
+				Usuario usuario = new Usuario(rs.getString("u.usuario"),rs.getString("u.contrasena"), rs.getString("u.nombre"),
 						rs.getString("email"), rol);
 				
 				usuarios.add(usuario);
@@ -104,5 +104,38 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 		return usuarios;
 		
 	}
+
+	@Override
+	public Usuario buscar(String nombreDeUsuario) {
+		Usuario usuario = null;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT u.usuario,  u.contrasena, u.nombre, u.email, r.id_rol FROM usuarios u JOIN roles r ON (u_id_usuario = r.id_rol) " + " WHERE u.usuario = ?");
+
+			statement.setString(1, nombreDeUsuario);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				Rol rol = new Rol(rs.getInt("id_rol"), rs.getString("r.nombre"));
+				usuario = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"),
+						rs.getString("u.email"), rol);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+			// throw new AppException(e, e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			// TODO: disparar Exception propia
+			// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+		} finally {
+			ConnectionManager.disconnect();
+		}
+
+		return usuario;
+	}
+	
+	
+	
 
 }

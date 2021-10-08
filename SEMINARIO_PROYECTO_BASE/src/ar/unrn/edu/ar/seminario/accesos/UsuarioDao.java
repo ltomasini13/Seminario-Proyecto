@@ -8,4 +8,6 @@ public interface UsuarioDao {
 	void crear(Usuario usuario);
 	
 	List<Usuario> listarTodos();
+
+	Usuario buscar(String nombreDeUsuario);
 }
