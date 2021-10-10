@@ -88,6 +88,24 @@ public class VentanaPrincipal extends JFrame {
 				listadoViv.setVisible(true);
 		});
 		viviendasMenu.add(listadoMenuItem);
+		
+		JMenu residuosMenu = new JMenu("Residuos");
+		menuBar.add(residuosMenu);
+		
+		JMenuItem registrarMenuItem = new JMenuItem("Registrar");
+		residuosMenu.add(registrarMenuItem);
+		
+		JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
+		residuosMenu.add(listadoResiduosMenuItem);
+		
+		JMenu pedidosMenu = new JMenu("Pedidos");
+		menuBar.add(pedidosMenu);
+		
+		JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+		pedidosMenu.add(altaModificacionPedidosMenuItem);
+		
+		JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+		pedidosMenu.add(listadoPedidosMenuItem);
 
 		JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
 		menuBar.add(configuracionMenu);

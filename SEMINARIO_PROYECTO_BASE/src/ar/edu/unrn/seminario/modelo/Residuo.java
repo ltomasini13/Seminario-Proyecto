@@ -5,7 +5,7 @@ public class Residuo {
 	private TipoResiduo tipo;
 	private double cantkg;
 	
-	public Residuo(TipoResiduo residuo, float cant_kg) {
+	public Residuo(TipoResiduo residuo, double cant_kg) {
 		this.tipo = residuo;
 		this.cantkg = cant_kg;
 	}

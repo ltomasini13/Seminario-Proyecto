@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class PedidoRetiro {
+
 	private LocalDateTime fechaEmision;
 	private LocalDateTime fechaCumplimiento;
 	private boolean cargaPesada;
@@ -17,23 +18,24 @@ public class PedidoRetiro {
 
 		this.fechaEmision = fechaEmision;
 		this.cargaPesada = cargaPesada;
-		this.vivienda = vivienda;
 		this.observacion = observacion;
+		this.vivienda = vivienda;
+		
 		
 		if(fechaEmision == null || vivienda == null) {
 			throw new NotNullException("Alguno de los datos son nulos");
 		}
 	}
-
+	
 	public LocalDateTime obtenerFechaEmision() {
 		return fechaEmision;
 	}
 
-	public void editarFecEmision(LocalDateTime fecha) {
+	public void editarFechaEmision(LocalDateTime fecha) {
 		this.fechaEmision = fecha;
 	}
 
-	public LocalDateTime obtenerFechaCmplimiento() {
+	public LocalDateTime obtenerFechaCumplimiento() {
 		return fechaCumplimiento;
 	}
 
@@ -44,21 +46,9 @@ public class PedidoRetiro {
 	public boolean isCargaPesada() {
 		return cargaPesada;
 	}
-
+	
 	public void editarCargaPesada(boolean cargaPesada) {
 		this.cargaPesada = cargaPesada;
-	}
-	
-	public String obtenerObservacion() {
-		return observacion;
-	}
-
-	public void editarObservacion(String observacion) {
-		this.observacion = observacion;
-	}
-	
-	public Vivienda obtenerVivienda() {
-		return vivienda;
 	}
 
 	public void editarVivienda(Vivienda vivienda) {
@@ -75,6 +65,14 @@ public class PedidoRetiro {
 	
 	public String obtenerDniCiudadanoVivienda() {
 		return vivienda.obtenerDniCiudadano();
+	}
+	
+	public void obtenerVivienda(Vivienda vivienda) {
+		this.vivienda = vivienda;
+	}
+
+	public String obtenerObservacion() {
+		return observacion;
 	}
 	
 }
