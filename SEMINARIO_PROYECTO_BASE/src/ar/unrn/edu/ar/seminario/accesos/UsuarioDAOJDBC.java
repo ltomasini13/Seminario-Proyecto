@@ -38,6 +38,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 			statement.setString(3, usuario.obtenerNombre());
 			statement.setString(4, usuario.obtenerEmail());
 			statement.setInt(5, usuario.obtenerCodigoRol());
+
 			
 			try {
 				int cantidad = statement.executeUpdate();
