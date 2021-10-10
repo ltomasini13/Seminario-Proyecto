@@ -72,6 +72,11 @@ public class Usuario {
 		return this.rol.obtenerCodigo();
 	}
 
+	public String obtenerNombreRol() {
+		return this.rol.obtenerNombre();
+	}
+	
+	
 	public void editarRol(Rol rol) {
 		this.rol = rol;
 	}

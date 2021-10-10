@@ -6,18 +6,15 @@ public class UsuarioDTO {
 	private String nombre;
 	private String email;
 	private String rol;
-	private boolean activo;
 	private String estado;
 
-	public UsuarioDTO(String username, String password, String nombre, String email, String rol, boolean activo,
+	public UsuarioDTO(String username, String password, String nombre, String email, String rol,
 			String estado) {
-		super();
 		this.username = username;
 		this.password = password;
 		this.nombre = nombre;
 		this.email = email;
 		this.rol = rol;
-		this.activo = activo;
 		this.estado = estado;
 	}
 
@@ -62,11 +59,22 @@ public class UsuarioDTO {
 	}
 
 	public boolean isActivo() {
-		return activo;
+		if(this.estado.equals("ACTIVO")) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public void setActivo(boolean activo) {
-		this.activo = activo;
+		if(activo==true) {
+			estado="ACTIvo";
+		}
+		else {
+			estado="INACTIVO";
+		}
+		
 	}
 
 	public String getEstado() {

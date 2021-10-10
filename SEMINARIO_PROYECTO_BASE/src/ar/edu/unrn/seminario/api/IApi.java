@@ -5,6 +5,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -16,10 +17,12 @@ public interface IApi {
 
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException, SintaxisSQLException;
 	
+	UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException;
+	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
 			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException;
 
-	UsuarioDTO obtenerUsuario(String username);
+	UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException;
 
 	void eliminarUsuario(String username);
 

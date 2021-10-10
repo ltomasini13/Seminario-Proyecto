@@ -12,7 +12,7 @@ public class Rol {
 
 	}
 
-	public Rol(Integer codigo, String nombre) throws NotNullException, DataEmptyException{
+	public Rol(Integer codigo, String nombre, boolean activo) throws NotNullException, DataEmptyException{
 		if (codigo==null || nombre==null) {
 			throw new NotNullException("Alguno de los datos es nulo");
 		}
@@ -23,9 +23,19 @@ public class Rol {
 		
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.activo=true;
-	}
+		this.activo = activo;
+	} 
 	
+	public Rol(Integer codigo, String nombre) throws NotNullException, DataEmptyException {
+		if (codigo==null || nombre==null) {
+			throw new NotNullException("Alguno de los datos es nulo");
+		}
+		if(nombre.isEmpty()) {
+			throw new DataEmptyException("Uno o mas campos incompletos");
+		}
+		this.codigo=codigo;
+		this.nombre=nombre;
+	}
 	
 	public Rol(String nombre, boolean activo) throws NotNullException, DataEmptyException {
 		if (nombre==null) {

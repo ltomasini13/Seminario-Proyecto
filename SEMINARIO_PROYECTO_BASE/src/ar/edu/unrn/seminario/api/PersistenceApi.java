@@ -6,6 +6,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -39,6 +40,8 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
 			throws DataEmptyException, NotNullException, SintaxisSQLException {
+		
+		
 		Rol role = this.rolDao.obtenerRol(rol);
 		Usuario usuario = new Usuario(username, password, nombre, email, role);
 		
@@ -82,9 +85,18 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public UsuarioDTO obtenerUsuario(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException {
+		Usuario usuario = this.usuarioDao.buscar(username);
+		UsuarioDTO usuarioDTO = null;
+		
+		if(usuario!=null) {
+			Rol rol = this.rolDao.obtenerRol(usuario.obtenerCodigoRol());
+			usuarioDTO=new UsuarioDTO(usuario.obtenerUsuario(), usuario.obtenerContrasena(), usuario.obtenerNombre(),
+					usuario.obtenerEmail(),rol.obtenerNombre(), usuario.obtenerEstado());
+		}
+		
+		return usuarioDTO;
+		
 	}
 
 
@@ -101,10 +113,10 @@ public class PersistenceApi implements IApi {
 		
 		for(Rol r : rolDao.listarTodos()) {
 			if(r.isActivo()) {
-				rolesDto.add(new RolDTO(r.getCodigo(), r.getNombre(), "ACTIVO"));
+				rolesDto.add(new RolDTO(r.obtenerCodigo(), r.obtenerNombre(), "ACTIVO"));
 			}
 			else {
-				rolesDto.add(new RolDTO(r.getCodigo(),r.getNombre(), "INACTIVO"));
+				rolesDto.add(new RolDTO(r.obtenerCodigo(),r.obtenerNombre(), "INACTIVO"));
 			}
 			
 		}
@@ -133,6 +145,9 @@ public class PersistenceApi implements IApi {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	
 
 
 	@Override
@@ -151,8 +166,16 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public List<UsuarioDTO> obtenerUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Usuario> usuarios = this.usuarioDao.listarTodos();
+		
+		List<UsuarioDTO> usuariosDTO = new ArrayList<UsuarioDTO>();
+		
+		for (Usuario u : usuarios) {
+			usuariosDTO.add(new UsuarioDTO(u.obtenerUsuario(), u.obtenerContrasena(), u.obtenerNombre(), u.obtenerEmail(), u.obtenerNombreRol(), u.obtenerEstado()));
+			
+		}
+		
+		return usuariosDTO;
 	}
 
 
@@ -181,6 +204,31 @@ public class PersistenceApi implements IApi {
 		}
 		
 		return viviendasDTO;
+	}
+
+
+	@Override
+	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
+		if(username==null || contrasena==null) {
+			throw new NotNullException("Los campos de usuario o contraseña son nulos");
+		}
+		
+		if(username.isEmpty() || contrasena.isEmpty()) {
+			throw new DataEmptyException ("Los campos de suario o contraseña son vacios");
+		}
+		
+		UsuarioDTO usuarioDTO= this.obtenerUsuario(username);
+		
+		if(usuarioDTO==null) {
+			throw new AuthenticationException("Usuario y/o contraseña");
+		}
+		else {
+			if(!contrasena.equals(usuarioDTO.getPassword())) {
+				throw new AuthenticationException("Usuario y/o contraseña");
+			}
+		}
+		return usuarioDTO;
+		
 	}
 	
 	

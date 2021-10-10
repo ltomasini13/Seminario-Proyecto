@@ -131,10 +131,10 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			// TODO: disparar Exception propia
 		} finally {
 			ConnectionManager.disconnect();
-			return viviendasOrdenadasPorBarrio;
+			
 		}
 		
-		
+		return viviendasOrdenadasPorBarrio;
 
 	}
 	
