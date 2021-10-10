@@ -79,13 +79,9 @@ public class Loguin extends JFrame {
 		JButton botonAceptar = new JButton("Aceptar");
 		botonAceptar.addActionListener((ActionEvent e) -> {
 			try {
-				UsuarioDTO usuarioDto = api.loguearUsuario(usuarioTextField.getText(), contrasenaPasswordField.getText());
-				if(usuarioDto.getRol().equals("ADMIN")) {
-					
-				}
-				if (usuarioDto.getRol().equals("RECICLADOR")){
-					
-				}
+				UsuarioDTO usuarioDto = api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
+				VentanaPrincipal vp = new VentanaPrincipal(api, usuarioDto);
+				vp.setVisible(true);
 				
 			} catch (SintaxisSQLException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

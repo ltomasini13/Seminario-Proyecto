@@ -111,12 +111,13 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT u.usuario,  u.contrasena, u.nombre, u.email, r.id_rol FROM usuarios u JOIN roles r ON (u_id_usuario = r.id_rol) " + " WHERE u.usuario = ?");
+					"SELECT u.usuario,  u.contrasena, u.nombre, u.email, u.id_rol, (select r.nombre from roles r"
+					+ " where r.id_rol=u.id_rol) as nombre_rol FROM usuarios u where u.usuario = ?");
 
 			statement.setString(1, nombreDeUsuario);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
-				Rol rol = new Rol(rs.getInt("id_rol"), rs.getString("r.nombre"));
+				Rol rol = new Rol(rs.getInt("u.id_rol"), rs.getString("nombre_rol"));
 				usuario = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"),
 						rs.getString("u.email"), rol);
 			}

@@ -207,6 +207,7 @@ public class PersistenceApi implements IApi {
 	}
 
 
+	
 	@Override
 	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
 		if(username==null || contrasena==null) {
@@ -229,6 +230,13 @@ public class PersistenceApi implements IApi {
 		}
 		return usuarioDTO;
 		
+	}
+
+
+	@Override
+	public List<ViviendaDTO> obtenerViviendas(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

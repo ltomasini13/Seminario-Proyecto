@@ -10,6 +10,9 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.AuthenticationException;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Rol;
 
@@ -52,8 +55,13 @@ public class Prueba {
 //		}
 		
 		IApi api = new PersistenceApi();
-		List<RolDTO> usu = api.obtenerRoles();
-		usu.size();
+		try {
+			UsuarioDTO us = api.loguearUsuario("ltomasini13", "1234");
+			us.toString();
+		} catch (AuthenticationException | NotNullException | DataEmptyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	

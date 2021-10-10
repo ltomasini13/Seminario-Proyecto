@@ -12,6 +12,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.modelo.Usuario;
 
 public interface IApi {
 
@@ -45,4 +46,5 @@ public interface IApi {
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 	
 	List<ViviendaDTO> obtenerViviendas(); //recupera todas las viviendas registradas
+	List<ViviendaDTO> obtenerViviendas(Usuario usuario); //recupera todas las viviendas que tiene registradas ese usuario
 }

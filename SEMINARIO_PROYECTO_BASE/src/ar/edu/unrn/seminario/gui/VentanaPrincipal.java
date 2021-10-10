@@ -15,93 +15,113 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.UsuarioDTO;
 
 public class VentanaPrincipal extends JFrame {
 
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IApi api = new PersistenceApi();
-					VentanaPrincipal frame = new VentanaPrincipal(api);
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JPanel ventanaPrincipalContentPane;
 
 	/**
 	 * Create the frame.
+
 	 */
-	public VentanaPrincipal(IApi api) {
+	public VentanaPrincipal(IApi api, UsuarioDTO usuarioDto) {
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		
+		if(usuarioDto.getRol().equals("ADMIN")) { // pregunta que tipo de usuario para mostrar el menu
+			JMenu adminUsuarioMenu = new JMenu("Usuarios");
+			menuBar.add(adminUsuarioMenu);
 
-		JMenu usuarioMenu = new JMenu("Usuarios");
-		menuBar.add(usuarioMenu);
+			JMenuItem adminAltaUsuarioMenuItem = new JMenuItem("Alta/Modificaci\u00F3n");
+			adminAltaUsuarioMenuItem.addActionListener((ActionEvent e) -> {
+					AltaUsuario alta = new AltaUsuario(api);
+					alta.setLocationRelativeTo(null);
+					alta.setVisible(true);
+				
+			});
+			adminUsuarioMenu.add(adminAltaUsuarioMenuItem);
 
-		JMenuItem altaUsuarioMenuItem = new JMenuItem("Alta/Modificaci\u00F3n");
-		altaUsuarioMenuItem.addActionListener((ActionEvent e) -> {
-				AltaUsuario alta = new AltaUsuario(api);
-				alta.setLocationRelativeTo(null);
-				alta.setVisible(true);
+			JMenuItem listadoUsuarioMenuItem = new JMenuItem("Listado");
+			listadoUsuarioMenuItem.addActionListener((ActionEvent e) -> {
+					ListadoUsuario listado= new ListadoUsuario(api);
+					listado.setLocationRelativeTo(null);
+					listado.setVisible(true);
+		
+			});
+			adminUsuarioMenu.add(listadoUsuarioMenuItem);
 			
-		});
-		usuarioMenu.add(altaUsuarioMenuItem);
+			JMenu viviendasMenu = new JMenu("Viviendas");
+			menuBar.add(viviendasMenu);
+			
+			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
+			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
+					AltaVivienda altaViv = new AltaVivienda(api);
+					altaViv.setLocationRelativeTo(null);
+					altaViv.setVisible(true);
+			});
+			viviendasMenu.add(altaModificacionMenuItem);
+			
+			JMenuItem listadoMenuItem = new JMenuItem("Listado");
+			listadoMenuItem.addActionListener((ActionEvent e) -> {
+					ListadoVivienda listadoViv = new ListadoVivienda(api, usuarioDto);
+					listadoViv.setLocationRelativeTo(null);
+					listadoViv.setVisible(true);
+			});
+			viviendasMenu.add(listadoMenuItem);
 
-		JMenuItem listadoUsuarioMenuItem = new JMenuItem("Listado");
-		listadoUsuarioMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoUsuario listado= new ListadoUsuario(api);
-				listado.setLocationRelativeTo(null);
-				listado.setVisible(true);
-	
-		});
-		usuarioMenu.add(listadoUsuarioMenuItem);
-		
-		JMenu viviendasMenu = new JMenu("Viviendas");
-		menuBar.add(viviendasMenu);
-		
-		JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
-		altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
-				AltaVivienda altaViv = new AltaVivienda(api);
-				altaViv.setLocationRelativeTo(null);
-				altaViv.setVisible(true);
-		});
-		viviendasMenu.add(altaModificacionMenuItem);
-		
-		JMenuItem listadoMenuItem = new JMenuItem("Listado");
-		listadoMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoVivienda listadoViv = new ListadoVivienda(api);
-				listadoViv.setLocationRelativeTo(null);
-				listadoViv.setVisible(true);
-		});
-		viviendasMenu.add(listadoMenuItem);
+			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
+			menuBar.add(configuracionMenu);
 
-		JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
-		menuBar.add(configuracionMenu);
+			JMenuItem salirMenuItem = new JMenuItem("Salir");
+			salirMenuItem.addActionListener((ActionEvent e) -> {
+				setVisible(false);
+				dispose();
+			});
+			configuracionMenu.add(salirMenuItem);
+		}
+		
 
-		JMenuItem salirMenuItem = new JMenuItem("Salir");
-		salirMenuItem.addActionListener((ActionEvent e) -> {
-			setVisible(false);
-			dispose();
-		});
-		configuracionMenu.add(salirMenuItem);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		if(usuarioDto.getRol().equals("RECICLADOR")) {
+			
+			JMenu viviendasMenu = new JMenu("Mis viviendas");
+			menuBar.add(viviendasMenu);
+			
+			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
+			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
+					AltaVivienda altaViv = new AltaVivienda(api);
+					altaViv.setLocationRelativeTo(null);
+					altaViv.setVisible(true);
+			});
+			viviendasMenu.add(altaModificacionMenuItem);
+			
+			JMenuItem listadoMenuItem = new JMenuItem("Listado");
+			listadoMenuItem.addActionListener((ActionEvent e) -> {
+					ListadoVivienda listadoViv = new ListadoVivienda(api, usuarioDto);
+					listadoViv.setLocationRelativeTo(null);
+					listadoViv.setVisible(true);
+			});
+			viviendasMenu.add(listadoMenuItem);
+
+			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
+			menuBar.add(configuracionMenu);
+
+			JMenuItem salirMenuItem = new JMenuItem("Salir");
+			salirMenuItem.addActionListener((ActionEvent e) -> {
+				setVisible(false);
+				dispose();
+			});
+			configuracionMenu.add(salirMenuItem);
+		}
+		
+		ventanaPrincipalContentPane = new JPanel();
+		ventanaPrincipalContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		ventanaPrincipalContentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(ventanaPrincipalContentPane);
 	}
 
 }

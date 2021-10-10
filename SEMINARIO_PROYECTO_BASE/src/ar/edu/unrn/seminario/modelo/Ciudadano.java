@@ -9,8 +9,9 @@ public class Ciudadano {
 	private String nombre;
 	private String apellido;
 	private String dni;
+	private Usuario usuario;
 	
-	public Ciudadano (String nombre, String apellido, String dni) throws NotNullException, DataEmptyException, NumbersException {
+	public Ciudadano (String nombre, String apellido, String dni, Usuario usuario) throws NotNullException, DataEmptyException, NumbersException {
 		
 		if(nombre==null || apellido==null || dni==null) {
 			throw new NotNullException("Los datos ingresados son nulos");
