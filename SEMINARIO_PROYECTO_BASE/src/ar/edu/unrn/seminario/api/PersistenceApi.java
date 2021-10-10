@@ -75,7 +75,7 @@ public class PersistenceApi implements IApi {
 		
 		
 		Ubicacion ubicacion = new Ubicacion(calle,nro, barrio, lat, longi);
-		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano);
+		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
 		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
 		//RegistroVivienda regVivienda = new RegistroVivienda(LocalDateTime.now(), vivienda); 
 		

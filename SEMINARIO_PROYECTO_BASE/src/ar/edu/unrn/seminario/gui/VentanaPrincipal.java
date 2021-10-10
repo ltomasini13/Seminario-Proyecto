@@ -106,6 +106,25 @@ public class VentanaPrincipal extends JFrame {
 					listadoViv.setVisible(true);
 			});
 			viviendasMenu.add(listadoMenuItem);
+			
+			
+			JMenu residuosMenu = new JMenu("Residuos");
+			menuBar.add(residuosMenu);
+			
+			JMenuItem registrarMenuItem = new JMenuItem("Registrar");
+			residuosMenu.add(registrarMenuItem);
+			
+			JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
+			residuosMenu.add(listadoResiduosMenuItem);
+			
+			JMenu pedidosMenu = new JMenu("Pedidos");
+			menuBar.add(pedidosMenu);
+			
+			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			pedidosMenu.add(altaModificacionPedidosMenuItem);
+			
+			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			pedidosMenu.add(listadoPedidosMenuItem);
 
 			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
 			menuBar.add(configuracionMenu);
@@ -118,52 +137,17 @@ public class VentanaPrincipal extends JFrame {
 			configuracionMenu.add(salirMenuItem);
 		}
 		
-<<<<<<< HEAD
+
 		ventanaPrincipalContentPane = new JPanel();
 		ventanaPrincipalContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		ventanaPrincipalContentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(ventanaPrincipalContentPane);
-=======
-		JMenuItem listadoMenuItem = new JMenuItem("Listado");
-		listadoMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoVivienda listadoViv = new ListadoVivienda(api);
-				listadoViv.setLocationRelativeTo(null);
-				listadoViv.setVisible(true);
-		});
-		viviendasMenu.add(listadoMenuItem);
-		
-		JMenu residuosMenu = new JMenu("Residuos");
-		menuBar.add(residuosMenu);
-		
-		JMenuItem registrarMenuItem = new JMenuItem("Registrar");
-		residuosMenu.add(registrarMenuItem);
-		
-		JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
-		residuosMenu.add(listadoResiduosMenuItem);
-		
-		JMenu pedidosMenu = new JMenu("Pedidos");
-		menuBar.add(pedidosMenu);
-		
-		JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
-		pedidosMenu.add(altaModificacionPedidosMenuItem);
-		
-		JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
-		pedidosMenu.add(listadoPedidosMenuItem);
 
-		JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
-		menuBar.add(configuracionMenu);
+		
+		
+		
 
-		JMenuItem salirMenuItem = new JMenuItem("Salir");
-		salirMenuItem.addActionListener((ActionEvent e) -> {
-			setVisible(false);
-			dispose();
-		});
-		configuracionMenu.add(salirMenuItem);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
->>>>>>> 2c07bc55ae789fb512e114ba1af183e46aa4c596
+		
 	}
 
 }

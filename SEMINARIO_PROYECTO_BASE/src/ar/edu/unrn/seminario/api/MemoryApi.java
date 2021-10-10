@@ -168,7 +168,7 @@ public class MemoryApi implements IApi {
 		double longi= Double.parseDouble(longitud);
 		
 		Ubicacion ubicacion = new Ubicacion(calle,nro, barrio, lat, longi);
-		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano);
+		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
 		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
 		RegistroVivienda regVivienda = new RegistroVivienda(LocalDateTime.now(), vivienda); 
 		
@@ -178,6 +178,12 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ViviendaDTO> obtenerViviendas(Usuario usuario) {
 		// TODO Auto-generated method stub
 		return null;
 	}
