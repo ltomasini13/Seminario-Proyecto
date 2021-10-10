@@ -1,20 +1,19 @@
 package ar.edu.unrn.seminario.modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class PedidoRetiro {
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 	private LocalDateTime fechaEmision;
 	private LocalDateTime fechaCumplimiento;
 	private boolean cargaPesada;
 	private String observacion;
 	private Vivienda vivienda;
+	private ArrayList<Residuo> listaResiduos = new ArrayList<Residuo>();
 	
-<<<<<<< Updated upstream
-	public PedidoRetiro(LocalDateTime fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) {
+	public PedidoRetiro(LocalDateTime fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) throws NotNullException {
 
 		this.fechaEmision = fechaEmision;
 		this.cargaPesada = cargaPesada;
@@ -22,52 +21,30 @@ public class PedidoRetiro {
 		this.observacion = observacion;
 		
 		if(fechaEmision == null || vivienda == null) {
-			
+			throw new NotNullException("Alguno de los datos son nulos");
 		}
 	}
 
-=======
-	public PedidoRetiro(LocalDateTime fecEmision, boolean cargaPesada, String observacion, Vivienda vivienda) {
-		
-		this.fechaEmision = fecEmision;
-		this.cargaPesada = cargaPesada;
-		this.observacion = observacion;
-		this.vivienda = vivienda;
-		
-	}
-	
->>>>>>> Stashed changes
 	public LocalDateTime obtenerFechaEmision() {
 		return fechaEmision;
 	}
 
-<<<<<<< Updated upstream
 	public void editarFecEmision(LocalDateTime fecha) {
 		this.fechaEmision = fecha;
-=======
-	public void cambiarFechaEmision(LocalDateTime fEmision) {
-		this.fechaEmision = fEmision;
->>>>>>> Stashed changes
 	}
 
 	public LocalDateTime obtenerFechaCmplimiento() {
 		return fechaCumplimiento;
 	}
 
-<<<<<<< Updated upstream
 	public void editarFechaCumplimiento(LocalDateTime fecha) {
 		this.fechaCumplimiento = fecha;
-=======
-	public void cambiarFechaCumplimiento(LocalDateTime fCumplimiento) {
-		this.fechaCumplimiento = fCumplimiento;
->>>>>>> Stashed changes
 	}
 
 	public boolean isCargaPesada() {
 		return cargaPesada;
 	}
 
-<<<<<<< Updated upstream
 	public void editarCargaPesada(boolean cargaPesada) {
 		this.cargaPesada = cargaPesada;
 	}
@@ -80,17 +57,10 @@ public class PedidoRetiro {
 		this.observacion = observacion;
 	}
 	
-=======
-	public void cambiarCargaPesada(boolean cargaPesada) {
-		this.cargaPesada = cargaPesada;
-	}
-
->>>>>>> Stashed changes
 	public Vivienda obtenerVivienda() {
 		return vivienda;
 	}
 
-<<<<<<< Updated upstream
 	public void editarVivienda(Vivienda vivienda) {
 		this.vivienda = vivienda;
 	}
@@ -105,18 +75,6 @@ public class PedidoRetiro {
 	
 	public String obtenerDniCiudadanoVivienda() {
 		return vivienda.obtenerDniCiudadano();
-=======
-	public void obtenerVivienda(Vivienda vivienda) {
-		this.vivienda = vivienda;
-	}
-
-	public String obtenerObservacion() {
-		return observacion;
-	}
-
-	public void cambiarObservacion(String observacion) {
-		this.observacion = observacion;
->>>>>>> Stashed changes
 	}
 	
 }
