@@ -1,2 +1,0 @@
-SEMINARIO_PROYECTO_BASE/.classpath
-/ar/
