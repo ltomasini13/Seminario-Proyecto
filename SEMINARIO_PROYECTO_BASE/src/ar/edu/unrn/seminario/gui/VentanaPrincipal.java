@@ -138,16 +138,6 @@ public class VentanaPrincipal extends JFrame {
 			configuracionMenu.add(salirMenuItem);
 		}
 		
-
-		ventanaPrincipalContentPane = new JPanel();
-		ventanaPrincipalContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		ventanaPrincipalContentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(ventanaPrincipalContentPane);
-
-		
-		
-		
-
 		
 	}
 
