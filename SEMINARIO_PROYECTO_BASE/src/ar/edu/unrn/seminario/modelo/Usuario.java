@@ -21,9 +21,7 @@ public class Usuario {
 		if(rol==null || usuario==null || contrasena==null) {
 			throw new  NotNullException("Algunos de los datos es nulo");
 		}
-		
-		
-		
+	
 		this.usuario = usuario;
 		this.contrasena = contrasena;
 		this.nombre = nombre;

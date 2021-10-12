@@ -13,6 +13,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Rol;
 
@@ -56,9 +57,9 @@ public class Prueba {
 		
 		IApi api = new PersistenceApi();
 		try {
-			UsuarioDTO us = api.loguearUsuario("ltomasini13", "1234");
-			us.toString();
-		} catch (AuthenticationException | NotNullException | DataEmptyException e) {
+			api.registrarCiudadano("ltomasini15", "1234", "ltomasini13@gmail.com", "Laura", 2, "Tomasini", "39354863");
+			
+		} catch (AuthenticationException | NotNullException | DataEmptyException | NumbersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

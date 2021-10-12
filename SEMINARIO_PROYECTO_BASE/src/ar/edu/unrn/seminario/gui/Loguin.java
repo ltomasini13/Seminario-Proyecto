@@ -97,6 +97,11 @@ public class Loguin extends JFrame {
 		contentPane.add(botonAceptar);
 		
 		JButton registrarseBoton = new JButton("Registrarse");
+		registrarseBoton.addActionListener((ActionEvent e) -> {
+			RegistroUsuario registro = new RegistroUsuario(api);
+			registro.setVisible(true);
+			
+		});
 		registrarseBoton.setBounds(275, 184, 112, 23);
 		contentPane.add(registrarseBoton);
 	}

@@ -18,6 +18,8 @@ import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
 import ar.unrn.edu.ar.seminario.accesos.RolDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.RolDao;
 import ar.unrn.edu.ar.seminario.accesos.UsuarioDAOJDBC;
@@ -29,11 +31,13 @@ public class PersistenceApi implements IApi {
 	private ViviendaDao viviendaDao;
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
+	private CiudadanoDao ciudadanoDao;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
 		rolDao=new RolDAOJDBC();
 		usuarioDao=new UsuarioDAOJDBC();
+		ciudadanoDao= new CiudadanoDAOJDBC();
 	}
 
 
@@ -49,7 +53,26 @@ public class PersistenceApi implements IApi {
 		
 	}
 
+	@Override
+	public void registrarCiudadano(String username, String password, String email, String nombre, Integer rol,
+			String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException, NumbersException, AuthenticationException {
+		
+		if(this.usuarioDao.buscar(username)!=null) {
+			throw new AuthenticationException("El nombre de usuario '"+ username + "' ya esta en uso");
+		}
+		
+		if(this.ciudadanoDao.buscar(dni)!=null) {
+			throw new AuthenticationException("Existe un ciudadano registrado con el dni '"+dni+"'");
+		}
+		
+		Rol rolCiudadano= rolDao.obtenerRol(rol);
+		Usuario usuario = new Usuario(username, password, nombre, email, rolCiudadano);
+		Ciudadano ciudadano =new Ciudadano(nombre, apellido, dni, usuario);
 
+		ciudadanoDao.crear(ciudadano);
+		
+	}
+	
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano)
@@ -85,7 +108,7 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException {
+	public UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException, NotNullException, DataEmptyException {
 		Usuario usuario = this.usuarioDao.buscar(username);
 		UsuarioDTO usuarioDTO = null;
 		
@@ -238,6 +261,9 @@ public class PersistenceApi implements IApi {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	
 	
 	
 }

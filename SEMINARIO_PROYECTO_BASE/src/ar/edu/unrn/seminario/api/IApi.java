@@ -17,13 +17,15 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 public interface IApi {
 
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException, SintaxisSQLException;
+	void registrarCiudadano(String username, String password, String email, String nombre, Integer rol, String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException, NumbersException, AuthenticationException;
 	
 	UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException;
 	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
 			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException;
 
-	UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException;
+	
+	UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException, NotNullException, DataEmptyException;
 
 	void eliminarUsuario(String username);
 

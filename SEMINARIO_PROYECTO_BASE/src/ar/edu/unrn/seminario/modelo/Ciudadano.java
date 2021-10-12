@@ -26,6 +26,7 @@ public class Ciudadano {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
+		this.usuario=usuario;
 	} 	
  
 	public String obtenerNombre() {
@@ -47,7 +48,21 @@ public class Ciudadano {
 		this.dni = dni;
 	}
 	
+	public String obtenerNombreDeUsuario() {
+		return this.usuario.obtenerNombre();
+	}
 	
+	public String obtenerContrasenaUsuario() {
+		return this.usuario.obtenerContrasena();
+	}
+	
+	public String obtenerEmailUsuario() {
+		return this.usuario.obtenerEmail();
+	}
+	
+	public Usuario obtenerUsuario() {
+		return this.usuario;
+	}
 
 	public Long obtenerId() {
 		return id;

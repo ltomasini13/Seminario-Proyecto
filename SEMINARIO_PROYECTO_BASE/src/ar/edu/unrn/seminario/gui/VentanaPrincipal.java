@@ -60,7 +60,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
-					AltaVivienda altaViv = new AltaVivienda(api);
+					AltaVivienda altaViv = new AltaVivienda(api, usuarioDto);
 					altaViv.setLocationRelativeTo(null);
 					altaViv.setVisible(true);
 			});
@@ -73,7 +73,7 @@ public class VentanaPrincipal extends JFrame {
 					listadoViv.setVisible(true);
 			});
 			viviendasMenu.add(listadoMenuItem);
-			
+
 			JMenu residuosMenu = new JMenu("Residuos");
 			menuBar.add(residuosMenu);
 			
@@ -111,7 +111,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
-					AltaVivienda altaViv = new AltaVivienda(api);
+					AltaVivienda altaViv = new AltaVivienda(api, usuarioDto);
 					altaViv.setLocationRelativeTo(null);
 					altaViv.setVisible(true);
 			});
@@ -126,7 +126,6 @@ public class VentanaPrincipal extends JFrame {
 			viviendasMenu.add(listadoMenuItem);
 			
 			
-		
 
 			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
 			menuBar.add(configuracionMenu);

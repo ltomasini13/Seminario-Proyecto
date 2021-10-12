@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.sun.media.jfxmedia.events.NewFrameEvent;
 
+import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -107,7 +109,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 	}
 
 	@Override
-	public Usuario buscar(String nombreDeUsuario) {
+	public Usuario buscar(String nombreDeUsuario) throws NotNullException, DataEmptyException {
 		Usuario usuario = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -127,9 +129,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 			System.out.println("Error al procesar consulta");
 			// TODO: disparar Exception propia
 			// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+		
 		} finally {
 			ConnectionManager.disconnect();
 		}

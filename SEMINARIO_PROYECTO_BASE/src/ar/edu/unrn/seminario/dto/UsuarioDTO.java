@@ -18,6 +18,10 @@ public class UsuarioDTO {
 		this.estado = estado;
 	}
 
+	public UsuarioDTO() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getUsername() {
 		return username;
 	}
