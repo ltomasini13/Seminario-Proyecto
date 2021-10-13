@@ -52,6 +52,7 @@ public class VentanaPrincipal extends JFrame {
 					listado.setLocationRelativeTo(null);
 					listado.setVisible(true);
 		
+<<<<<<< Updated upstream
 			});
 			adminUsuarioMenu.add(listadoUsuarioMenuItem);
 			
@@ -106,6 +107,37 @@ public class VentanaPrincipal extends JFrame {
 			});
 			configuracionMenu.add(salirMenuItem);
 		}
+=======
+		JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
+		altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
+				AltaVivienda altaViv = new AltaVivienda(api);
+				altaViv.setLocationRelativeTo(null);
+				altaViv.setVisible(true);
+		});
+		viviendasMenu.add(altaModificacionMenuItem);
+		
+		JMenuItem listadoMenuItem = new JMenuItem("Listado");
+		listadoMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoVivienda listadoViv = new ListadoVivienda(api);
+				listadoViv.setLocationRelativeTo(null);
+				listadoViv.setVisible(true);
+		});
+		viviendasMenu.add(listadoMenuItem);
+		
+		JMenu residuosMenu = new JMenu("Residuos");
+		menuBar.add(residuosMenu);
+		
+		JMenuItem registrarMenuItem = new JMenuItem("Registrar");
+		registrarMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarResiduo registro = new RegistrarResiduo(api);
+				registro.setLocationRelativeTo(null);
+				registro.setVisible(true);
+		});
+		residuosMenu.add(registrarMenuItem);
+		
+		JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
+		residuosMenu.add(listadoResiduosMenuItem);
+>>>>>>> Stashed changes
 		
 
 		if(usuarioDto.getRol().equals("RECICLADOR")) {
