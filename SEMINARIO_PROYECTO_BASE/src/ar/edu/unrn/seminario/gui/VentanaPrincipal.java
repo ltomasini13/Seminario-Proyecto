@@ -78,6 +78,10 @@ public class VentanaPrincipal extends JFrame {
 			menuBar.add(residuosMenu);
 			
 			JMenuItem registrarMenuItem = new JMenuItem("Registrar");
+			registrarMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarResiduo residuo = new RegistrarResiduo(api, usuarioDto);
+				residuo.setVisible(true);
+			});
 			residuosMenu.add(registrarMenuItem);
 			
 			JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");

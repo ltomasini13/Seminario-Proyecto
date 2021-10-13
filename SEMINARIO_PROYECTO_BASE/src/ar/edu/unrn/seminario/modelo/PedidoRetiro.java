@@ -7,6 +7,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class PedidoRetiro {
 
+	private Long id;
 	private LocalDateTime fechaEmision;
 	private LocalDateTime fechaCumplimiento;
 	private boolean cargaPesada;
@@ -14,9 +15,9 @@ public class PedidoRetiro {
 	private Vivienda vivienda;
 	private ArrayList<Residuo> listaResiduos = new ArrayList<Residuo>();
 	
-	public PedidoRetiro(LocalDateTime fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) throws NotNullException {
+	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) throws NotNullException {
 
-		this.fechaEmision = fechaEmision;
+		this.fechaEmision = LocalDateTime.parse(fechaEmision);
 		this.cargaPesada = cargaPesada;
 		this.observacion = observacion;
 		this.vivienda = vivienda;
@@ -25,6 +26,14 @@ public class PedidoRetiro {
 		if(fechaEmision == null || vivienda == null) {
 			throw new NotNullException("Alguno de los datos son nulos");
 		}
+	}
+	
+	public Long obtenerId() {
+		return id;
+	}
+	
+	public void editarId(Long id) {
+		this.id=id;
 	}
 	
 	public LocalDateTime obtenerFechaEmision() {
@@ -67,12 +76,23 @@ public class PedidoRetiro {
 		return vivienda.obtenerDniCiudadano();
 	}
 	
-	public void obtenerVivienda(Vivienda vivienda) {
-		this.vivienda = vivienda;
+	public Vivienda obtenerVivienda() {
+		return vivienda;
 	}
 
 	public String obtenerObservacion() {
 		return observacion;
 	}
 	
+	public void editarObservacion(String observacion) {
+		this.observacion = observacion;
+	}
+	
+	public double obtenerCantidad() {
+		double cantidad = 0;
+		for(Residuo r : this.listaResiduos) {
+			cantidad = cantidad+r.obtenerCantkg();
+		}
+		return cantidad;
+	}
 }

@@ -1,13 +1,22 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.exception.NotNullException;
+
 public class Residuo {
 
 	private TipoResiduo tipo;
 	private double cantkg;
 	
-	public Residuo(TipoResiduo residuo, double cant_kg) {
+	public Residuo(TipoResiduo residuo, double cantKg) throws NotNullException {
 		this.tipo = residuo;
-		this.cantkg = cant_kg;
+		this.cantkg = cantKg;
+		
+		if(residuo == null) {
+			throw new NotNullException("El tipo de residuo no puede ser nulo.");
+		}
+		if(cantKg <0) {
+			throw new NumberFormatException("El valor que se ingreso para la cantidad de kg debe ser > 0");
+		}
 	}
 	
 	public double totalPuntosRetiro(){
@@ -28,8 +37,15 @@ public class Residuo {
 		return cantkg;
 	}
 
-	public void editarCantkg(double cant_kg) {
-		this.cantkg = cant_kg;
+	public void editarCantkg(double cantKg) {
+		this.cantkg = cantKg;
+	}
+	
+	public String obtenerTipoResiduo(String tipo) {
+		return this.tipo.obtenerTipo();
 	}
 
+	public int obtenerPuntosTipoResiduo(int puntos) {
+		return this.tipo.obtenerPunto();
+	}
 }
