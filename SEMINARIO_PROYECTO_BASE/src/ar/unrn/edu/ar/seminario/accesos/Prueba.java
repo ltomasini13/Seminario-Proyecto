@@ -12,6 +12,7 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -19,7 +20,7 @@ import ar.edu.unrn.seminario.modelo.Rol;
 
 public class Prueba {
 
-	public static void main(String[] args) throws SintaxisSQLException {
+	public static void main(String[] args) throws SintaxisSQLException, DuplicateUniqueKeyException {
 //		try {
 //
 //			Connection conn = ConnectionManager.getConnection();
@@ -57,9 +58,9 @@ public class Prueba {
 		
 		IApi api = new PersistenceApi();
 		try {
-			api.registrarCiudadano("ltomasini15", "1234", "ltomasini13@gmail.com", "Laura", 2, "Tomasini", "39354863");
+			api.registrarResiduo("PLASTICO", "150");
 			
-		} catch (AuthenticationException | NotNullException | DataEmptyException | NumbersException e) {
+		} catch (NotNullException | DataEmptyException | NumbersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

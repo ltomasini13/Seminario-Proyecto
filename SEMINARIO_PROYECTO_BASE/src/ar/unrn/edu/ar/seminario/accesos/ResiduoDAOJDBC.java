@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
@@ -13,6 +14,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
 public class ResiduoDAOJDBC implements ResiduoDao{
@@ -63,9 +65,33 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 	}
 
 	@Override
-	public List<TipoResiduo> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TipoResiduo> listarTodos() throws SintaxisSQLException {
+		List<TipoResiduo> residuos = new ArrayList<>();
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM residuos");
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				TipoResiduo residuo=new TipoResiduo(rs.getString("tipo"), rs.getInt("puntos"));
+				
+				residuos.add(residuo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Error al procesar la consulta");
+			throw new SintaxisSQLException("No se pudo crear el residuo por un error en la Base de Datos");
+			
+		}catch (Exception e) { 
+				
+		}
+		finally {
+			ConnectionManager.disconnect();
+		}
+		return residuos;
 	}
 
 	@Override

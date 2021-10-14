@@ -1,7 +1,9 @@
 package ar.edu.unrn.seminario.modelo;
-
+ 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.sql.Date;
 
 import ar.edu.unrn.seminario.exception.NotNullException;
 
@@ -44,6 +46,12 @@ public class PedidoRetiro {
 		this.fechaEmision = fecha;
 	}
 
+	public Date obtenerFecha() {
+		ZoneId defaultZoneId = ZoneId.systemDefault ();
+		Date fecha = (Date) Date.from(this.fechaEmision.atZone(defaultZoneId).toInstant());
+		return fecha;
+	}
+	
 	public LocalDateTime obtenerFechaCumplimiento() {
 		return fechaCumplimiento;
 	}

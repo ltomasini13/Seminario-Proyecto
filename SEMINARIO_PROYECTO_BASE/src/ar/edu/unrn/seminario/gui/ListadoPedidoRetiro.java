@@ -40,16 +40,14 @@ public class ListadoPedidoRetiro extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "FECHA", "CARGA PESADA", "OBSERVACION", "CANTIDAD KG", "CALLE", "NUMERO", "BARRIO",
-				"LATITUD", "LONGITUD", "DUEÑO"};
+		String[] titulos = { "FECHA", "CARGA PESADA", "OBSERVACION", "CANTIDAD KG"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
 		List<PedidoRetiroDTO> pedidos= api.obtenerPedidos();
 		for (PedidoRetiroDTO pedido : pedidos) {
 			modelo.addRow(new Object[] { pedido.obtenerFechaEmision(), pedido.isCargaPesada(), pedido.obtenerObservacion(),
-					pedido.obtenerCantidad(), pedido.obtenerCalle(), pedido.obtenerNumero(), pedido.obtenerBarrio(), pedido.obtenerLatitud(), 
-					pedido.obtenerLongitud(), pedido.obtenerNomyApe()});
+					pedido.obtenerCantidad()});
 		}
 		table.setModel(modelo);
 

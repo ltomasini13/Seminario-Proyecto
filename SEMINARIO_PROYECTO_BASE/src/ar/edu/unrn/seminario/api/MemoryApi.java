@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -205,8 +206,7 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion, String calle, String numero, 
-			String barrio, String latitud, String longitud,  String nombre, String apellido) {
+	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -219,6 +219,13 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ResiduoDTO> obtenerResiduos()
+			throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
 		// TODO Auto-generated method stub
 		return null;
 	}

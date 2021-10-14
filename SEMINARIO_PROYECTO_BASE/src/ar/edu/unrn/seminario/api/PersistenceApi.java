@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -22,7 +23,9 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
+import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDao;
+import ar.unrn.edu.ar.seminario.accesos.ResiduoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ResiduoDao;
 import ar.unrn.edu.ar.seminario.accesos.RolDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.RolDao;
@@ -44,6 +47,8 @@ public class PersistenceApi implements IApi {
 		rolDao=new RolDAOJDBC();
 		usuarioDao=new UsuarioDAOJDBC();
 		ciudadanoDao= new CiudadanoDAOJDBC();
+		residuoDao= new ResiduoDAOJDBC();
+		pedidoDao= new PedidoRetiroDAOJDBC();
 	}
 
 
@@ -285,8 +290,7 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion, String calle, String numero, 
-			String barrio, String latitud, String longitud,  String nombre, String apellido) {
+	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -303,6 +307,18 @@ public class PersistenceApi implements IApi {
 	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public List<ResiduoDTO> obtenerResiduos() throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+		List<ResiduoDTO> residuosDTO=new ArrayList<ResiduoDTO>();
+		
+		for(TipoResiduo residuo : residuoDao.listarTodos()) {
+			residuosDTO.add(new ResiduoDTO(residuo.obtenerTipo(), residuo.obtenerPunto()));
+		}
+		
+		return residuosDTO;
 	}
 
 

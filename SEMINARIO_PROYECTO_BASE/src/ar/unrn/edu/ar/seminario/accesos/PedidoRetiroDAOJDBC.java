@@ -1,10 +1,12 @@
 package ar.unrn.edu.ar.seminario.accesos;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +18,12 @@ import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
-import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class PedidoRetiroDAOJDBC implements PedidoRetiroDao{
 
 	@Override
-	public void crear(PedidoRetiro pedido) {
+	public void crear(PedidoRetiro pedido) throws DuplicateUniqueKeyException, SintaxisSQLException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -32,7 +33,8 @@ public class PedidoRetiroDAOJDBC implements PedidoRetiroDao{
 					.prepareStatement("INSERT INTO pedidos (fecha_pedido, carga_pesada, observacion, cantidad_kg, id_vivienda)"
 							+ "VALUES (?, ?, ?, ?, ?)",  Statement.RETURN_GENERATED_KEYS);
 			
-			statement.setDate(1, new java.sql.Date(pedido.obtenerFechaEmision());
+			
+			statement.setDate(1, pedido.obtenerFecha());
 			statement.setBoolean(2, pedido.isCargaPesada());
 			statement.setString(3, pedido.obtenerObservacion());
 			statement.setDouble(4, pedido.obtenerCantidad());
@@ -44,16 +46,14 @@ public class PedidoRetiroDAOJDBC implements PedidoRetiroDao{
 					System.out.println("El ciudadano se creo correctamente.");
 			}
 			catch(MySQLIntegrityConstraintViolationException e){
-		    	throw new DuplicateUniqueKeyException("El ciudadano con dni: "+vivienda.obtenerDniCiudadano()+" ya existe");
+		    	throw new DuplicateUniqueKeyException("El pedido ya existe");
 		    }
 			
 			
 			
 			ResultSet miResult = statement.getGeneratedKeys();
 			miResult.next();
-		    int idCiudadano=miResult.getInt(1);
 		    
-		    //vivienda.obtenerCiudadano().editarId(Long.valueOf(idCiudadano));
 		    miResult.close();
 		    
 		    

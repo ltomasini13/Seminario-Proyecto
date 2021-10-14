@@ -2,9 +2,9 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,24 +14,27 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
-import javax.swing.JButton;
-public class ListadoVivienda extends JFrame {
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
-	private JPanel contentPane;
+public class ListadoResiduo extends JFrame{
+
+	JPanel contentPane;
 	private JTable table;
 	DefaultTableModel modelo;
-	IApi api;
-
-	public ListadoVivienda(IApi api, UsuarioDTO usuarioDto) {
-		this.api=api;
+	
+	public ListadoResiduo(IApi api, UsuarioDTO usuario) throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -39,14 +42,13 @@ public class ListadoVivienda extends JFrame {
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD", "DUEÑO", "FECHA Y HORA"};
+		String[] titulos = { "TIPO RESIDUO", "PUNTOS"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
-		List<ViviendaDTO> viviendas= api.obtenerViviendas();
-		for (ViviendaDTO viv : viviendas) {
-			modelo.addRow(new Object[] { viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
-					viv.obtenerLatitud(), viv.obtenerLongitu(), viv.obtenerNomApeDueño(), viv.obtenerFechaYhora()});
+		List<ResiduoDTO> residuos= api.obtenerResiduos();
+		for (ResiduoDTO residuo : residuos) {
+			modelo.addRow(new Object[] { residuo.obtenerTipo(), residuo.obtenerPunto() });
 		}
 		table.setModel(modelo);
 

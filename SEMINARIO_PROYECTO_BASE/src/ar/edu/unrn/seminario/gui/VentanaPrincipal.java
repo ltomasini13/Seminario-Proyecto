@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -16,6 +17,10 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -51,8 +56,6 @@ public class VentanaPrincipal extends JFrame {
 					ListadoUsuario listado= new ListadoUsuario(api);
 					listado.setLocationRelativeTo(null);
 					listado.setVisible(true);
-		
-<<<<<<< Updated upstream
 			});
 			adminUsuarioMenu.add(listadoUsuarioMenuItem);
 			
@@ -81,20 +84,48 @@ public class VentanaPrincipal extends JFrame {
 			JMenuItem registrarMenuItem = new JMenuItem("Registrar");
 			registrarMenuItem.addActionListener((ActionEvent e) -> {
 				RegistrarResiduo residuo = new RegistrarResiduo(api, usuarioDto);
+				residuo.setLocationRelativeTo(null);
 				residuo.setVisible(true);
 			});
 			residuosMenu.add(registrarMenuItem);
 			
 			JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
+			listadoResiduosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoResiduo residuos;
+				try {
+					residuos = new ListadoResiduo(api, usuarioDto);
+					residuos.setLocationRelativeTo(null);
+					residuos.setVisible(true);
+				} catch (SintaxisSQLException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NotNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (DataEmptyException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NumbersException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			});
 			residuosMenu.add(listadoResiduosMenuItem);
 			
 			JMenu pedidosMenu = new JMenu("Pedidos");
 			menuBar.add(pedidosMenu);
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api, usuarioDto);
+				altaPedido.setLocationRelativeTo(null);
+				altaPedido.setVisible(true);
+			});
 			pedidosMenu.add(altaModificacionPedidosMenuItem);
 			
 			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api, usuarioDto);
+				pedidos.setLocationRelativeTo(null);
+				pedidos.setVisible(true);
+			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 
 			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
@@ -107,38 +138,6 @@ public class VentanaPrincipal extends JFrame {
 			});
 			configuracionMenu.add(salirMenuItem);
 		}
-=======
-		JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
-		altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
-				AltaVivienda altaViv = new AltaVivienda(api);
-				altaViv.setLocationRelativeTo(null);
-				altaViv.setVisible(true);
-		});
-		viviendasMenu.add(altaModificacionMenuItem);
-		
-		JMenuItem listadoMenuItem = new JMenuItem("Listado");
-		listadoMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoVivienda listadoViv = new ListadoVivienda(api);
-				listadoViv.setLocationRelativeTo(null);
-				listadoViv.setVisible(true);
-		});
-		viviendasMenu.add(listadoMenuItem);
-		
-		JMenu residuosMenu = new JMenu("Residuos");
-		menuBar.add(residuosMenu);
-		
-		JMenuItem registrarMenuItem = new JMenuItem("Registrar");
-		registrarMenuItem.addActionListener((ActionEvent e) -> {
-				RegistrarResiduo registro = new RegistrarResiduo(api);
-				registro.setLocationRelativeTo(null);
-				registro.setVisible(true);
-		});
-		residuosMenu.add(registrarMenuItem);
-		
-		JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
-		residuosMenu.add(listadoResiduosMenuItem);
->>>>>>> Stashed changes
-		
 
 		if(usuarioDto.getRol().equals("RECICLADOR")) {
 			
@@ -161,7 +160,24 @@ public class VentanaPrincipal extends JFrame {
 			});
 			viviendasMenu.add(listadoMenuItem);
 			
+			JMenu pedidosMenu = new JMenu("Mis Pedidos");
+			menuBar.add(pedidosMenu);
 			
+			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api, usuarioDto);
+				altaPedido.setLocationRelativeTo(null);
+				altaPedido.setVisible(true);
+			});
+			pedidosMenu.add(altaModificacionPedidosMenuItem);
+			
+			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api, usuarioDto);
+				pedidos.setLocationRelativeTo(null);
+				pedidos.setVisible(true);
+			});
+			pedidosMenu.add(listadoPedidosMenuItem);
 
 			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
 			menuBar.add(configuracionMenu);

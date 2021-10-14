@@ -28,6 +28,9 @@ public class TipoResiduo {
 		}
 	}
 	
+	public TipoResiduo() {
+	}
+	
 	public Long obtenerId() {
 		return id;
 	}

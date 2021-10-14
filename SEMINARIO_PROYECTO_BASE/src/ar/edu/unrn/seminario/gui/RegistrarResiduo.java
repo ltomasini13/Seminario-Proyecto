@@ -52,6 +52,7 @@ public class RegistrarResiduo extends JFrame {
 					
 					api.registrarResiduo(tipoResiduoTextField.getText(), puntosTextField.getText());
 					JOptionPane.showMessageDialog(null, "Residuo registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+					this.dispose();
 					
 				} catch (DataEmptyException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -69,9 +70,8 @@ public class RegistrarResiduo extends JFrame {
 		contentPane.add(btnAceptar);
 		
 		JButton btnCancelar = new JButton("CANCELAR");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
+		btnCancelar.addActionListener((ActionEvent e) -> {
+			this.dispose();
 		});
 		btnCancelar.setBounds(260, 184, 97, 25);
 		contentPane.add(btnCancelar);

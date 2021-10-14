@@ -10,7 +10,7 @@ public interface ResiduoDao {
 
 	void crear(TipoResiduo residuo)throws DuplicateUniqueKeyException, SintaxisSQLException;
 	
-	List<TipoResiduo> listarTodos();
+	List<TipoResiduo> listarTodos()throws SintaxisSQLException;
 
 	TipoResiduo buscar(String nombreDeUsuario);
 	
