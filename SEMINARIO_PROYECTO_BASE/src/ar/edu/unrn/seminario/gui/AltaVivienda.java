@@ -39,7 +39,7 @@ public class AltaVivienda extends JFrame {
 	
 	
 
-	public AltaVivienda(IApi api, UsuarioDTO usuarioDto) {
+	public AltaVivienda(IApi api) {
 		setTitle("Registrar Vivienda");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -52,7 +52,7 @@ public class AltaVivienda extends JFrame {
 		JPanel panelDatosPersonales;
 		JPanel panelDatosVivienda;
 		
-		if (usuarioDto.getRol().equals("ADMIN")) {
+		if (api.esUsuarioAdmin()) {
 			panelDatosPersonales=new JPanel();
 			panelDatosPersonales.setBounds(0, 0, 299, 108);
 			contentPane.add(panelDatosPersonales);
@@ -211,7 +211,7 @@ public class AltaVivienda extends JFrame {
 		}
 		
 		
-		if(usuarioDto.getRol().equals("RECICLADOR")) {
+		if(api.esUsuarioReciclador()) {
 			
 			JButton btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener((ActionEvent e) -> {

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
@@ -75,7 +77,7 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 	}
 
 	@Override
-	public Ciudadano buscar(String dni) throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException {
+	public Ciudadano buscar(String dni) {
 		Ciudadano ciu=null;
 		Connection conn = ConnectionManager.getConnection();
 		
@@ -105,8 +107,10 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 	    
 		}
 		catch (SQLException sq){
-			throw new SintaxisSQLException("Hubo un error con la base de datos");
-			
+			System.out.println("Error al procesar consulta");			
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
 		}
 		finally {
 			ConnectionManager.disconnect();
@@ -114,5 +118,69 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 		
 		return ciu;
 	}
+
+	@Override
+	public List<Vivienda> listarMisViviendas(Ciudadano ciudadano) {
+		List<Vivienda> viviendas = new ArrayList<Vivienda>();
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v where v.id_ciudadano=?");
+
+			statement.setInt(1, ciudadano.obtenerId());
+			ResultSet rs = statement.executeQuery();
+			
+			while (rs.next()) {
+				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
+						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
+				Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
+				viviendas.add(vivienda);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+			// throw new AppException(e, e.getSQLState(), e.getMessage());
+			
+		} catch (Exception e) {
+			//hacer algo
+		
+		} finally {
+			ConnectionManager.disconnect();
+		}
+
+		return viviendas;
+	}
+
+	@Override
+	public Ciudadano buscar(Usuario usuario) {
+		Ciudadano ciu=null;
+		Connection conn = ConnectionManager.getConnection();
+		
+		try {
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM ciudadanos c where c.id_usuario=?");
+			
+			statement.setInt(1, usuario.obtenerId());
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				ciu = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"),rs.getString("c.dni"),  usuario);
+				ciu.editarId(rs.getInt("c.id_ciudadano"));
+			}
+	 
+		}
+		catch (SQLException sq){
+			System.out.println("Error al procesar consulta");			
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+		}
+		finally {
+			ConnectionManager.disconnect();
+		}
+		
+		return ciu;
+	}
+	
 
 }

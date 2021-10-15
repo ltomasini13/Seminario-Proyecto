@@ -5,7 +5,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class Ciudadano {
-	private Long id;
+	private Integer id;
 	private String nombre;
 	private String apellido;
 	private String dni;
@@ -64,11 +64,11 @@ public class Ciudadano {
 		return this.usuario;
 	}
 
-	public Long obtenerId() {
+	public Integer obtenerId() {
 		return id;
 	}
 
-	public void editarId(Long id) {
+	public void editarId(Integer id) {
 		this.id = id;
 	}
 

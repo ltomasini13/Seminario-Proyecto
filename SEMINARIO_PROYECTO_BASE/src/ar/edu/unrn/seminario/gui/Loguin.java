@@ -79,8 +79,8 @@ public class Loguin extends JFrame {
 		JButton botonAceptar = new JButton("Aceptar");
 		botonAceptar.addActionListener((ActionEvent e) -> {
 			try {
-				UsuarioDTO usuarioDto = api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
-				VentanaPrincipal vp = new VentanaPrincipal(api, usuarioDto);
+				api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
+				VentanaPrincipal vp = new VentanaPrincipal(api);
 				vp.setVisible(true);
 				
 			} catch (SintaxisSQLException e1) {

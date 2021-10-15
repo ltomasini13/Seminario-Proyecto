@@ -15,6 +15,7 @@ import com.sun.media.jfxmedia.events.NewFrameEvent;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -114,7 +115,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT u.usuario,  u.contrasena, u.nombre, u.email, u.id_rol, (select r.nombre from roles r"
+					"SELECT u.id_usuario, u.usuario,  u.contrasena, u.nombre, u.email, u.id_rol, (select r.nombre from roles r"
 					+ " where r.id_rol=u.id_rol) as nombre_rol FROM usuarios u where u.usuario = ?");
 
 			statement.setString(1, nombreDeUsuario);
@@ -123,6 +124,8 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 				Rol rol = new Rol(rs.getInt("u.id_rol"), rs.getString("nombre_rol"));
 				usuario = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"),
 						rs.getString("u.email"), rol);
+				usuario.editarId(new Integer(rs.getInt("u.id_usuario")));
+				
 			}
 
 		} catch (SQLException e) {
@@ -136,6 +139,7 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 
 		return usuario;
 	}
+
 	
 	
 	

@@ -10,6 +10,8 @@ public class UsuarioDTO {
 
 	public UsuarioDTO(String username, String password, String nombre, String email, String rol,
 			String estado) {
+		
+	
 		this.username = username;
 		this.password = password;
 		this.nombre = nombre;
@@ -61,6 +63,8 @@ public class UsuarioDTO {
 	public void setRol(String rol) {
 		this.rol = rol;
 	}
+	
+	
 
 	public boolean isActivo() {
 		if(this.estado.equals("ACTIVO")) {

@@ -9,6 +9,7 @@ import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -32,6 +33,7 @@ public class PersistenceApi implements IApi {
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
 	private CiudadanoDao ciudadanoDao;
+	private Sesion sesion;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -217,13 +219,33 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<ViviendaDTO> obtenerViviendas() {
-		
+	public List<ViviendaDTO> obtenerViviendas() throws EmptyListException  {
 		List<ViviendaDTO> viviendasDTO=new ArrayList<ViviendaDTO>();
+		List<Vivienda> viviendas;
+		if(this.esUsuarioAdmin()) {
+			viviendas=viviendaDao.listarTodas();
+			if(viviendas.isEmpty()) {
+				throw new EmptyListException("No hay ninguna vivienda registrada en el sistema");
+			}
+			for(Vivienda v : viviendas ) {
+				viviendasDTO.add(new ViviendaDTO(v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(),
+						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
+			}
+		}
 		
-		for(Vivienda v : viviendaDao.listarTodas()) {
-			viviendasDTO.add(new ViviendaDTO(v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(),
-					v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
+		
+		if(this.esUsuarioReciclador()) {
+			Ciudadano ciu=this.ciudadanoDao.buscar(sesion.obtenerUsuario());
+			viviendas=this.ciudadanoDao.listarMisViviendas(ciu);
+			
+			if(viviendas.isEmpty()) {
+				throw new EmptyListException("No tiene ninguna vivienda registrada");
+			}
+			
+			for(Vivienda v : viviendas) {
+				viviendasDTO.add(new ViviendaDTO(v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(), 
+						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
+			}
 		}
 		
 		return viviendasDTO;
@@ -232,7 +254,7 @@ public class PersistenceApi implements IApi {
 
 	
 	@Override
-	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
+	public void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
 		if(username==null || contrasena==null) {
 			throw new NotNullException("Los campos de usuario o contraseña son nulos");
 		}
@@ -241,26 +263,42 @@ public class PersistenceApi implements IApi {
 			throw new DataEmptyException ("Los campos de suario o contraseña son vacios");
 		}
 		
-		UsuarioDTO usuarioDTO= this.obtenerUsuario(username);
+		Usuario usuario = this.usuarioDao.buscar(username);
 		
-		if(usuarioDTO==null) {
+		if(usuario==null) {
 			throw new AuthenticationException("Usuario y/o contraseña");
 		}
 		else {
-			if(!contrasena.equals(usuarioDTO.getPassword())) {
+			if(!contrasena.equals(usuario.obtenerContrasena())) {
 				throw new AuthenticationException("Usuario y/o contraseña");
 			}
 		}
-		return usuarioDTO;
 		
+		sesion=new Sesion(usuario);
+	}
+	
+	
+	public boolean esUsuarioAdmin() {
+		if(sesion.tipoDeUsuario().equals("ADMIN")) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	
+	public boolean esUsuarioReciclador() {
+		if(sesion.tipoDeUsuario().equals("RECICLADOR")) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 
-	@Override
-	public List<ViviendaDTO> obtenerViviendas(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 	

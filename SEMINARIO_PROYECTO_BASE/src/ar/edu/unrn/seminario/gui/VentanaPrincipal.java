@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -16,6 +17,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.EmptyListException;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -25,7 +27,8 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 
 	 */
-	public VentanaPrincipal(IApi api, UsuarioDTO usuarioDto) {
+	public VentanaPrincipal(IApi api) {
+		
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -33,7 +36,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		if(usuarioDto.getRol().equals("ADMIN")) { // pregunta que tipo de usuario para mostrar el menu
+		if(api.esUsuarioAdmin()) { // pregunta que tipo de usuario para mostrar el menu
 			JMenu adminUsuarioMenu = new JMenu("Usuarios");
 			menuBar.add(adminUsuarioMenu);
 
@@ -60,7 +63,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
-					AltaVivienda altaViv = new AltaVivienda(api, usuarioDto);
+					AltaVivienda altaViv = new AltaVivienda(api);
 					altaViv.setLocationRelativeTo(null);
 					altaViv.setVisible(true);
 			});
@@ -68,9 +71,16 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem listadoMenuItem = new JMenuItem("Listado");
 			listadoMenuItem.addActionListener((ActionEvent e) -> {
-					ListadoVivienda listadoViv = new ListadoVivienda(api, usuarioDto);
-					listadoViv.setLocationRelativeTo(null);
-					listadoViv.setVisible(true);
+					ListadoVivienda listadoViv;
+					try {
+						listadoViv = new ListadoVivienda(api);
+						listadoViv.setLocationRelativeTo(null);
+						listadoViv.setVisible(true);
+					} catch (EmptyListException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 			});
 			viviendasMenu.add(listadoMenuItem);
 
@@ -104,14 +114,14 @@ public class VentanaPrincipal extends JFrame {
 		}
 		
 
-		if(usuarioDto.getRol().equals("RECICLADOR")) {
+		if(api.esUsuarioReciclador()) {
 			
 			JMenu viviendasMenu = new JMenu("Mis viviendas");
 			menuBar.add(viviendasMenu);
 			
 			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
-					AltaVivienda altaViv = new AltaVivienda(api, usuarioDto);
+					AltaVivienda altaViv = new AltaVivienda(api);
 					altaViv.setLocationRelativeTo(null);
 					altaViv.setVisible(true);
 			});
@@ -119,9 +129,15 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem listadoMenuItem = new JMenuItem("Listado");
 			listadoMenuItem.addActionListener((ActionEvent e) -> {
-					ListadoVivienda listadoViv = new ListadoVivienda(api, usuarioDto);
-					listadoViv.setLocationRelativeTo(null);
-					listadoViv.setVisible(true);
+					ListadoVivienda listadoViv;
+					try {
+						listadoViv = new ListadoVivienda(api);
+						listadoViv.setLocationRelativeTo(null);
+						listadoViv.setVisible(true);
+					} catch (EmptyListException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
 			});
 			viviendasMenu.add(listadoMenuItem);
 			

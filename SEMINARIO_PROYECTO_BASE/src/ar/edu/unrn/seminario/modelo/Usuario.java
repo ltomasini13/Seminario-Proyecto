@@ -5,6 +5,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.StateException;
 
 public class Usuario {
+	private Integer id;
 	private String usuario;
 	private String contrasena;
 	private String nombre;
@@ -29,6 +30,17 @@ public class Usuario {
 		this.rol = rol;
 		this.activo=true;
 	}
+
+	
+	public Integer obtenerId() {
+		return id;
+	}
+
+
+	public void editarId(Integer id) {
+		this.id = id;
+	}
+
 
 	public String obtenerUsuario() {
 		return usuario;
