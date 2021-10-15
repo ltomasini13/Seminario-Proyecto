@@ -17,6 +17,14 @@ public class Vivienda {
 		}
 	}
 	
+	public Long obtenerId() {
+		return id;
+	}
+	
+	public void editarId(Long id) {
+		this.id=id;
+	}
+	
 	public Ubicacion obtenerUbicacion() {
 		return ubicacion;
 	}
@@ -40,7 +48,7 @@ public class Vivienda {
 	}
 	
 	public String obtenerUbicacionBarrio() {
-		return ubicacion.obeterBarrio();
+		return ubicacion.obtenerBarrio();
 	}
 	
 	public double obtenerUbicacionLatitud() {

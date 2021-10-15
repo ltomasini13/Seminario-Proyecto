@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
@@ -184,6 +187,45 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public List<ViviendaDTO> obtenerViviendas(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registrarCiudadano(String username, String password, String email, String nombre, Integer rol,
+			String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException,
+			NumbersException, AuthenticationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registrarResiduo(String tipo, String numero) throws NumbersException  {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<PedidoRetiroDTO> obtenerPedidos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ResiduoDTO> obtenerResiduos()
+			throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
 		// TODO Auto-generated method stub
 		return null;
 	}

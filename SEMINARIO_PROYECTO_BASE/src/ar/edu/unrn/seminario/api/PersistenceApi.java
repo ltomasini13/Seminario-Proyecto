@@ -3,6 +3,8 @@ package ar.edu.unrn.seminario.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -16,11 +18,16 @@ import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
+import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDao;
+import ar.unrn.edu.ar.seminario.accesos.ResiduoDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.ResiduoDao;
 import ar.unrn.edu.ar.seminario.accesos.RolDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.RolDao;
 import ar.unrn.edu.ar.seminario.accesos.UsuarioDAOJDBC;
@@ -33,13 +40,20 @@ public class PersistenceApi implements IApi {
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
 	private CiudadanoDao ciudadanoDao;
+<<<<<<< HEAD
 	private Sesion sesion;
+=======
+	private ResiduoDao residuoDao;
+	private PedidoRetiroDao pedidoDao;
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
 		rolDao=new RolDAOJDBC();
 		usuarioDao=new UsuarioDAOJDBC();
 		ciudadanoDao= new CiudadanoDAOJDBC();
+		residuoDao= new ResiduoDAOJDBC();
+		pedidoDao= new PedidoRetiroDAOJDBC();
 	}
 
 
@@ -260,7 +274,7 @@ public class PersistenceApi implements IApi {
 		}
 		
 		if(username.isEmpty() || contrasena.isEmpty()) {
-			throw new DataEmptyException ("Los campos de suario o contraseña son vacios");
+			throw new DataEmptyException ("Los campos de usuario o contraseña son vacios");
 		}
 		
 		Usuario usuario = this.usuarioDao.buscar(username);
@@ -299,6 +313,54 @@ public class PersistenceApi implements IApi {
 
 
 	
+
+
+	@Override
+	public void registrarResiduo(String tipo, String numero) throws NumbersException, NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException {
+		
+		if(!numero.matches("[0-9]+")) {
+			throw new NumbersException("El valor ingresado para el campo 'Número' no es numérico");
+		}
+		int nro = Integer.parseInt(numero);
+		
+		TipoResiduo residuo = new TipoResiduo(tipo, nro);
+		
+		residuoDao.crear(residuo);
+		
+	}
+
+
+	@Override
+	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<PedidoRetiroDTO> obtenerPedidos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<ResiduoDTO> obtenerResiduos() throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+		List<ResiduoDTO> residuosDTO=new ArrayList<ResiduoDTO>();
+		
+		for(TipoResiduo residuo : residuoDao.listarTodos()) {
+			residuosDTO.add(new ResiduoDTO(residuo.obtenerTipo(), residuo.obtenerPunto()));
+		}
+		
+		return residuosDTO;
+	}
 
 
 	

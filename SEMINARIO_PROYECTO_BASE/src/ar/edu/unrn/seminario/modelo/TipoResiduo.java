@@ -6,6 +6,7 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class TipoResiduo {
 
+	private Long id;
 	private String tipo;
 	private int punto;
 	
@@ -27,12 +28,23 @@ public class TipoResiduo {
 		}
 	}
 	
+	public TipoResiduo() {
+	}
+	
+	public Long obtenerId() {
+		return id;
+	}
+	
+	public void editarId(Long id) {
+		this.id=id;
+	}
+	
 	public String obtenerTipo() {
 		return tipo;
 	}
 
-	public void editarTipo(String tipo_residuo) {
-		this.tipo = tipo_residuo;
+	public void editarTipo(String tipoResiduo) {
+		this.tipo = tipoResiduo;
 	}
 
 	public int obtenerPunto() {

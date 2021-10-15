@@ -13,7 +13,11 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+<<<<<<< HEAD
 import ar.edu.unrn.seminario.exception.EmptyListException;
+=======
+import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -21,7 +25,11 @@ import ar.edu.unrn.seminario.modelo.Rol;
 
 public class Prueba {
 
+<<<<<<< HEAD
 	public static void main(String[] args) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException, EmptyListException {
+=======
+	public static void main(String[] args) throws SintaxisSQLException, DuplicateUniqueKeyException {
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 //		try {
 //
 //			Connection conn = ConnectionManager.getConnection();
@@ -58,11 +66,21 @@ public class Prueba {
 //		}
 		
 		IApi api = new PersistenceApi();
+<<<<<<< HEAD
 		api.loguearUsuario("karen2021", "12345");
 		List<ViviendaDTO> viviendas = api.obtenerViviendas();
 		viviendas.size();
 			
 		
+=======
+		try {
+			api.registrarResiduo("PLASTICO", "150");
+			
+		} catch (NotNullException | DataEmptyException | NumbersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 	}
 	
 	

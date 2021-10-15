@@ -47,7 +47,7 @@ public class Ubicacion {
 		this.numero = numero;
 	}
 
-	public String obeterBarrio() {
+	public String obtenerBarrio() {
 		return barrio;
 	}
 

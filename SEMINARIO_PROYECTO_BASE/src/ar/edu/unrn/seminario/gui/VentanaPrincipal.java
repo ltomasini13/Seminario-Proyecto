@@ -17,7 +17,14 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+<<<<<<< HEAD
 import ar.edu.unrn.seminario.exception.EmptyListException;
+=======
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 
 public class VentanaPrincipal extends JFrame {
 
@@ -54,7 +61,6 @@ public class VentanaPrincipal extends JFrame {
 					ListadoUsuario listado= new ListadoUsuario(api);
 					listado.setLocationRelativeTo(null);
 					listado.setVisible(true);
-		
 			});
 			adminUsuarioMenu.add(listadoUsuarioMenuItem);
 			
@@ -88,18 +94,50 @@ public class VentanaPrincipal extends JFrame {
 			menuBar.add(residuosMenu);
 			
 			JMenuItem registrarMenuItem = new JMenuItem("Registrar");
+			registrarMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarResiduo residuo = new RegistrarResiduo(api, usuarioDto);
+				residuo.setLocationRelativeTo(null);
+				residuo.setVisible(true);
+			});
 			residuosMenu.add(registrarMenuItem);
 			
 			JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
+			listadoResiduosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoResiduo residuos;
+				try {
+					residuos = new ListadoResiduo(api, usuarioDto);
+					residuos.setLocationRelativeTo(null);
+					residuos.setVisible(true);
+				} catch (SintaxisSQLException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NotNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (DataEmptyException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NumbersException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			});
 			residuosMenu.add(listadoResiduosMenuItem);
 			
 			JMenu pedidosMenu = new JMenu("Pedidos");
 			menuBar.add(pedidosMenu);
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api, usuarioDto);
+				altaPedido.setLocationRelativeTo(null);
+				altaPedido.setVisible(true);
+			});
 			pedidosMenu.add(altaModificacionPedidosMenuItem);
 			
 			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api, usuarioDto);
+				pedidos.setLocationRelativeTo(null);
+				pedidos.setVisible(true);
+			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 
 			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
@@ -112,7 +150,6 @@ public class VentanaPrincipal extends JFrame {
 			});
 			configuracionMenu.add(salirMenuItem);
 		}
-		
 
 		if(api.esUsuarioReciclador()) {
 			
@@ -141,7 +178,24 @@ public class VentanaPrincipal extends JFrame {
 			});
 			viviendasMenu.add(listadoMenuItem);
 			
+			JMenu pedidosMenu = new JMenu("Mis Pedidos");
+			menuBar.add(pedidosMenu);
 			
+			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api, usuarioDto);
+				altaPedido.setLocationRelativeTo(null);
+				altaPedido.setVisible(true);
+			});
+			pedidosMenu.add(altaModificacionPedidosMenuItem);
+			
+			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api, usuarioDto);
+				pedidos.setLocationRelativeTo(null);
+				pedidos.setVisible(true);
+			});
+			pedidosMenu.add(listadoPedidosMenuItem);
 
 			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
 			menuBar.add(configuracionMenu);

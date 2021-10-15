@@ -1,7 +1,10 @@
 package ar.edu.unrn.seminario.api;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -13,6 +16,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
 public interface IApi {
@@ -24,6 +28,11 @@ public interface IApi {
 	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
 			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException;
+<<<<<<< HEAD
+=======
+
+	void registrarResiduo(String tipo, String numero) throws NumbersException, NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException;
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 	
 	
 	boolean esUsuarioAdmin();
@@ -50,7 +59,19 @@ public interface IApi {
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 	
+<<<<<<< HEAD
 	List<ViviendaDTO> obtenerViviendas() throws EmptyListException; //recupera todas las viviendas registradas
 	
+=======
+	List<ViviendaDTO> obtenerViviendas(); //recupera todas las viviendas registradas
+	List<ViviendaDTO> obtenerViviendas(Usuario usuario); //recupera todas las viviendas que tiene registradas ese usuario
+
+	void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion);
+	
+	List<PedidoRetiroDTO> obtenerPedidos();
+	List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario);
+	
+	List<ResiduoDTO> obtenerResiduos()throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException;
+>>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 	
 }
