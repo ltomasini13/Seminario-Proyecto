@@ -28,15 +28,14 @@ public class ListadoVivienda extends JFrame {
 	
 	IApi api;
 
-<<<<<<< HEAD
+
 
 	/**
 	 * Create the frame.
 	 */
 	public ListadoVivienda(IApi api) throws EmptyListException {
-=======
-	public ListadoVivienda(IApi api, UsuarioDTO usuarioDto) {
->>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
+
+
 		this.api=api;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

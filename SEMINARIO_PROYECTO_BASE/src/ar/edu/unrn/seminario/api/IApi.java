@@ -28,11 +28,9 @@ public interface IApi {
 	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
 			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException;
-<<<<<<< HEAD
-=======
+
 
 	void registrarResiduo(String tipo, String numero) throws NumbersException, NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException;
->>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
 	
 	
 	boolean esUsuarioAdmin();
@@ -59,19 +57,17 @@ public interface IApi {
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 	
-<<<<<<< HEAD
+
 	List<ViviendaDTO> obtenerViviendas() throws EmptyListException; //recupera todas las viviendas registradas
 	
-=======
-	List<ViviendaDTO> obtenerViviendas(); //recupera todas las viviendas registradas
-	List<ViviendaDTO> obtenerViviendas(Usuario usuario); //recupera todas las viviendas que tiene registradas ese usuario
 
+	
 	void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion);
 	
 	List<PedidoRetiroDTO> obtenerPedidos();
 	List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario);
 	
 	List<ResiduoDTO> obtenerResiduos()throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException;
->>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
+
 	
 }

@@ -17,14 +17,14 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
-<<<<<<< HEAD
+
 import ar.edu.unrn.seminario.exception.EmptyListException;
-=======
+
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
->>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
+
 
 public class VentanaPrincipal extends JFrame {
 
@@ -95,7 +95,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem registrarMenuItem = new JMenuItem("Registrar");
 			registrarMenuItem.addActionListener((ActionEvent e) -> {
-				RegistrarResiduo residuo = new RegistrarResiduo(api, usuarioDto);
+				RegistrarResiduo residuo = new RegistrarResiduo(api);
 				residuo.setLocationRelativeTo(null);
 				residuo.setVisible(true);
 			});
@@ -105,7 +105,7 @@ public class VentanaPrincipal extends JFrame {
 			listadoResiduosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoResiduo residuos;
 				try {
-					residuos = new ListadoResiduo(api, usuarioDto);
+					residuos = new ListadoResiduo(api);
 					residuos.setLocationRelativeTo(null);
 					residuos.setVisible(true);
 				} catch (SintaxisSQLException e1) {
@@ -126,7 +126,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api, usuarioDto);
+				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api);
 				altaPedido.setLocationRelativeTo(null);
 				altaPedido.setVisible(true);
 			});
@@ -134,7 +134,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
 			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api, usuarioDto);
+				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api);
 				pedidos.setLocationRelativeTo(null);
 				pedidos.setVisible(true);
 			});
@@ -183,7 +183,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api, usuarioDto);
+				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api);
 				altaPedido.setLocationRelativeTo(null);
 				altaPedido.setVisible(true);
 			});
@@ -191,7 +191,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
 			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api, usuarioDto);
+				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api);
 				pedidos.setLocationRelativeTo(null);
 				pedidos.setVisible(true);
 			});

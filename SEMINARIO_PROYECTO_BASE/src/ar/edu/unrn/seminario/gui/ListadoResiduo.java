@@ -28,7 +28,7 @@ public class ListadoResiduo extends JFrame{
 	private JTable table;
 	DefaultTableModel modelo;
 	
-	public ListadoResiduo(IApi api, UsuarioDTO usuario) throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+	public ListadoResiduo(IApi api) throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

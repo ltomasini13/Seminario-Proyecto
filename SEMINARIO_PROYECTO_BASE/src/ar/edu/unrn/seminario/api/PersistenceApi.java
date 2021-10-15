@@ -40,12 +40,12 @@ public class PersistenceApi implements IApi {
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
 	private CiudadanoDao ciudadanoDao;
-<<<<<<< HEAD
+
 	private Sesion sesion;
-=======
+
 	private ResiduoDao residuoDao;
 	private PedidoRetiroDao pedidoDao;
->>>>>>> 8b000275cd62562d603c30581e4c5c1694e0bb84
+
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -361,6 +361,9 @@ public class PersistenceApi implements IApi {
 		
 		return residuosDTO;
 	}
+
+
+	
 
 
 	

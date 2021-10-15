@@ -18,7 +18,7 @@ public class AltaPedidoRetiro extends JFrame{
 	private JPanel contentPane;
 	private JTextField observacionText;
 	
-	public AltaPedidoRetiro(IApi api, UsuarioDTO usuario) {
+	public AltaPedidoRetiro(IApi api) {
 		
 		setTitle("Alta Pedido Retiro");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

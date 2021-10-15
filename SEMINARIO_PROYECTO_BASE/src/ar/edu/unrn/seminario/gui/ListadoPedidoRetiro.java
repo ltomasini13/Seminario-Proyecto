@@ -25,7 +25,7 @@ public class ListadoPedidoRetiro extends JFrame{
 	DefaultTableModel modelo;
 	IApi api;
 
-	public ListadoPedidoRetiro(IApi api, UsuarioDTO usuarioDto) {
+	public ListadoPedidoRetiro(IApi api) {
 		this.api=api;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
