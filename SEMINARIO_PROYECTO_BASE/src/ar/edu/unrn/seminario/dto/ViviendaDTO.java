@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.dto;
 import java.time.LocalDateTime;
 
 public class ViviendaDTO {
+		private Integer id;
 		private String calle;
 		private int numero;
 		private String barrio;
@@ -12,8 +13,9 @@ public class ViviendaDTO {
 		private LocalDateTime fechaYhora;
 		
 		
-		public ViviendaDTO(String calle, int numero, String barrio, double latitud, double longitud, String nomApeDueño,
+		public ViviendaDTO(Integer id, String calle, int numero, String barrio, double latitud, double longitud, String nomApeDueño,
 				LocalDateTime fechaYhora) {
+			this.id=id;
 			this.calle = calle;
 			this.numero = numero;
 			this.barrio = barrio;
@@ -23,7 +25,14 @@ public class ViviendaDTO {
 			this.fechaYhora = fechaYhora;
 		}
 
-
+		public Integer obtenerId() {
+			return id;
+		}
+		
+		public void editarId(Integer id) {
+			this.id=id;
+		}
+		
 		public String obtenerCalle() {
 			return calle;
 		}

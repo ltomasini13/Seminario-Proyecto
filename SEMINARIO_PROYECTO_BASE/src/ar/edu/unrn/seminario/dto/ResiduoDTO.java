@@ -5,16 +5,17 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class ResiduoDTO {
-
+	private Integer id;
 	private String tipo;
 	private int punto;
 	
-	public ResiduoDTO(String tipo, int punto) throws NotNullException, DataEmptyException, NumbersException {
-		
+	public ResiduoDTO(Integer id, String tipo, int punto) throws NotNullException, DataEmptyException, NumbersException {
+		this.id=id;
 		this.tipo = tipo;
 		this.punto = punto;
 		
 	}
+	
 	
 	public String obtenerTipo() {
 		return tipo;
@@ -26,6 +27,15 @@ public class ResiduoDTO {
 
 	public int obtenerPunto() {
 		return punto;
+	}
+
+	
+	public Integer obtenerId() {
+		return id;
+	}
+
+	public void editarId(Integer id) {
+		this.id = id;
 	}
 
 	public void editarPunto(int punto) {

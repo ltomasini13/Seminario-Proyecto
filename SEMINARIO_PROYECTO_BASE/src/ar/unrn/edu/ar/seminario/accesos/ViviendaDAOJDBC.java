@@ -116,7 +116,10 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 //				System.out.println("Nombre y apellido: "+rs.getString("nombre")+" "+rs.getString("apellido")+"Dni: "+rs.getString("dni"));
 				Ciudadano ciudadano = new Ciudadano(rs.getString("nombre"), rs.getString("apellido"), rs.getString("dni"), null);
 				Ubicacion ubicacion = new Ubicacion(rs.getString("calle"), rs.getInt("numero"), rs.getString("barrio"), rs.getDouble("latitud"), rs.getDouble("longitud"));
-				viviendas.add(new Vivienda(ubicacion, ciudadano));
+				Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
+				vivienda.editarId(rs.getInt("v.id_vivienda"));
+				viviendas.add(vivienda);
+				
 			}
 		
 		   viviendasOrdenadasPorBarrio= viviendas.stream().sorted((v1, v2) -> 

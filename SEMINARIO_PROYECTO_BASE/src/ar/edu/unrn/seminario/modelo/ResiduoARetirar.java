@@ -2,12 +2,12 @@ package ar.edu.unrn.seminario.modelo;
 
 import ar.edu.unrn.seminario.exception.NotNullException;
 
-public class Residuo {
+public class ResiduoARetirar {
 
 	private TipoResiduo tipo;
 	private double cantkg;
 	
-	public Residuo(TipoResiduo residuo, double cantKg) throws NotNullException {
+	public ResiduoARetirar(TipoResiduo residuo, double cantKg) throws NotNullException {
 		this.tipo = residuo;
 		this.cantkg = cantKg;
 		

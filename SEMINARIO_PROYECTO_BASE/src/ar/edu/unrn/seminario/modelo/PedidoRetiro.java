@@ -15,7 +15,7 @@ public class PedidoRetiro {
 	private boolean cargaPesada;
 	private String observacion;
 	private Vivienda vivienda;
-	private ArrayList<Residuo> listaResiduos = new ArrayList<Residuo>();
+	private ArrayList<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
 	
 	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) throws NotNullException {
 
@@ -98,8 +98,8 @@ public class PedidoRetiro {
 	
 	public double obtenerCantidad() {
 		double cantidad = 0;
-		for(Residuo r : this.listaResiduos) {
-			cantidad = cantidad+r.obtenerCantkg();
+		for(ResiduoARetirar r : this.residuosARetirar) {
+		//	cantidad = cantidad
 		}
 		return cantidad;
 	}

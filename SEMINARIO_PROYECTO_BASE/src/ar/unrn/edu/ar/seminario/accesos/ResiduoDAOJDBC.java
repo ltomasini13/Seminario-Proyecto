@@ -13,7 +13,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
@@ -77,7 +77,7 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 			
 			while(rs.next()) {
 				TipoResiduo residuo=new TipoResiduo(rs.getString("tipo"), rs.getInt("puntos"));
-				
+				residuo.editarId(rs.getInt("id_residuo"));
 				residuos.add(residuo);
 			}
 			

@@ -49,16 +49,16 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 	
 		ResultSet miResult = statement.getGeneratedKeys();
 		miResult.next();
-	    int idUsuarios=miResult.getInt(1);
+	    int idUsuarioss=miResult.getInt(1);
 	    miResult.close();
 	    
 	    PreparedStatement statement2 = conn
-				.prepareStatement("INSERT INTO ciudadanos c (c.nombre, c.apellido, c.dni, c.id_usuario) VALUES (?, ?, ?, ?)");
+				.prepareStatement("INSERT INTO ciudadanos (nombre, apellido, dni, id_usuario) VALUES (?, ?, ?, ?)");
 	    
 	    statement2.setString(1, ciudadano.obtenerNombre());
 	    statement2.setString(2, ciudadano.obtenerApellido());
 	    statement2.setString(3, ciudadano.obtenerDni());
-	    statement2.setInt(4, idUsuarios);
+	    statement2.setInt(4, idUsuarioss);
 	    
 		
 	    int cantidad2 = statement2.executeUpdate();
@@ -133,6 +133,7 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
 						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
 				Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
+				vivienda.editarId(rs.getInt("v.id_vivienda"));
 				viviendas.add(vivienda);
 			}
 

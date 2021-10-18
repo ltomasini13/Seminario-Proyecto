@@ -242,7 +242,7 @@ public class PersistenceApi implements IApi {
 				throw new EmptyListException("No hay ninguna vivienda registrada en el sistema");
 			}
 			for(Vivienda v : viviendas ) {
-				viviendasDTO.add(new ViviendaDTO(v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(),
+				viviendasDTO.add(new ViviendaDTO(v.obtenerId(), v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(),
 						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
 			}
 		}
@@ -257,7 +257,7 @@ public class PersistenceApi implements IApi {
 			}
 			
 			for(Vivienda v : viviendas) {
-				viviendasDTO.add(new ViviendaDTO(v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(), 
+				viviendasDTO.add(new ViviendaDTO(v.obtenerId(), v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(), 
 						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
 			}
 		}
@@ -319,7 +319,7 @@ public class PersistenceApi implements IApi {
 	public void registrarResiduo(String tipo, String numero) throws NumbersException, NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException {
 		
 		if(!numero.matches("[0-9]+")) {
-			throw new NumbersException("El valor ingresado para el campo 'Número' no es numérico");
+			throw new NumbersException("El valor ingresado para el campo 'Puntos' no es numérico");
 		}
 		int nro = Integer.parseInt(numero);
 		
@@ -356,7 +356,7 @@ public class PersistenceApi implements IApi {
 		List<ResiduoDTO> residuosDTO=new ArrayList<ResiduoDTO>();
 		
 		for(TipoResiduo residuo : residuoDao.listarTodos()) {
-			residuosDTO.add(new ResiduoDTO(residuo.obtenerTipo(), residuo.obtenerPunto()));
+			residuosDTO.add(new ResiduoDTO(residuo.obtenerId(),residuo.obtenerTipo(), residuo.obtenerPunto()));
 		}
 		
 		return residuosDTO;

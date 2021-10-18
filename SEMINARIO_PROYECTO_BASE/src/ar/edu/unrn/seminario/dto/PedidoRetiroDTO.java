@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import ar.edu.unrn.seminario.exception.NotNullException;
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 
 public class PedidoRetiroDTO {
 
@@ -20,7 +20,7 @@ public class PedidoRetiroDTO {
     private String nombre;
 	private String apellido;
 	private String dni;
-	private ArrayList<Residuo> listaResiduos = new ArrayList<Residuo>();
+	private ArrayList<ResiduoARetirar> listaResiduos = new ArrayList<ResiduoARetirar>();
 	
 	public PedidoRetiroDTO(LocalDateTime fechaEmision, boolean cargaPesada, String observacion, double cantidadKg, String calle, int numero, 
 			String barrio, double latitud, double longitud,  String nombre, String apellido) throws NotNullException {

@@ -3,7 +3,7 @@ package ar.edu.unrn.seminario.modelo;
 import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class Vivienda {
-	private Long id;
+	private Integer id;
 	private Ubicacion ubicacion;
 	private Ciudadano ciudadano;
 	
@@ -17,11 +17,11 @@ public class Vivienda {
 		}
 	}
 	
-	public Long obtenerId() {
+	public Integer obtenerId() {
 		return id;
 	}
 	
-	public void editarId(Long id) {
+	public void editarId(Integer id) {
 		this.id=id;
 	}
 	

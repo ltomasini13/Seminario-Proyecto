@@ -126,7 +126,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api);
+				SeleccionResiduos altaPedido = new SeleccionResiduos(api);
 				altaPedido.setLocationRelativeTo(null);
 				altaPedido.setVisible(true);
 			});
@@ -183,7 +183,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				AltaPedidoRetiro altaPedido = new AltaPedidoRetiro(api);
+				SeleccionResiduos altaPedido = new SeleccionResiduos(api);
 				altaPedido.setLocationRelativeTo(null);
 				altaPedido.setVisible(true);
 			});

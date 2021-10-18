@@ -49,7 +49,7 @@ public class Ciudadano {
 	}
 	
 	public String obtenerNombreDeUsuario() {
-		return this.usuario.obtenerNombre();
+		return this.usuario.obtenerUsuario();
 	}
 	
 	public String obtenerContrasenaUsuario() {

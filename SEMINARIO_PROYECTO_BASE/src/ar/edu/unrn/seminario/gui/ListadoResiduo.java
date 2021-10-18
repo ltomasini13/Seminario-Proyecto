@@ -42,16 +42,18 @@ public class ListadoResiduo extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "TIPO RESIDUO", "PUNTOS"};
+		String[] titulos = { "ID", "TIPO RESIDUO", "PUNTOS"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
 		List<ResiduoDTO> residuos= api.obtenerResiduos();
 		for (ResiduoDTO residuo : residuos) {
-			modelo.addRow(new Object[] { residuo.obtenerTipo(), residuo.obtenerPunto() });
+			modelo.addRow(new Object[] { residuo.obtenerId(), residuo.obtenerTipo(), residuo.obtenerPunto() });
 		}
 		table.setModel(modelo);
-
+		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
+		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
+		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 		scrollPane.setViewportView(table);
 		
 		

@@ -6,7 +6,7 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class TipoResiduo {
 
-	private Long id;
+	private Integer id;
 	private String tipo;
 	private int punto;
 	
@@ -31,11 +31,11 @@ public class TipoResiduo {
 	public TipoResiduo() {
 	}
 	
-	public Long obtenerId() {
+	public Integer obtenerId() {
 		return id;
 	}
 	
-	public void editarId(Long id) {
+	public void editarId(Integer id) {
 		this.id=id;
 	}
 	

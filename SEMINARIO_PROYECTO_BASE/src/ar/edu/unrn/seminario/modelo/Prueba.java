@@ -13,7 +13,7 @@ public class Prueba {
 	public static void main(String[] args) throws SintaxisSQLException, DuplicateUniqueKeyException, NotNullException, DataEmptyException, NumbersException {
 		ViviendaDAOJDBC vista = new ViviendaDAOJDBC();
 		
-		vista.crear(new Vivienda(new Ubicacion("Pedro Bronzetti", 450, null,40.4532, 60.7645), new Ciudadano("Laura", "Tomasini", "39354863", null)));
+		
 		
 	}
 }

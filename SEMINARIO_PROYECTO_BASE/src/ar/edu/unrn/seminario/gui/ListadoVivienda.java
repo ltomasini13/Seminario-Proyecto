@@ -3,9 +3,11 @@ package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,7 +26,8 @@ public class ListadoVivienda extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
+	public static Integer id_vivienda=0;
 	
 	IApi api;
 
@@ -50,18 +53,18 @@ public class ListadoVivienda extends JFrame {
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] adminTitulos = { "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD", "DUEÑO"};
+		String[] adminTitulos = { "ID", "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD", "DUEÑO"};
 		
 		
 		
-		String[] recicTitulos = { "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD"};
-		List<ViviendaDTO> viviendas;
+		String[] recicTitulos = {"ID", "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD"};
+		List<ViviendaDTO> viviendas= new ArrayList<ViviendaDTO>();
 		if (api.esUsuarioAdmin()) {
 			modelo = new DefaultTableModel(new Object[][] {}, adminTitulos);
 			
 			viviendas=api.obtenerViviendas();
 			for (ViviendaDTO viv : viviendas) {
-				modelo.addRow(new Object[] { viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+				modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
 						viv.obtenerLatitud(), viv.obtenerLongitu(), viv.obtenerNomApeDueño()});
 			}
 			
@@ -74,7 +77,7 @@ public class ListadoVivienda extends JFrame {
 				
 				viviendas=api.obtenerViviendas();
 				for (ViviendaDTO viv : viviendas) {
-					modelo.addRow(new Object[] { viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+					modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
 							viv.obtenerLatitud(), viv.obtenerLongitu()});
 					
 				}
@@ -83,6 +86,11 @@ public class ListadoVivienda extends JFrame {
 		
 		
 		table.setModel(modelo);
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
+
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(0);
 		scrollPane.setViewportView(table);
 		
 		
@@ -99,7 +107,16 @@ public class ListadoVivienda extends JFrame {
 		
 		JButton btnPedirRecoleccin = new JButton("Pedir recolecci\u00F3n");
 		btnPedirRecoleccin.addActionListener((ActionEvent e)->{
-			System.out.println(modelo.getValueAt(table.getSelectedRow(), 0));
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna vivienda", "", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				this.id_vivienda=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+				SeleccionResiduos sr = new SeleccionResiduos(api);
+				sr.setVisible(true);
+				this.setVisible(false);
+			}
+			
 		});
 		pnlBotonesOperaciones.add(btnPedirRecoleccin);
 		pnlBotonesOperaciones.add(cerrarButton);
