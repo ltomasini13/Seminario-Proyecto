@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.modelo;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.sql.Date;
 
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -15,21 +16,34 @@ public class PedidoRetiro {
 	private boolean cargaPesada;
 	private String observacion;
 	private Vivienda vivienda;
-	private ArrayList<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
+	private List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
 	
-	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) throws NotNullException {
-
+	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda, List<ResiduoARetirar> residuosARetirar) throws NotNullException {
+		if(fechaEmision == null || vivienda == null) {
+			throw new NotNullException("Alguno de los datos son nulos");
+		}
+		
 		this.fechaEmision = LocalDateTime.parse(fechaEmision);
 		this.cargaPesada = cargaPesada;
 		this.observacion = observacion;
 		this.vivienda = vivienda;
+		this.residuosARetirar=residuosARetirar;
 		
 		
+	}
+	
+	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda) throws NotNullException {
 		if(fechaEmision == null || vivienda == null) {
 			throw new NotNullException("Alguno de los datos son nulos");
 		}
+		
+		this.fechaEmision = LocalDateTime.parse(fechaEmision);
+		this.cargaPesada = cargaPesada;
+		this.observacion = observacion;
+		this.vivienda = vivienda;
+		this.residuosARetirar=residuosARetirar;
 	}
-	
+
 	public Long obtenerId() {
 		return id;
 	}
@@ -102,5 +116,10 @@ public class PedidoRetiro {
 		//	cantidad = cantidad
 		}
 		return cantidad;
+	}
+	
+	
+	public List<ResiduoARetirar> obetenerResiduosARetirar(){
+		return this.residuosARetirar;
 	}
 }

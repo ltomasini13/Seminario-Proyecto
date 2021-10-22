@@ -82,6 +82,7 @@ public class Loguin extends JFrame {
 				api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
 				VentanaPrincipal vp = new VentanaPrincipal(api);
 				vp.setVisible(true);
+				dispose();
 				
 			} catch (SintaxisSQLException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

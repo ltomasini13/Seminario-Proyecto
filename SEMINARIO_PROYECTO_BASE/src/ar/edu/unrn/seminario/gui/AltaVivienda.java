@@ -109,7 +109,6 @@ public class AltaVivienda extends JFrame {
 									textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
 						
 						JOptionPane.showMessageDialog(null, "La vivienda y el ciudadano se registraron con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
-						setVisible(false);
 						dispose();
 					} catch (NotNullException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -129,10 +128,7 @@ public class AltaVivienda extends JFrame {
 			
 			JButton btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener((ActionEvent e) -> {
-				
-					setVisible(false);
 					dispose();
-				
 			});
 			btnCancelar.setBounds(311, 103, 94, 30);
 			getContentPane().add(btnCancelar);
@@ -223,7 +219,6 @@ public class AltaVivienda extends JFrame {
 									textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
 						
 						JOptionPane.showMessageDialog(null, "La vivienda y el ciudadano se registraron con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
-						setVisible(false);
 						dispose();
 					} catch (NotNullException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -243,8 +238,6 @@ public class AltaVivienda extends JFrame {
 			
 			JButton btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener((ActionEvent e) -> {
-				
-					setVisible(false);
 					dispose();
 				
 			});

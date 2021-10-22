@@ -27,7 +27,7 @@ public class ListadoVivienda extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
-	public static Integer id_vivienda=0;
+	public  Integer id_vivienda;
 	
 	IApi api;
 
@@ -37,6 +37,7 @@ public class ListadoVivienda extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoVivienda(IApi api) throws EmptyListException {
+		setTitle("LISTADO DE VIVIENDAS");
 
 
 		this.api=api;
@@ -97,7 +98,6 @@ public class ListadoVivienda extends JFrame {
 		
 		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
-				setVisible(false);
 				dispose();
 		});
 		
@@ -112,7 +112,7 @@ public class ListadoVivienda extends JFrame {
 			}
 			else {
 				this.id_vivienda=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
-				SeleccionResiduos sr = new SeleccionResiduos(api);
+				SeleccionResiduos sr = new SeleccionResiduos(api, id_vivienda);
 				sr.setVisible(true);
 				this.setVisible(false);
 			}

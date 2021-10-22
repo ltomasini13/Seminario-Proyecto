@@ -1,6 +1,13 @@
 package ar.edu.unrn.seminario.modelo;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
@@ -14,6 +21,6 @@ public class Prueba {
 		ViviendaDAOJDBC vista = new ViviendaDAOJDBC();
 		
 		
-		
+		LocalDateTime.parse(LocalDateTime.now().toString());
 	}
 }

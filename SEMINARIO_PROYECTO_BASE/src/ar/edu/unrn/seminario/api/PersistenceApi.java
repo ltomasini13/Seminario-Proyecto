@@ -1,9 +1,11 @@
 package ar.edu.unrn.seminario.api;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
@@ -17,6 +19,8 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
+import ar.edu.unrn.seminario.modelo.PedidoRetiro;
+import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
@@ -352,15 +356,54 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<ResiduoDTO> obtenerResiduos() throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+	public List<ResiduoDTO> obtenerResiduos()  {
 		List<ResiduoDTO> residuosDTO=new ArrayList<ResiduoDTO>();
 		
-		for(TipoResiduo residuo : residuoDao.listarTodos()) {
-			residuosDTO.add(new ResiduoDTO(residuo.obtenerId(),residuo.obtenerTipo(), residuo.obtenerPunto()));
+		try {
+			for(TipoResiduo residuo : residuoDao.listarTodos()) {
+				try {
+					residuosDTO.add(new ResiduoDTO(residuo.obtenerId(),residuo.obtenerTipo(), residuo.obtenerPunto()));
+				} catch (NotNullException | DataEmptyException | NumbersException e) {
+					
+				}
+			}
+		} catch (SintaxisSQLException e) {
+			
 		}
 		
 		return residuosDTO;
 	}
+
+
+	@Override
+	public void cerrarSesion() {
+		this.sesion=null;	
+	}
+
+
+	@Override
+	public void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion,
+			List<ResiduoARetirarDTO> residuosARetirarDTO) throws NotNullException {
+		
+		List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
+		Vivienda vivienda = viviendaDao.buscar(id_vivienda);
+		
+		for(ResiduoARetirarDTO r : residuosARetirarDTO) {
+			TipoResiduo tipoResiduo = residuoDao.buscar(r.obetenerTipoResiduo());
+			
+				residuosARetirar.add(new ResiduoARetirar(tipoResiduo, r.obetenerCantidad()));
+		}
+		
+		PedidoRetiro pedidoRetiro = new PedidoRetiro(LocalDateTime.now().toString(), cargaPesada, observacion, vivienda, residuosARetirar);
+		
+		pedidoDao.crear(pedidoRetiro);
+		
+	}
+
+
+	
+
+
 
 
 	

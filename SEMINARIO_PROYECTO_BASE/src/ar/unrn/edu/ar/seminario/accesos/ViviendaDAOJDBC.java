@@ -140,6 +140,43 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		return viviendasOrdenadasPorBarrio;
 
 	}
+
+	@Override
+	public Vivienda buscar(Integer idVivienda) {
+		Vivienda vivienda =null;
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM viviendas v WHERE v.id_vivienda=?");
+		
+			statement.setInt(1, idVivienda);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
+						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
+				Ciudadano ciudadano = new Ciudadano(rs.getString("v.nombre"), rs.getString("v.apellido"), rs.getString("v.dni"), null);
+				vivienda=new Vivienda(ubicacion, ciudadano);
+			}
+		
+		  
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viviendas");
+			// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		
+		return vivienda;
+	}
 	
 	
 	

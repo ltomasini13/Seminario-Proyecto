@@ -110,7 +110,6 @@ public class ListadoUsuario extends JFrame {
 
 		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
-				setVisible(false);
 				dispose();
 		});
 //		contentPane.add(cerrarButton, BorderLayout.SOUTH);

@@ -2,12 +2,14 @@ package ar.edu.unrn.seminario.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
@@ -19,6 +21,7 @@ import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -26,7 +29,12 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -44,6 +52,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTabbedPane;
 import javax.swing.JSplitPane;
 import javax.swing.JDesktopPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Component;
+import javax.swing.JMenuItem;
 
 public class SeleccionResiduos extends JFrame{
 
@@ -56,13 +68,14 @@ public class SeleccionResiduos extends JFrame{
 	private JRadioButton siRadioButton;
 	private JList jListResiduos;
 	private List<ResiduoDTO> residuos;
-	private JList JListResAgregados;
+	private JList jListResAgregados;
 	private DefaultListModel modeloResAgregados;
-	private List<String> residuosAgregados;
-	
-	public SeleccionResiduos(IApi api) {
+	private List<ResiduoARetirarDTO> residuosAgregados;
+	private JFormattedTextField formatoCantidad ;
+	private boolean cargaPesada;
+	private JPopupMenu popupMenu ;
+	public SeleccionResiduos(IApi api, Integer id_vivienda) {
 		this.api=api;
-		System.out.println(ListadoVivienda.id_vivienda);
 		setTitle("Datos del pedido");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -72,23 +85,25 @@ public class SeleccionResiduos extends JFrame{
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
+		
+		
 		JLabel cargaPesadaLabel = new JLabel("Carga Pesada:");
 		cargaPesadaLabel.setBounds(12, 22, 84, 16);
 		contentPane.add(cargaPesadaLabel);
 		
 		JLabel observacionLabel = new JLabel("Observaci\u00F3n:");
-		observacionLabel.setBounds(12, 169, 84, 16);
+		observacionLabel.setBounds(12, 180, 84, 16);
 		contentPane.add(observacionLabel);
 		
 		JButton cancelarBoton = new JButton("CANCELAR");
 		cancelarBoton.addActionListener((ActionEvent arg0) ->{
 			dispose();
 		});
-		cancelarBoton.setBounds(214, 227, 89, 23);
+		cancelarBoton.setBounds(284, 227, 89, 23);
 		contentPane.add(cancelarBoton);
 		
 		observacionText = new JTextField();
-		observacionText.setBounds(81, 169, 144, 32);
+		observacionText.setBounds(96, 172, 144, 32);
 		contentPane.add(observacionText);
 		observacionText.setColumns(10);
 		
@@ -97,6 +112,7 @@ public class SeleccionResiduos extends JFrame{
 			if (noRadioButton.isSelected()) {
 				noRadioButton.setSelected(false);
 			}
+			this.cargaPesada=true;
 		});
 		siRadioButton.setBounds(102, 18, 56, 25);
 		contentPane.add(siRadioButton);
@@ -106,6 +122,7 @@ public class SeleccionResiduos extends JFrame{
 			if (siRadioButton.isSelected()) {
 				siRadioButton.setSelected(false);
 			}
+			this.cargaPesada=false;
 		});
 		noRadioButton.setBounds(164, 14, 110, 32);
 		contentPane.add(noRadioButton);
@@ -125,37 +142,30 @@ public class SeleccionResiduos extends JFrame{
 				
 			}
 		});
-		botonVolver.setBounds(115, 227, 89, 23);
+		botonVolver.setBounds(175, 227, 89, 23);
 		contentPane.add(botonVolver);
-		
-		
-
-		
-		
-		
-		
-		
-	
 		
 		
 		JButton btnContinuar = new JButton("CONTINUAR");
 		contentPane.add(btnContinuar);
 		btnContinuar.addActionListener((ActionEvent arg0) ->{
 			
+			try {
+				api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
+			} catch (NotNullException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+			};
+		
 		});
-		btnContinuar.setBounds(12, 227, 93, 23);
+		btnContinuar.setBounds(47, 227, 93, 23);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 60, 144, 102);
 		contentPane.add(scrollPane);
 		
 		
-		try {
-			residuos = api.obtenerResiduos();
-		} catch (SintaxisSQLException | NotNullException | DataEmptyException | NumbersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		residuos = api.obtenerResiduos();
 		
 		jListResiduos = new JList();
 		jListResiduos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
@@ -176,17 +186,45 @@ public class SeleccionResiduos extends JFrame{
 		labelCantidad.setBounds(164, 61, 110, 14);
 		contentPane.add(labelCantidad);
 		
-		JFormattedTextField formatoCantidad = new JFormattedTextField();
+		formatoCantidad = new JFormattedTextField();
+		formatoCantidad.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				formatoCantidad.setText("");
+			}
+		});
 		formatoCantidad.setText("Ej: 124.5");
 		formatoCantidad.setBounds(164, 86, 89, 20);
 		contentPane.add(formatoCantidad);
 		
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener((ActionEvent arg0) ->{
-			
-		
-			String residuo = (String)modelo.getElementAt(jListResiduos.getSelectedIndex());
-			
+			Double peso=0.0;
+			try {
+				peso=Double.parseDouble(formatoCantidad.getText());
+			}
+			catch(NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Ingrese un peso correcto", "Error", JOptionPane.ERROR_MESSAGE); 
+			}
+			if(!jListResiduos.isSelectionEmpty()) {
+				String tipoResiduo = (String)modelo.getElementAt(jListResiduos.getSelectedIndex());
+				ResiduoARetirarDTO residuoARetirarDTO = new ResiduoARetirarDTO(null, tipoResiduo, peso);
+				
+				if(estaAgregado(residuoARetirarDTO)) {
+					JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.ERROR_MESSAGE); 
+				}
+				else {
+					residuosAgregados.add(residuoARetirarDTO);
+					modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
+					jListResAgregados.removeAll();
+					jListResAgregados.setModel(modeloResAgregados);
+					
+				}
+				
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun residuo", "Error", JOptionPane.INFORMATION_MESSAGE); 
+			}
 			
 			
 		});
@@ -201,12 +239,44 @@ public class SeleccionResiduos extends JFrame{
 		scrollPaneResiduosAgregados.setColumnHeaderView(lblResiduosAgregados);
 		
 		
-		residuosAgregados=new ArrayList<String>();
-		JListResAgregados = new JList();
+		residuosAgregados=new ArrayList<ResiduoARetirarDTO>();
+		jListResAgregados = new JList();
+		jListResAgregados.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(!jListResAgregados.isSelectionEmpty()) {
+						if (arg0.getButton()==3) {
+							popupMenu.setLocation(arg0.getLocationOnScreen());
+							popupMenu.setVisible(true);
+							
+						}
+				}
+			}
+		});
 		 modeloResAgregados = new DefaultListModel();
-		JListResAgregados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
-		JListResAgregados.setModel(modeloResAgregados);
-		scrollPaneResiduosAgregados.setViewportView(JListResAgregados);
+		jListResAgregados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+		jListResAgregados.setModel(modeloResAgregados);
+		scrollPaneResiduosAgregados.setViewportView(jListResAgregados);
+		
+		popupMenu = new JPopupMenu();
+		JMenuItem menuItemPopupMenu = new JMenuItem("Eliminar");
+		menuItemPopupMenu.addActionListener((ActionEvent arg0) ->{
+			popupMenu.setVisible(false);
+			Iterator<ResiduoARetirarDTO> itResiduosAgregados = residuosAgregados.iterator();
+			while(itResiduosAgregados.hasNext()) {
+				ResiduoARetirarDTO resRetirar = itResiduosAgregados.next();
+				String tipoResiduo = (String)(modeloResAgregados.getElementAt(jListResAgregados.getSelectedIndex()));
+				String[] partResAgregado = tipoResiduo.split("-");
+				if(resRetirar.obetenerTipoResiduo().equals(partResAgregado[1])) {   
+					itResiduosAgregados.remove();
+				}
+			}
+			modeloResAgregados.remove(jListResAgregados.getSelectedIndex());
+			jListResAgregados.removeAll();
+			jListResAgregados.setModel(modeloResAgregados);
+		});
+		popupMenu.add(menuItemPopupMenu);
+		
 		
 		
 		
@@ -217,6 +287,17 @@ public class SeleccionResiduos extends JFrame{
 	
 	}
 	
+	private boolean estaAgregado(ResiduoARetirarDTO residuoARetirarDTO) {
+		boolean existe=false;
+		for(ResiduoARetirarDTO res : residuosAgregados) {
+			if(res.equals(residuoARetirarDTO)) {
+				existe=true;
+				break;
+			}	
+		}
+		return existe;
+	}
+
 	private void cargarResiduos() throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
 		List<ResiduoDTO> residuos = api.obtenerResiduos();
 
@@ -227,4 +308,23 @@ public class SeleccionResiduos extends JFrame{
 		
 //		}
 		}
+	
+	
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 	}

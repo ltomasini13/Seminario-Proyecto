@@ -76,7 +76,6 @@ public class AltaUsuario extends JFrame {
 								nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
 						
 						JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
-						setVisible(false);
 						dispose();
 					}catch (DataEmptyException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -90,8 +89,6 @@ public class AltaUsuario extends JFrame {
 
 		JButton cancelarButton = new JButton("Cancelar");
 		cancelarButton.addActionListener((ActionEvent e) -> {
-			
-				setVisible(false);
 				dispose();
 		});
 		cancelarButton.setBounds(323, 215, 97, 25);

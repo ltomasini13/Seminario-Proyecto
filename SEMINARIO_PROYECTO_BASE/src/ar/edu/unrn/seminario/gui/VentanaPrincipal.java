@@ -126,9 +126,15 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				SeleccionResiduos altaPedido = new SeleccionResiduos(api);
-				altaPedido.setLocationRelativeTo(null);
-				altaPedido.setVisible(true);
+				ListadoVivienda altaPedido;
+				try {
+					altaPedido = new ListadoVivienda(api);
+					altaPedido.setLocationRelativeTo(null);
+					altaPedido.setVisible(true);
+				} catch (EmptyListException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
 			});
 			pedidosMenu.add(altaModificacionPedidosMenuItem);
 			
@@ -140,15 +146,6 @@ public class VentanaPrincipal extends JFrame {
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 
-			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
-			menuBar.add(configuracionMenu);
-
-			JMenuItem salirMenuItem = new JMenuItem("Salir");
-			salirMenuItem.addActionListener((ActionEvent e) -> {
-				setVisible(false);
-				dispose();
-			});
-			configuracionMenu.add(salirMenuItem);
 		}
 
 		if(api.esUsuarioReciclador()) {
@@ -183,9 +180,15 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				SeleccionResiduos altaPedido = new SeleccionResiduos(api);
-				altaPedido.setLocationRelativeTo(null);
-				altaPedido.setVisible(true);
+				ListadoVivienda altaPedido;
+				try {
+					altaPedido = new ListadoVivienda(api);
+					altaPedido.setLocationRelativeTo(null);
+					altaPedido.setVisible(true);
+				} catch (EmptyListException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
 			});
 			pedidosMenu.add(altaModificacionPedidosMenuItem);
 			
@@ -196,19 +199,21 @@ public class VentanaPrincipal extends JFrame {
 				pedidos.setVisible(true);
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
-
-			JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
-			menuBar.add(configuracionMenu);
-
-			JMenuItem salirMenuItem = new JMenuItem("Salir");
-			salirMenuItem.addActionListener((ActionEvent e) -> {
-				setVisible(false);
-				dispose();
-			});
-			configuracionMenu.add(salirMenuItem);
+		
 		}
 		
 		
+		JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
+		menuBar.add(configuracionMenu);
+		JMenuItem salirMenuItem = new JMenuItem("Salir");
+		salirMenuItem.addActionListener((ActionEvent e) -> {
+			api.cerrarSesion();
+			dispose();
+			Loguin loguin = new Loguin(api);
+			loguin.setVisible(true);
+			
+		});
+		configuracionMenu.add(salirMenuItem);
 	}
 
 }

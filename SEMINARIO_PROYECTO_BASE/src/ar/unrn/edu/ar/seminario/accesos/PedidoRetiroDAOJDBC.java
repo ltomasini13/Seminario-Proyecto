@@ -16,6 +16,7 @@ import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
+import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -23,7 +24,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class PedidoRetiroDAOJDBC implements PedidoRetiroDao{
 
 	@Override
-	public void crear(PedidoRetiro pedido) throws DuplicateUniqueKeyException, SintaxisSQLException {
+	public void crear(PedidoRetiro pedido)  {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -33,39 +34,49 @@ public class PedidoRetiroDAOJDBC implements PedidoRetiroDao{
 					.prepareStatement("INSERT INTO pedidos (fecha_pedido, carga_pesada, observacion, cantidad_kg, id_vivienda)"
 							+ "VALUES (?, ?, ?, ?, ?)",  Statement.RETURN_GENERATED_KEYS);
 			
+			String cargaPesada=null;
+			if(pedido.isCargaPesada()) {
+				cargaPesada="SI";
+			}
+			else {
+				cargaPesada="NO";
+			}
 			
 			statement.setDate(1, pedido.obtenerFecha());
-			statement.setBoolean(2, pedido.isCargaPesada());
+			statement.setString(2, cargaPesada);
 			statement.setString(3, pedido.obtenerObservacion());
 			statement.setDouble(4, pedido.obtenerCantidad());
 			statement.setLong(5, pedido.obtenerVivienda().obtenerId());
 			
-			try {
+			
 				int cantidad = statement.executeUpdate();
 				if (cantidad==1) 
-					System.out.println("El ciudadano se creo correctamente.");
-			}
-			catch(MySQLIntegrityConstraintViolationException e){
-		    	throw new DuplicateUniqueKeyException("El pedido ya existe");
-		    }
+					System.out.println("El pedido se creo correctamente.");
+			
 			
 			
 			
 			ResultSet miResult = statement.getGeneratedKeys();
 			miResult.next();
-		    
+		    Integer idPedido= miResult.getInt(1);
 		    miResult.close();
 		    
+		    PreparedStatement statementResiduos = conn
+					.prepareStatement("INSERT INTO residuos_a_retirar (cantidad_kg, id_tipo_residuo, id_pedido)"
+							+ "VALUES (?, ?, ?)");
 		    
-		} catch (DuplicateUniqueKeyException e) {
-			throw new DuplicateUniqueKeyException(e.getMessage());
+		    
+		    for (ResiduoARetirar r : pedido.obetenerResiduosARetirar()) {
+		    	statementResiduos.setDouble(1, r.obtenerCantkg());
+		    	statementResiduos.setInt(2, r.obtenerResiduo().obtenerId());
+		    	statementResiduos.setInt(3, idPedido);
+		    }
+		}  catch (SQLException e) {
 			
-			
-		} catch (SQLException e) {
 			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
 			
-		
+		} catch (Exception e) {
+			System.out.println("Error en la base de datos");
 		} finally {
 			ConnectionManager.disconnect();
 		}

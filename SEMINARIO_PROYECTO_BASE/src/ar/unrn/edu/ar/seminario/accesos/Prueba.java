@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -21,7 +23,9 @@ import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
 public class Prueba {
 
@@ -65,13 +69,11 @@ public class Prueba {
 //		}
 		
 		IApi api = new PersistenceApi();
-
-		try {
-			api.registrarCiudadano("ltomasini20", "1234", "ltomasini13@hotmail.com", "Laura", 2, "Tomasini", "30354222");
-		} catch (NumbersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<ResiduoARetirarDTO> resRet = new ArrayList<ResiduoARetirarDTO>();
+		resRet.add(new ResiduoARetirarDTO(null, "CARTON", 5.0));
+		
+		api.generarPedido(1, false, " nada que decir", resRet);
+	
 
 	}
 	

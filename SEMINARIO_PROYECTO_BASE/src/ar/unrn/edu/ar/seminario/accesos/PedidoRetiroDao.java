@@ -8,7 +8,7 @@ import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 
 public interface PedidoRetiroDao {
 	
-	void crear(PedidoRetiro pedido)throws DuplicateUniqueKeyException, SintaxisSQLException ;
+	void crear(PedidoRetiro pedido);
 	
 	List<PedidoRetiro> listarTodos();
 }

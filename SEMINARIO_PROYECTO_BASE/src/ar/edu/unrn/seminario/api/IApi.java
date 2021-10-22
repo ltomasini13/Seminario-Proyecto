@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
@@ -67,7 +68,10 @@ public interface IApi {
 	List<PedidoRetiroDTO> obtenerPedidos();
 	List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario);
 	
-	List<ResiduoDTO> obtenerResiduos()throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException;
+	List<ResiduoDTO> obtenerResiduos();
+	void cerrarSesion(); 				
+	
+	void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion, List<ResiduoARetirarDTO> residuosARetirar) throws NotNullException;
 
 	
 }

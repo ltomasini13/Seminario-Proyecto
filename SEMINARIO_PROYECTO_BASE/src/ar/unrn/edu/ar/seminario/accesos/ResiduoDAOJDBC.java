@@ -65,7 +65,7 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 	}
 
 	@Override
-	public List<TipoResiduo> listarTodos() throws SintaxisSQLException {
+	public List<TipoResiduo> listarTodos() {
 		List<TipoResiduo> residuos = new ArrayList<>();
 		try {
 
@@ -83,7 +83,6 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 			
 		} catch (SQLException e) {
 			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear el residuo por un error en la Base de Datos");
 			
 		}catch (Exception e) { 
 				
@@ -95,9 +94,33 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 	}
 
 	@Override
-	public TipoResiduo buscar(String nombreDeUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+	public TipoResiduo buscar(String tipoResiduo) {
+			TipoResiduo residuo = null;
+			try {
+
+				Connection conn = ConnectionManager.getConnection();
+				PreparedStatement statement = conn
+						.prepareStatement("SELECT * FROM residuos r WHERE r.tipo=?");
+				statement.setString(1, tipoResiduo);
+				
+				ResultSet rs = statement.executeQuery();
+				
+				while(rs.next()) {
+					residuo=new TipoResiduo(rs.getString("r.tipo"), rs.getInt("r.puntos"));
+					residuo.editarId(rs.getInt("r.id_residuo"));
+				
+				}
+				
+			} catch (SQLException e) {
+				System.out.println("Error al procesar la consulta");
+				
+			}catch (Exception e) { 
+					
+			}
+			finally {
+				ConnectionManager.disconnect();
+			}
+			return residuo;
 	}
 
 	@Override

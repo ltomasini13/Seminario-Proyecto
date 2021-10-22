@@ -7,6 +7,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public interface ViviendaDao {
 	void crear(Vivienda vivienda) throws SintaxisSQLException, DuplicateUniqueKeyException;
 
+	Vivienda buscar(Integer idVivienda);
 	void modificar(Vivienda vivienda);
 
 	List<Vivienda> listarTodas();

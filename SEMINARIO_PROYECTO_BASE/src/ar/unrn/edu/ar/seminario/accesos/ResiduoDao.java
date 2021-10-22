@@ -12,7 +12,7 @@ public interface ResiduoDao {
 	
 	List<TipoResiduo> listarTodos()throws SintaxisSQLException;
 
-	TipoResiduo buscar(String nombreDeUsuario);
+	TipoResiduo buscar(String tipoResiduo);
 	
 	void actualizar(TipoResiduo residuo);
 
