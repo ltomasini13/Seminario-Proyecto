@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
@@ -21,6 +22,7 @@ import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.exception.UnfinishedException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
+import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
@@ -31,6 +33,8 @@ import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
 import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDao;
+import ar.unrn.edu.ar.seminario.accesos.RecolectorDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.RecolectorDao;
 import ar.unrn.edu.ar.seminario.accesos.ResiduoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ResiduoDao;
 import ar.unrn.edu.ar.seminario.accesos.RolDAOJDBC;
@@ -50,7 +54,7 @@ public class PersistenceApi implements IApi {
 
 	private ResiduoDao residuoDao;
 	private PedidoRetiroDao pedidoDao;
-
+	private RecolectorDao recolectorDao;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -59,6 +63,7 @@ public class PersistenceApi implements IApi {
 		ciudadanoDao= new CiudadanoDAOJDBC();
 		residuoDao= new ResiduoDAOJDBC();
 		pedidoDao= new PedidoRetiroDAOJDBC();
+		recolectorDao= new RecolectorDAOJDBC();
 	}
 
 
@@ -490,19 +495,27 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-
-	
-
-
-	
-
-
-
-
-	
+	public void registrarRecolector(String nombre, String apellido, String dni, String email)
+			throws NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException {
+		
+		Recolector recolector = new Recolector(nombre, apellido, dni, email);
+		
+		this.recolectorDao.crear(recolector);
+		
+	}
 
 
 	
 	
+	@Override
+	public List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException {
+		List<RecolectorDTO> recolectoresDTO=new ArrayList<RecolectorDTO>();
+		
+		for(Recolector r: recolectorDao.listarTodos()) {
+			recolectoresDTO.add(new RecolectorDTO(r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail()));
+		}
+		
+		return recolectoresDTO;
+	}	
 	
 }

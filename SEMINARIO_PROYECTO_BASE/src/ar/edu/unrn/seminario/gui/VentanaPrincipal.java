@@ -152,13 +152,38 @@ public class VentanaPrincipal extends JFrame {
 				
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
-			
+	
 			JMenuItem ordenesMenuItem = new JMenuItem("Ordenes de pedido");
 			ordenesMenuItem.addActionListener((ActionEvent e) -> {
 					
 				
 			});
 			adminUsuarioMenu.add(ordenesMenuItem);
+
+			JMenu recolectorMenu = new JMenu("Recolectores");
+			menuBar.add(recolectorMenu);
+			
+			JMenuItem registrarRecolectorMenuItem = new JMenuItem("Registrar Recolector");
+			registrarRecolectorMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarRecolector regRecolector = new RegistrarRecolector(api);
+				regRecolector.setLocationRelativeTo(null);
+				regRecolector.setVisible(true);
+			});
+			recolectorMenu.add(registrarRecolectorMenuItem);
+			
+			JMenuItem listadoRecolectoresMenuItem = new JMenuItem("Listado");
+			listadoRecolectoresMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoRecolector recolectores;
+				try {
+					recolectores = new ListadoRecolector(api);
+					recolectores.setLocationRelativeTo(null);
+					recolectores.setVisible(true);
+				} catch (SintaxisSQLException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			});
+			recolectorMenu.add(listadoRecolectoresMenuItem);
 
 		}
 

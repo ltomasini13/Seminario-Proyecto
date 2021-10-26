@@ -16,7 +16,7 @@ public interface ResiduoDao {
 	
 	void actualizar(TipoResiduo residuo);
 
-	void eliminar(Long id);
+	void eliminar(Integer id);
 
 	void eliminar(TipoResiduo residuo);
 }

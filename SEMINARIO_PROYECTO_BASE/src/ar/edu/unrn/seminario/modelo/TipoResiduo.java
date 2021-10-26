@@ -20,7 +20,7 @@ public class TipoResiduo {
 		}
 		
 		if(tipo.isEmpty()) {
-			throw new DataEmptyException("El tipo de residuo que se ingreso es vacío.");
+			throw new DataEmptyException("El tipo de residuo esta incompleto y/o vacio.");
 		}
 		
 		if(punto<=0) {
