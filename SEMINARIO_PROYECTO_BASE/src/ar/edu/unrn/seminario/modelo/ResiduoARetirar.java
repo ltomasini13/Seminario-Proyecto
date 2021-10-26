@@ -41,7 +41,7 @@ public class ResiduoARetirar {
 		this.cantkg = cantKg;
 	}
 	
-	public String obtenerTipoResiduo(String tipo) {
+	public String obtenerTipoResiduo() {
 		return this.tipo.obtenerTipo();
 	}
 

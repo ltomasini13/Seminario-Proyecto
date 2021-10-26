@@ -7,11 +7,11 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 
 public class PedidoRetiroDTO {
-
+	private Integer id;
 	private LocalDateTime fechaEmision;
+	private LocalDateTime fechaCumplimiento;
 	private boolean cargaPesada;
 	private String observacion;
-	private double cantidadKg;
 	private String calle;
     private int numero;
     private String barrio;
@@ -22,13 +22,15 @@ public class PedidoRetiroDTO {
 	private String dni;
 	private ArrayList<ResiduoARetirar> listaResiduos = new ArrayList<ResiduoARetirar>();
 	
-	public PedidoRetiroDTO(LocalDateTime fechaEmision, boolean cargaPesada, String observacion, double cantidadKg, String calle, int numero, 
+	public PedidoRetiroDTO(Integer id, LocalDateTime fechaEmision, LocalDateTime fechaCumplimiento, boolean cargaPesada, String observacion, String calle, int numero, 
 			String barrio, double latitud, double longitud,  String nombre, String apellido) throws NotNullException {
 
+		this.id=id;
 		this.fechaEmision = fechaEmision;
+		this.fechaCumplimiento=fechaCumplimiento;
 		this.cargaPesada = cargaPesada;
 		this.observacion = observacion;
-		this.cantidadKg = cantidadKg;
+
 		this.calle = calle;
 		this.numero = numero;
 		this.barrio = barrio;
@@ -63,13 +65,6 @@ public class PedidoRetiroDTO {
 		this.observacion = observacion;
 	}
 	
-	public double obtenerCantidad() {
-		return cantidadKg;
-	}
-	
-	public void editarCantidad(double cantidad) {
-		this.cantidadKg = cantidad;
-	}
 	
 	public String obtenerCalle() {
 		return calle;
@@ -85,6 +80,20 @@ public class PedidoRetiroDTO {
 
 	public void editarNumero(int numero) {
 		this.numero = numero;
+	}
+
+	public Integer obtenerId() {
+		return this.id;
+	}
+	public void editarId(Integer id) {
+		this.id = id;
+	}
+	public LocalDateTime obtenerFechaCumplimiento() {
+		return fechaCumplimiento;
+	}
+
+	public void seditarFechaCumplimiento(LocalDateTime fechaCumplimiento) {
+		this.fechaCumplimiento = fechaCumplimiento;
 	}
 
 	public String obtenerBarrio() {

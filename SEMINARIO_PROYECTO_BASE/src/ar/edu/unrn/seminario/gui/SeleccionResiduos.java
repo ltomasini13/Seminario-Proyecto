@@ -118,6 +118,7 @@ public class SeleccionResiduos extends JFrame{
 		contentPane.add(siRadioButton);
 		
 		noRadioButton = new JRadioButton("NO");
+		noRadioButton.setSelected(true);
 		noRadioButton.addActionListener((ActionEvent arg0) ->{
 			if (siRadioButton.isSelected()) {
 				siRadioButton.setSelected(false);
@@ -152,6 +153,8 @@ public class SeleccionResiduos extends JFrame{
 			
 			try {
 				api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
+				JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Error", JOptionPane.INFORMATION_MESSAGE); 
+				dispose();
 			} catch (NotNullException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			};
@@ -211,7 +214,8 @@ public class SeleccionResiduos extends JFrame{
 				ResiduoARetirarDTO residuoARetirarDTO = new ResiduoARetirarDTO(null, tipoResiduo, peso);
 				
 				if(estaAgregado(residuoARetirarDTO)) {
-					JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.ERROR_MESSAGE); 
+
+					JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.WARNING_MESSAGE); 
 				}
 				else {
 					residuosAgregados.add(residuoARetirarDTO);
@@ -261,19 +265,27 @@ public class SeleccionResiduos extends JFrame{
 		popupMenu = new JPopupMenu();
 		JMenuItem menuItemPopupMenu = new JMenuItem("Eliminar");
 		menuItemPopupMenu.addActionListener((ActionEvent arg0) ->{
-			popupMenu.setVisible(false);
-			Iterator<ResiduoARetirarDTO> itResiduosAgregados = residuosAgregados.iterator();
-			while(itResiduosAgregados.hasNext()) {
-				ResiduoARetirarDTO resRetirar = itResiduosAgregados.next();
-				String tipoResiduo = (String)(modeloResAgregados.getElementAt(jListResAgregados.getSelectedIndex()));
-				String[] partResAgregado = tipoResiduo.split("-");
-				if(resRetirar.obetenerTipoResiduo().equals(partResAgregado[1])) {   
-					itResiduosAgregados.remove();
+			int confirmacion = JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar la seleccion?");
+			
+			if(confirmacion==0) {
+				popupMenu.setVisible(false);
+				Iterator<ResiduoARetirarDTO> itResiduosAgregados = residuosAgregados.iterator();
+				while(itResiduosAgregados.hasNext()) {
+					ResiduoARetirarDTO resRetirar = itResiduosAgregados.next();
+					String tipoResiduo = (String)(modeloResAgregados.getElementAt(jListResAgregados.getSelectedIndex()));
+					String[] partResAgregado = tipoResiduo.split("-");
+					if(resRetirar.obetenerTipoResiduo().equals(partResAgregado[1])) {   
+						itResiduosAgregados.remove();
+					}
 				}
+				modeloResAgregados.remove(jListResAgregados.getSelectedIndex());
+				jListResAgregados.removeAll();
+				jListResAgregados.setModel(modeloResAgregados);
 			}
-			modeloResAgregados.remove(jListResAgregados.getSelectedIndex());
-			jListResAgregados.removeAll();
-			jListResAgregados.setModel(modeloResAgregados);
+			
+			if(confirmacion==1 || confirmacion==2) {
+				popupMenu.setVisible(false);
+			}
 		});
 		popupMenu.add(menuItemPopupMenu);
 		

@@ -19,6 +19,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.UnfinishedException;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
 import javax.swing.JButton;
@@ -105,20 +106,27 @@ public class ListadoVivienda extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		JButton btnPedirRecoleccin = new JButton("Pedir recolecci\u00F3n");
-		btnPedirRecoleccin.addActionListener((ActionEvent e)->{
+		JButton btnPedirRecoleccion = new JButton("Pedir recolecci\u00F3n");
+		btnPedirRecoleccion.addActionListener((ActionEvent e)->{
 			if(table.getSelectedRow()==-1) {
 				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna vivienda", "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
+				
 				this.id_vivienda=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
-				SeleccionResiduos sr = new SeleccionResiduos(api, id_vivienda);
-				sr.setVisible(true);
-				this.setVisible(false);
+				try {
+					api.pedidoPendiente(id_vivienda);
+					SeleccionResiduos sr = new SeleccionResiduos(api, id_vivienda);
+					sr.setVisible(true);
+					this.setVisible(false);
+				} catch (UnfinishedException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
 			}
 			
 		});
-		pnlBotonesOperaciones.add(btnPedirRecoleccin);
+		pnlBotonesOperaciones.add(btnPedirRecoleccion);
 		pnlBotonesOperaciones.add(cerrarButton);
 
 	}

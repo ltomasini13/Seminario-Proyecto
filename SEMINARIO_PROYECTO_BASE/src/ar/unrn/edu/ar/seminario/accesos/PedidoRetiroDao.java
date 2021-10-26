@@ -10,5 +10,7 @@ public interface PedidoRetiroDao {
 	
 	void crear(PedidoRetiro pedido);
 	
+	List<PedidoRetiro> buscar(Integer idVivienda);
+	List<PedidoRetiro> buscarPorUsuario(Integer idUsuario);
 	List<PedidoRetiro> listarTodos();
 }

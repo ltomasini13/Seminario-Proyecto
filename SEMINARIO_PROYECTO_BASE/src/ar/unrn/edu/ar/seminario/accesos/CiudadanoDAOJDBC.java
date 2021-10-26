@@ -182,6 +182,7 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 		
 		return ciu;
 	}
+
 	
 
 }

@@ -17,6 +17,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.exception.UnfinishedException;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
@@ -28,7 +29,7 @@ public interface IApi {
 	void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException;
 	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
-			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException;
+			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, AuthenticationException;
 
 
 	void registrarResiduo(String tipo, String numero) throws NumbersException, NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException;
@@ -65,13 +66,14 @@ public interface IApi {
 	
 	void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion);
 	
-	List<PedidoRetiroDTO> obtenerPedidos();
-	List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario);
+	List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException;
 	
+
 	List<ResiduoDTO> obtenerResiduos();
 	void cerrarSesion(); 				
 	
 	void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion, List<ResiduoARetirarDTO> residuosARetirar) throws NotNullException;
+	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException;
 
-	
+	void pedidoPendiente(Integer id_vivienda) throws UnfinishedException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
 }

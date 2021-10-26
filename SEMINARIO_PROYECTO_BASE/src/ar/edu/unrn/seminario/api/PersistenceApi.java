@@ -18,6 +18,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.exception.UnfinishedException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
@@ -96,7 +97,7 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano)
-			throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, DuplicateUniqueKeyException {
+			throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, AuthenticationException {
 		
 		if(latitud.isEmpty() || longitud.isEmpty() || numero.isEmpty()) {
 			throw new DataEmptyException("Faltan completar campos");
@@ -117,13 +118,57 @@ public class PersistenceApi implements IApi {
 		}
 		
 		
+		
 		Ubicacion ubicacion = new Ubicacion(calle,nro, barrio, lat, longi);
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
 		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
 		//RegistroVivienda regVivienda = new RegistroVivienda(LocalDateTime.now(), vivienda); 
+		Vivienda vivAutent = viviendaDao.buscar(vivienda);
+		if(vivAutent!=null) {
+			throw new AuthenticationException("Ya existe una vivienda con esa direccion");
+		}
 		
+		Ciudadano ciuAutent = ciudadanoDao.buscar(ciudadano.obtenerDni());
+		if(ciuAutent!=null) {
+				throw new AuthenticationException("El ciudadano con dni: " +ciudadano.obtenerDni()+" ya existe");
+			
+		}
 		viviendaDao.crear(vivienda);
 		
+	}
+	
+	
+	@Override
+	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException {
+		if(latitud.isEmpty() || longitud.isEmpty() || numero.isEmpty()) {
+			throw new DataEmptyException("Faltan completar campos");
+		}
+		
+		if(!numero.matches("[0-9]+")) {
+			throw new NumbersException("El valor ingresado para el campo 'Número' no es numérico");
+		}
+		Integer nro = Integer.parseInt(numero);
+		double lat=0;
+		double longi=0;
+		try {
+			lat= Double.parseDouble(latitud);
+			longi= Double.parseDouble(longitud);
+		}
+		catch(NumberFormatException e) {
+			throw new NumbersException("La latitud y/o longitud ingresadas no son correctas");
+		}
+		
+		
+		Ubicacion ubicacion = new Ubicacion(calle,nro, barrio, lat,longi);
+		Ciudadano ciudadano = ciudadanoDao.buscar(sesion.obtenerUsuario());
+		Vivienda vivienda = new Vivienda(ubicacion, ciudadano);
+		//RegistroVivienda regVivienda = new RegistroVivienda(LocalDateTime.now(), vivienda); 
+		
+		Vivienda vivAutent = viviendaDao.buscar(vivienda);
+		if(vivAutent!=null) {
+			throw new AuthenticationException("Ya existe una vivienda con esa direccion");
+		}
+		viviendaDao.crearParaRecic(vivienda);
 	}
 
 
@@ -342,17 +387,46 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<PedidoRetiroDTO> obtenerPedidos() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException {
+		List<PedidoRetiroDTO> pedidosDTO=new ArrayList<PedidoRetiroDTO>();
+		List<PedidoRetiro> pedidos = new ArrayList<PedidoRetiro>();
+		if(this.esUsuarioAdmin()) {
+			pedidos= this.pedidoDao.listarTodos();
+			if(pedidos.isEmpty()) {
+				throw new EmptyListException("No hay ningun pedido en el sistema");
+			}
+			for(PedidoRetiro p : pedidos) {
+				
+				try {
+					pedidosDTO.add(new PedidoRetiroDTO(p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(), p.obtenerVivienda().obtenerUbicacionCalle(),
+							p.obtenerVivienda().obtenerUbicacionNro(), p.obtenerVivienda().obtenerUbicacionBarrio(), p.obtenerVivienda().obtenerUbicacionLatitud(),
+							p.obtenerVivienda().obtenerUbicacionLongitud(), p.obtenerNombreCiudadanoVivienda(), p.obtenerApellidoCiudadanoVivienda()));
+				} catch (NotNullException e) {
+					System.out.println("Error en constructor Pedido de retiro DTO");
+				}
+			}
+		}
+		
+		if(this.esUsuarioReciclador()) {
+			pedidos=this.pedidoDao.buscarPorUsuario(sesion.obtenerUsuario().obtenerId());
+			if(pedidos.isEmpty()) {
+				throw new EmptyListException("Aun no realizó ningun pedido");
+			}
+			for(PedidoRetiro p : pedidos) {
+				try {
+					pedidosDTO.add(new PedidoRetiroDTO(p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(), p.obtenerVivienda().obtenerUbicacionCalle(),
+							p.obtenerVivienda().obtenerUbicacionNro(), p.obtenerVivienda().obtenerUbicacionBarrio(), p.obtenerVivienda().obtenerUbicacionLatitud(),
+							p.obtenerVivienda().obtenerUbicacionLongitud(), p.obtenerNombreCiudadanoVivienda(), p.obtenerApellidoCiudadanoVivienda()));
+				} catch (NotNullException e) {
+					System.out.println("Error en constructor Pedido de retiro DTO");
+				}
+			}
+		}
+		
+		return pedidosDTO;
+		
 	}
 
-
-	@Override
-	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 	@Override
@@ -399,6 +473,25 @@ public class PersistenceApi implements IApi {
 		pedidoDao.crear(pedidoRetiro);
 		
 	}
+
+
+	@Override
+	public void pedidoPendiente(Integer id_vivienda) throws UnfinishedException {
+		
+		List<PedidoRetiro> pedidos = pedidoDao.buscar(id_vivienda);
+		if(!pedidos.isEmpty()) {
+			for(PedidoRetiro p : pedidos) {
+				if(p.obtenerFechaCumplimiento()==null) {
+					throw new UnfinishedException("La vivienda tiene un pedido que todavía no concluyó");
+				}
+			}
+		}
+		
+		
+	}
+
+
+	
 
 
 	

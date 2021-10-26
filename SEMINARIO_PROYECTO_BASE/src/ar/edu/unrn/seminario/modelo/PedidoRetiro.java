@@ -4,13 +4,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
+
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class PedidoRetiro {
 
-	private Long id;
+	private Integer id;
 	private LocalDateTime fechaEmision;
 	private LocalDateTime fechaCumplimiento;
 	private boolean cargaPesada;
@@ -44,11 +48,11 @@ public class PedidoRetiro {
 		this.residuosARetirar=residuosARetirar;
 	}
 
-	public Long obtenerId() {
+	public Integer obtenerId() {
 		return id;
 	}
 	
-	public void editarId(Long id) {
+	public void editarId(Integer id) {
 		this.id=id;
 	}
 	
@@ -60,11 +64,7 @@ public class PedidoRetiro {
 		this.fechaEmision = fecha;
 	}
 
-	public Date obtenerFecha() {
-		ZoneId defaultZoneId = ZoneId.systemDefault ();
-		Date fecha = (Date) Date.from(this.fechaEmision.atZone(defaultZoneId).toInstant());
-		return fecha;
-	}
+	
 	
 	public LocalDateTime obtenerFechaCumplimiento() {
 		return fechaCumplimiento;
@@ -72,6 +72,13 @@ public class PedidoRetiro {
 
 	public void editarFechaCumplimiento(LocalDateTime fecha) {
 		this.fechaCumplimiento = fecha;
+	}
+	
+	public void editarFechaCumplimiento(Timestamp fecha) {
+		if(fecha!=null) {
+			this.fechaCumplimiento = fecha.toLocalDateTime();
+		}
+		
 	}
 
 	public boolean isCargaPesada() {
@@ -110,6 +117,12 @@ public class PedidoRetiro {
 		this.observacion = observacion;
 	}
 	
+	
+
+	public void setFechaCumplimiento(String fechaCumplimiento) {
+		this.fechaCumplimiento = LocalDateTime.parse(fechaCumplimiento);
+	}
+
 	public double obtenerCantidad() {
 		double cantidad = 0;
 		for(ResiduoARetirar r : this.residuosARetirar) {

@@ -7,12 +7,12 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 public class Ubicacion {
 	private Long id;
       private String calle;
-      private int numero;
+      private Integer numero;
       private String barrio;
       private double latitud;
       private double longitud;
       
-	public Ubicacion(String calle, int numero, String barrio, double latitud, double longitud) throws DataEmptyException, NumbersException, NotNullException {
+	public Ubicacion(String calle, Integer numero, String barrio, double latitud, double longitud) throws DataEmptyException, NumbersException, NotNullException {
 		
 		this.calle = calle;
 		this.numero = numero;
@@ -39,11 +39,11 @@ public class Ubicacion {
 		this.calle = calle;
 	}
 
-	public int obtenerNumero() {
+	public Integer obtenerNumero() {
 		return numero;
 	}
 
-	public void editarNumero(int numero) {
+	public void editarNumero(Integer numero) {
 		this.numero = numero;
 	}
 

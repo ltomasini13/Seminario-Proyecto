@@ -140,11 +140,25 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
 			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api);
-				pedidos.setLocationRelativeTo(null);
-				pedidos.setVisible(true);
+				ListadoPedidoRetiro pedidos;
+				try {
+					pedidos = new ListadoPedidoRetiro(api);
+					pedidos.setLocationRelativeTo(null);
+					pedidos.setVisible(true);
+				} catch (EmptyListException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+
+				}
+				
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
+			
+			JMenuItem ordenesMenuItem = new JMenuItem("Ordenes de pedido");
+			ordenesMenuItem.addActionListener((ActionEvent e) -> {
+					
+				
+			});
+			adminUsuarioMenu.add(ordenesMenuItem);
 
 		}
 
@@ -194,13 +208,21 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
 			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
-				ListadoPedidoRetiro pedidos= new ListadoPedidoRetiro(api);
-				pedidos.setLocationRelativeTo(null);
-				pedidos.setVisible(true);
+				ListadoPedidoRetiro pedidos;
+				try {
+					pedidos = new ListadoPedidoRetiro(api);
+					pedidos.setLocationRelativeTo(null);
+					pedidos.setVisible(true);
+				} catch (EmptyListException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 		
 		}
+		
+		
 		
 		
 		JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");

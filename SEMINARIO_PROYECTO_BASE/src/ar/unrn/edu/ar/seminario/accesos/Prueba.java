@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,13 +70,19 @@ public class Prueba {
 //			ConnectionManager.disconnect();
 //		}
 		
-		IApi api = new PersistenceApi();
-		List<ResiduoARetirarDTO> resRet = new ArrayList<ResiduoARetirarDTO>();
-		resRet.add(new ResiduoARetirarDTO(null, "CARTON", 5.0));
-		
-		api.generarPedido(1, false, " nada que decir", resRet);
-	
+//		IApi api = new PersistenceApi();
+//		List<ResiduoARetirarDTO> resRet = new ArrayList<ResiduoARetirarDTO>();
+//		resRet.add(new ResiduoARetirarDTO(null, "CARTON", 5.0));
+//		
+//		apigenerarPedido(1, false, " nada que decir", resRet);.
+//	
 
+		
+		Timestamp fecha = Timestamp.valueOf(LocalDateTime.now());
+		
+		String otraFecha = fecha.toLocalDateTime().toString();
+		
+		System.out.println(LocalDateTime.parse(otraFecha));
 	}
 	
 	

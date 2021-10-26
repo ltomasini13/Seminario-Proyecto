@@ -21,6 +21,7 @@ import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import java.awt.event.ActionListener;
 
 public class ListadoResiduo extends JFrame{
 
@@ -34,7 +35,7 @@ public class ListadoResiduo extends JFrame{
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -56,17 +57,16 @@ public class ListadoResiduo extends JFrame{
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 		scrollPane.setViewportView(table);
 		
-		
-		
-		JButton cerrarButton = new JButton("Cerrar");
-		cerrarButton.addActionListener((ActionEvent e) -> {
-				dispose();
-		});
-		
+	
 		JPanel pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
-		pnlBotonesOperaciones.add(cerrarButton);
+		
+		JButton botonCerrar = new JButton("Cerrar");
+		botonCerrar.addActionListener((ActionEvent e)-> {
+			dispose();
+		});
+		pnlBotonesOperaciones.add(botonCerrar);
 
 	}
 }

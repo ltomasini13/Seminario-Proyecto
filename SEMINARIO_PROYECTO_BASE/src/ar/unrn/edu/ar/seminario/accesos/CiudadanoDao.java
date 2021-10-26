@@ -17,6 +17,8 @@ public interface CiudadanoDao {
 	
 	Ciudadano buscar(Usuario usuario);
 	List<Vivienda> listarMisViviendas(Ciudadano ciudadano);
+
+
 	
 	
 }

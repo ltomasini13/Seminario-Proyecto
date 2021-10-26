@@ -29,6 +29,10 @@ public class Ciudadano {
 		this.usuario=usuario;
 	} 	
  
+	public Ciudadano() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String obtenerNombre() {
 		return nombre;
 	}

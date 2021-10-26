@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -72,18 +73,21 @@ public class AltaVivienda extends JFrame {
 			panelDatosPersonales.add(txtpnDatosPersonales);
 			
 			JTextPane txtpnNombre = new JTextPane();
+			txtpnNombre.setEditable(false);
 			txtpnNombre.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnNombre.setText("Nombre:");
 			txtpnNombre.setBounds(37, 31, 63, 22);
 			panelDatosPersonales.add(txtpnNombre);
 			
 			JTextPane txtpnApellido = new JTextPane();
+			txtpnApellido.setEditable(false);
 			txtpnApellido.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnApellido.setText("Apellido:");
 			txtpnApellido.setBounds(37, 55, 56, 22);
 			panelDatosPersonales.add(txtpnApellido);
 			
 			JTextPane txtpnDni = new JTextPane();
+			txtpnDni.setEditable(false);
 			txtpnDni.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnDni.setText("DNI:");
 			txtpnDni.setBounds(37, 79, 49, 22);
@@ -103,25 +107,19 @@ public class AltaVivienda extends JFrame {
 			btnAceptar.addActionListener((ActionEvent e) -> {
 				
 									
-					try {
-		
-						api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
-									textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
-						
-						JOptionPane.showMessageDialog(null, "La vivienda y el ciudadano se registraron con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
-						dispose();
-					} catch (NotNullException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (DataEmptyException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (NumbersException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);					}
-					catch (SintaxisSQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (DuplicateUniqueKeyException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
 					
+
+						try {
+							api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
+									textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
+							JOptionPane.showMessageDialog(null, "La vivienda y el ciudadano se registraron con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} catch (NotNullException | DataEmptyException | NumbersException | SintaxisSQLException
+								| AuthenticationException e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						}
+						
+						
 			});
 			btnAceptar.setBounds(313, 52, 92, 30);
 			getContentPane().add(btnAceptar);
@@ -139,34 +137,40 @@ public class AltaVivienda extends JFrame {
 			panelDatosVivienda.setLayout(null);
 			
 			JTextPane textPane = new JTextPane();
+			textPane.setEditable(false);
 			textPane.setBounds(246, 5, -120, 22);
 			panelDatosVivienda.add(textPane);
 			
 			JTextPane txtpnBarrio = new JTextPane();
+			txtpnBarrio.setEditable(false);
 			txtpnBarrio.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnBarrio.setText("Barrio:");
 			txtpnBarrio.setBounds(30, 27, 60, 22);
 			panelDatosVivienda.add(txtpnBarrio);
 			
 			JTextPane txtpnCalle = new JTextPane();
+			txtpnCalle.setEditable(false);
 			txtpnCalle.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnCalle.setText("Calle:");
 			txtpnCalle.setBounds(30, 51, 60, 22);
 			panelDatosVivienda.add(txtpnCalle);
 			
 			JTextPane txtpnLatitud = new JTextPane();
+			txtpnLatitud.setEditable(false);
 			txtpnLatitud.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnLatitud.setText("Latitud:");
 			txtpnLatitud.setBounds(30, 98, 60, 22);
 			panelDatosVivienda.add(txtpnLatitud);
 			
 			JTextPane txtpnLongitud = new JTextPane();
+			txtpnLongitud.setEditable(false);
 			txtpnLongitud.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnLongitud.setText("Longitud:");
 			txtpnLongitud.setBounds(30, 123, 60, 22);
 			panelDatosVivienda.add(txtpnLongitud);
 			
 			JTextPane txtpnNmero = new JTextPane();
+			txtpnNmero.setEditable(false);
 			txtpnNmero.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnNmero.setText("N\u00FAmero:");
 			txtpnNmero.setBounds(30, 74, 70, 22);
@@ -211,27 +215,15 @@ public class AltaVivienda extends JFrame {
 			
 			JButton btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener((ActionEvent e) -> {
-				
-									
-					try {
-		
-						api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText(),
-									textFieldNombre.getText(), textFieldApellido.getText(), textFieldDni.getText());
-						
-						JOptionPane.showMessageDialog(null, "La vivienda y el ciudadano se registraron con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
-						dispose();
-					} catch (NotNullException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (DataEmptyException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (NumbersException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);					}
-					catch (SintaxisSQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (DuplicateUniqueKeyException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
-					
+	
+						try {
+							api.registrarVivienda(textFieldCalle.getText(), textFieldNro.getText(), textFieldBarrio.getText(), textFieldLatitud.getText(), textFieldLongitud.getText());
+							JOptionPane.showMessageDialog(null, "La vivienda se registró con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} catch (DataEmptyException | NumbersException | NotNullException
+								| AuthenticationException e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						}
 			});
 			btnAceptar.setBounds(313, 52, 92, 30);
 			getContentPane().add(btnAceptar);
@@ -249,34 +241,41 @@ public class AltaVivienda extends JFrame {
 			panelDatosVivienda.setLayout(null);
 			
 			JTextPane textPane = new JTextPane();
+			textPane.setEditable(false);
 			textPane.setBounds(246, 5, -120, 22);
 			panelDatosVivienda.add(textPane);
 			
 			JTextPane txtpnBarrio = new JTextPane();
+			txtpnBarrio.setEditable(false);
 			txtpnBarrio.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnBarrio.setText("Barrio:");
 			txtpnBarrio.setBounds(30, 27, 60, 22);
 			panelDatosVivienda.add(txtpnBarrio);
 			
 			JTextPane txtpnCalle = new JTextPane();
+			txtpnCalle.setEditable(false);
 			txtpnCalle.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnCalle.setText("Calle:");
 			txtpnCalle.setBounds(30, 51, 60, 22);
 			panelDatosVivienda.add(txtpnCalle);
 			
 			JTextPane txtpnLatitud = new JTextPane();
+			txtpnLatitud.setEditable(false);
 			txtpnLatitud.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnLatitud.setText("Latitud:");
 			txtpnLatitud.setBounds(30, 98, 60, 22);
 			panelDatosVivienda.add(txtpnLatitud);
 			
 			JTextPane txtpnLongitud = new JTextPane();
+			txtpnLongitud.setEditable(false);
+			txtpnLongitud.setEditable(false);
 			txtpnLongitud.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnLongitud.setText("Longitud:");
 			txtpnLongitud.setBounds(30, 123, 60, 22);
 			panelDatosVivienda.add(txtpnLongitud);
 			
 			JTextPane txtpnNmero = new JTextPane();
+			txtpnNmero.setEditable(false);
 			txtpnNmero.setBackground(UIManager.getColor("CheckBox.background"));
 			txtpnNmero.setText("N\u00FAmero:");
 			txtpnNmero.setBounds(30, 74, 70, 22);
