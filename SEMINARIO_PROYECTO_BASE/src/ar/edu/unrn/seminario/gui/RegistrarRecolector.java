@@ -14,6 +14,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
 public class RegistrarRecolector extends JFrame {
@@ -74,6 +75,7 @@ public class RegistrarRecolector extends JFrame {
 		aceptarButton.addActionListener((ActionEvent e) -> {
 			try {
 				api.registrarRecolector(nombreText.getText(), apellidoText.getText(), dniText.getText(), emailText.getText());
+				JOptionPane.showMessageDialog(null, "Se creo exitosamente al recolector.", "Confirmación", JOptionPane.ERROR_MESSAGE);
 				this.dispose();
 			} catch (NotNullException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -82,6 +84,8 @@ public class RegistrarRecolector extends JFrame {
 			} catch (DuplicateUniqueKeyException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (SintaxisSQLException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (NumbersException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});

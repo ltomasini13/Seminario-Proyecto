@@ -496,7 +496,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	public void registrarRecolector(String nombre, String apellido, String dni, String email)
-			throws NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException {
+			throws NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException {
 		
 		Recolector recolector = new Recolector(nombre, apellido, dni, email);
 		
@@ -516,6 +516,13 @@ public class PersistenceApi implements IApi {
 		}
 		
 		return recolectoresDTO;
+	}
+
+
+	@Override
+	public void generarOrden(String estado, Integer id_pedido) {
+		// TODO Auto-generated method stub
+		
 	}	
 	
 }

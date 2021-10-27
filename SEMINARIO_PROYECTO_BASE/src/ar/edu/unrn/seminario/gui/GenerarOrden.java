@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GenerarOrden extends JFrame {
 
@@ -38,6 +40,11 @@ public class GenerarOrden extends JFrame {
 		estadoText.setColumns(10);
 		
 		JButton asignarBoton = new JButton("ASIGNAR RECOLECTOR");
+		asignarBoton.addActionListener((ActionEvent e) -> {
+			RegistrarRecolector regRecolector = new RegistrarRecolector(api);
+			regRecolector.setVisible(true);
+			this.dispose();
+		});
 		asignarBoton.setBounds(12, 124, 177, 25);
 		contentPane.add(asignarBoton);
 		

@@ -78,7 +78,11 @@ public interface IApi {
 
 	void pedidoPendiente(Integer id_vivienda) throws UnfinishedException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
 
-	void registrarRecolector(String nombre, String apellido, String dni, String email) throws  NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException;
+	void registrarRecolector(String nombre, String apellido, String dni, String email) throws  NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException;
 	
 	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException ;
+	
+	void generarOrden(String estado, Integer id_pedido);
+	
+	
 }

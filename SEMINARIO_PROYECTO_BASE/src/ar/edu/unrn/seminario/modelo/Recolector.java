@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.modelo;
 
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 
 public class Recolector {
 	private Integer id;
@@ -10,7 +11,7 @@ public class Recolector {
 	private String dni;
 	private String email;
 		
-	public Recolector(String nombre, String apellido, String dni, String email) throws DataEmptyException, NotNullException {
+	public Recolector(String nombre, String apellido, String dni, String email) throws DataEmptyException, NotNullException, NumbersException {
 			
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -23,6 +24,10 @@ public class Recolector {
 			
 		if(nombre == null || apellido == null || dni == null || email == null) {
 			throw new NotNullException("Uno o m�s datos son nulos.");
+		}
+		
+		if(!dni.matches("[0-9]+") || (dni.length()<7||dni.length()>8)) {
+			throw new NumbersException("El dni ingresado es incorrecto");
 		}
 	}
 
