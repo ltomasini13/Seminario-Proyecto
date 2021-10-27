@@ -205,30 +205,31 @@ public class SeleccionResiduos extends JFrame{
 			Double peso=0.0;
 			try {
 				peso=Double.parseDouble(formatoCantidad.getText());
+				if(!jListResiduos.isSelectionEmpty()) {
+					String tipoResiduo = (String)modelo.getElementAt(jListResiduos.getSelectedIndex());
+					ResiduoARetirarDTO residuoARetirarDTO = new ResiduoARetirarDTO(null, tipoResiduo, peso);
+					
+					if(estaAgregado(residuoARetirarDTO)) {
+
+						JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.WARNING_MESSAGE); 
+					}
+					else {
+						residuosAgregados.add(residuoARetirarDTO);
+						modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
+						jListResAgregados.removeAll();
+						jListResAgregados.setModel(modeloResAgregados);
+						
+					}
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun residuo", "Error", JOptionPane.INFORMATION_MESSAGE); 
+				}
 			}
 			catch(NumberFormatException e) {
 				JOptionPane.showMessageDialog(null, "Ingrese un peso correcto", "Error", JOptionPane.ERROR_MESSAGE); 
 			}
-			if(!jListResiduos.isSelectionEmpty()) {
-				String tipoResiduo = (String)modelo.getElementAt(jListResiduos.getSelectedIndex());
-				ResiduoARetirarDTO residuoARetirarDTO = new ResiduoARetirarDTO(null, tipoResiduo, peso);
-				
-				if(estaAgregado(residuoARetirarDTO)) {
-
-					JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.WARNING_MESSAGE); 
-				}
-				else {
-					residuosAgregados.add(residuoARetirarDTO);
-					modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
-					jListResAgregados.removeAll();
-					jListResAgregados.setModel(modeloResAgregados);
-					
-				}
-				
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun residuo", "Error", JOptionPane.INFORMATION_MESSAGE); 
-			}
+			
 			
 			
 		});

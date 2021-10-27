@@ -57,7 +57,6 @@ public class ListadoResiduo extends JFrame{
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 		scrollPane.setViewportView(table);
 		
-	
 		JPanel pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
