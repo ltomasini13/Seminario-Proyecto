@@ -152,13 +152,55 @@ public class VentanaPrincipal extends JFrame {
 				
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
+	
+			JMenu ordenMenu = new JMenu("Ordenes");
+			menuBar.add(ordenMenu);
 			
-			JMenuItem ordenesMenuItem = new JMenuItem("Ordenes de pedido");
+			JMenuItem ordenesMenuItem = new JMenuItem("Generar Orden");
 			ordenesMenuItem.addActionListener((ActionEvent e) -> {
+					ListadoPedidoRetiro listado;
+					try {
+						listado = new ListadoPedidoRetiro(api);
+						listado.setVisible(true);
+					} catch (EmptyListException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					}
 					
+			});
+			
+			ordenMenu.add(ordenesMenuItem);
+
+			JMenuItem listadoOrdenesMenuItem = new JMenuItem("Listado");
+			listadoOrdenesMenuItem.addActionListener((ActionEvent e) -> {
+				
 				
 			});
-			adminUsuarioMenu.add(ordenesMenuItem);
+			ordenMenu.add(listadoOrdenesMenuItem);
+			
+			JMenu recolectorMenu = new JMenu("Recolectores");
+			menuBar.add(recolectorMenu);
+			
+			JMenuItem registrarRecolectorMenuItem = new JMenuItem("Registrar Recolector");
+			registrarRecolectorMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarRecolector regRecolector = new RegistrarRecolector(api);
+				regRecolector.setLocationRelativeTo(null);
+				regRecolector.setVisible(true);
+			});
+			recolectorMenu.add(registrarRecolectorMenuItem);
+			
+			JMenuItem listadoRecolectoresMenuItem = new JMenuItem("Listado");
+			listadoRecolectoresMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoRecolector recolectores;
+				try {
+					recolectores = new ListadoRecolector(api);
+					recolectores.setLocationRelativeTo(null);
+					recolectores.setVisible(true);
+				} catch (SintaxisSQLException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			});
+			recolectorMenu.add(listadoRecolectoresMenuItem);
 
 		}
 

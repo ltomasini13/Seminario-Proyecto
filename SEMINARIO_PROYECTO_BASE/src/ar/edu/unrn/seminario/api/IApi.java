@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
@@ -76,4 +77,12 @@ public interface IApi {
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException;
 
 	void pedidoPendiente(Integer id_vivienda) throws UnfinishedException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
+
+	void registrarRecolector(String nombre, String apellido, String dni, String email) throws  NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException;
+	
+	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException ;
+	
+	void generarOrden(String estado, Integer id_pedido);
+	
+	
 }

@@ -153,7 +153,7 @@ public class SeleccionResiduos extends JFrame{
 			
 			try {
 				api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
-				JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Error", JOptionPane.INFORMATION_MESSAGE); 
+				JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
 				dispose();
 			} catch (NotNullException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
