@@ -1,8 +1,8 @@
 package ar.edu.unrn.seminario.api;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
@@ -19,8 +19,6 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.exception.UnfinishedException;
-import ar.edu.unrn.seminario.modelo.TipoResiduo;
-import ar.edu.unrn.seminario.modelo.Usuario;
 
 public interface IApi {
 
@@ -82,7 +80,7 @@ public interface IApi {
 	
 	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException ;
 	
-	void generarOrden(String estado, Integer id_pedido);
+	void generarOrden(String estado, Integer id_pedido, Integer id_recolector);
 	
-	
+	List<OrdenDeRetiroDTO> obtenerOrdenes();
 }

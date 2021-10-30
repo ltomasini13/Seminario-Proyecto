@@ -2,21 +2,20 @@ package ar.unrn.edu.ar.seminario.accesos;
 
 import java.util.List;
 
-import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
-import ar.edu.unrn.seminario.modelo.Recolector;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 
-public class OrdenDeRetiroDao {
+public interface OrdenDeRetiroDao {
 
-void crear(Orden)throws SintaxisSQLException;
+	void crear(OrdenDeRetiro orden)throws SintaxisSQLException;
 	
-	List<Recolector> listarTodos()throws SintaxisSQLException;
+	List<OrdenDeRetiro> listarTodos()throws SintaxisSQLException;
 
-	Recolector buscar(String nombreDeUsuario);
+	OrdenDeRetiro buscar(Integer id);
 	
-	void actualizar(Recolector recolector);
+	void actualizar(OrdenDeRetiro orden);
 
 	void eliminar(Integer id);
 
-	void eliminar(Recolector recolector);
+	void eliminar(OrdenDeRetiro orden);
 }

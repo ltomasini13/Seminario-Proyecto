@@ -6,6 +6,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -41,14 +43,23 @@ public class GenerarOrden extends JFrame {
 		
 		JButton asignarBoton = new JButton("ASIGNAR RECOLECTOR");
 		asignarBoton.addActionListener((ActionEvent e) -> {
-			RegistrarRecolector regRecolector = new RegistrarRecolector(api);
-			regRecolector.setVisible(true);
-			this.dispose();
+			ListadoRecolector listado;
+			try {
+				listado = new ListadoRecolector(api);	
+				listado.setVisible(true);
+				this.dispose();
+			} catch (SintaxisSQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		asignarBoton.setBounds(12, 124, 177, 25);
 		contentPane.add(asignarBoton);
 		
 		JButton cancelarBoton = new JButton("CANCELAR");
+		cancelarBoton.addActionListener((ActionEvent e) -> {
+			this.dispose();
+		});
 		cancelarBoton.setBounds(261, 124, 97, 25);
 		contentPane.add(cancelarBoton);
 		
