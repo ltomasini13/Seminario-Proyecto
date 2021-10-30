@@ -69,22 +69,23 @@ public class ListadoOrdenDeRetiro extends JFrame {
 
 		asignar = new JButton("ASIGNAR RECOLECTOR");
 		asignar.addActionListener((ActionEvent e) -> {
-			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna recolector", "", JOptionPane.INFORMATION_MESSAGE);
-			}
-			else {
+			ListadoRecolector listado;
+			try {
+				listado = new ListadoRecolector(api);
+				listado.setVisible(true);
 				this.setVisible(false);
+			} catch (SintaxisSQLException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.INFORMATION_MESSAGE);
 			}
+			
+			
 		});
 		
 		realizarVisita = new JButton("REALIZAR VISITA");
 		realizarVisita.addActionListener((ActionEvent e) -> {
-			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna recolector", "", JOptionPane.INFORMATION_MESSAGE);
-			}
-			else {
+			
 				this.setVisible(false);
-			}
+			
 		});
 
 		JButton cerrarButton = new JButton("Cerrar");

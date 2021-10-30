@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.modelo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class OrdenDeRetiro {
 
@@ -11,13 +12,13 @@ public class OrdenDeRetiro {
 	
 	private Integer id;
 	private String estado;
-	private LocalDate fechaOrden;
+	private LocalDateTime fechaOrden;
 	private PedidoRetiro pedido;
 	private Recolector recolector;
 	
 	public OrdenDeRetiro(String fecha, String estado, PedidoRetiro pedido, Recolector recolector) {
 		
-		this.fechaOrden = LocalDate.parse(fecha);
+		this.fechaOrden = LocalDateTime.parse(fecha);
 		this.estado = "PENDIENTE";
 		this.pedido = pedido;
 		this.recolector = recolector;
@@ -40,11 +41,11 @@ public class OrdenDeRetiro {
 		this.estado = estado;
 	}
 	
-	public LocalDate obtenerFecha() {
+	public LocalDateTime obtenerFecha() {
 		return fechaOrden;
 	}
 	
-	public void editarFecha(LocalDate fecha) {
+	public void editarFecha(LocalDateTime fecha) {
 		this.fechaOrden = fecha;
 	}
 	
@@ -64,4 +65,11 @@ public class OrdenDeRetiro {
 		this.recolector = recolector;
 	}
 
+	public boolean tieneRecolector() {
+		if (this.recolector != null){
+			return true;
+		}
+		else 
+			return false;
+	}
 }

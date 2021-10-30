@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
@@ -530,7 +531,7 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void generarOrden(String estado, Integer id_pedido) {
+	public void generarOrden(String estado, Integer id_pedido, Integer id_orden) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -546,5 +547,9 @@ public class PersistenceApi implements IApi {
 
 
 		
+	
+	public List<OrdenDeRetiroDTO> obtenerOrdenes(){
+		return null;
+	}
 	
 }

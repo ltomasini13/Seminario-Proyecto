@@ -67,14 +67,9 @@ public class ListadoRecolector extends JFrame {
 
 		scrollPane.setViewportView(table);
 
-		asignar = new JButton("ASIGNAR ORDEN");
+		asignar = new JButton("ELEGIR");
 		asignar.addActionListener((ActionEvent e) -> {
-			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna recolector", "", JOptionPane.INFORMATION_MESSAGE);
-			}
-			else {
-				this.setVisible(false);
-			}
+		
 		});
 
 		JButton cerrarButton = new JButton("Cerrar");
