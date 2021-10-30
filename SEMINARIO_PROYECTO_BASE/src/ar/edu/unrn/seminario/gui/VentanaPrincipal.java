@@ -83,8 +83,7 @@ public class VentanaPrincipal extends JFrame {
 						listadoViv.setLocationRelativeTo(null);
 						listadoViv.setVisible(true);
 					} catch (EmptyListException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});

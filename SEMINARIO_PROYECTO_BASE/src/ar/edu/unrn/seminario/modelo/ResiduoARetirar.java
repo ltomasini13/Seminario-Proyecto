@@ -3,7 +3,7 @@ package ar.edu.unrn.seminario.modelo;
 import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class ResiduoARetirar {
-
+	private Integer id;
 	private TipoResiduo tipo;
 	private double cantkg;
 	
@@ -19,6 +19,20 @@ public class ResiduoARetirar {
 		}
 	}
 	
+	
+	
+	public Integer obtenerId() {
+		return id;
+	}
+
+
+
+	public void editarId(Integer id) {
+		this.id = id;
+	}
+
+
+
 	public double totalPuntosRetiro(){
 		double totalkg = 0;
 		totalkg = cantkg * tipo.obtenerPunto();

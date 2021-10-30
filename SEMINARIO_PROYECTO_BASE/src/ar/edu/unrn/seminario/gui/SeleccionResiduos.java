@@ -249,11 +249,15 @@ public class SeleccionResiduos extends JFrame{
 		jListResAgregados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				if(arg0.getButton()==1) {
+					popupMenu.setVisible(false);
+				}
 				if(!jListResAgregados.isSelectionEmpty()) {
 						if (arg0.getButton()==3) {
-							popupMenu.setLocation(arg0.getLocationOnScreen());
-							popupMenu.setVisible(true);
-							
+							if(!popupMenu.isVisible()) {
+								popupMenu.setLocation(arg0.getLocationOnScreen());
+								popupMenu.setVisible(true);
+							}
 						}
 				}
 			}

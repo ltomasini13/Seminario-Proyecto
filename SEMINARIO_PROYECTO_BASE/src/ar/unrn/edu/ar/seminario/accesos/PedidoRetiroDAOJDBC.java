@@ -19,6 +19,7 @@ import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
@@ -220,6 +221,42 @@ List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 			
 		}
 		return pedidos;
+	}
+
+	@Override
+	public List<ResiduoARetirar> buscarResiduosARetirar(Integer idPedido) {
+		List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("select * from  residuos_a_retirar rr  join residuos r on (rr.id_tipo_residuo=r.id_residuo) where rr.id_pedido=?");
+			
+			statement.setInt(1, idPedido);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				TipoResiduo tipoRes = new TipoResiduo(rs.getString("r.tipo"), rs.getInt("r.puntos"));
+				ResiduoARetirar residuoARetirar = new ResiduoARetirar(tipoRes, rs.getDouble("rr.cantidad_kg"));
+				residuoARetirar.editarId(rs.getInt("rr.id_residuo"));
+				
+				residuosARetirar.add(residuoARetirar);
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			
+		} catch (Exception e) {
+			System.out.println("Error al buscar vivienda");
+		
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		return residuosARetirar;
 	}
 
 }

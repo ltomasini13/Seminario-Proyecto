@@ -21,6 +21,7 @@ import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.exception.UnfinishedException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
@@ -384,11 +385,6 @@ public class PersistenceApi implements IApi {
 	}
 
 
-	@Override
-	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -453,6 +449,20 @@ public class PersistenceApi implements IApi {
 		return residuosDTO;
 	}
 
+	
+	@Override
+	public List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido) {
+		List<ResiduoARetirarDTO> residuosARetirarDTO=new ArrayList<ResiduoARetirarDTO>();
+		
+		for(ResiduoARetirar res : this.pedidoDao.buscarResiduosARetirar(idPedido)) {
+			residuosARetirarDTO.add(new ResiduoARetirarDTO(res.obtenerId(), res.obtenerTipoResiduo(), res.obtenerCantkg()));
+		}
+		
+		return residuosARetirarDTO;
+		
+	}
+	
+	
 
 	@Override
 	public void cerrarSesion() {
@@ -523,6 +533,18 @@ public class PersistenceApi implements IApi {
 	public void generarOrden(String estado, Integer id_pedido) {
 		// TODO Auto-generated method stub
 		
-	}	
+	}
+
+	
+	@Override
+	public void ejecutarOrden(Integer idOrden) {
+		
+		
+	}
+
+
+
+
+		
 	
 }

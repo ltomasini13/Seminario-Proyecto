@@ -2,11 +2,15 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
@@ -15,12 +19,16 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
@@ -30,6 +38,7 @@ public class ListadoPedidoRetiro extends JFrame{
 	private DefaultTableModel modelo;
 	private IApi api;
 	private JTable table;
+	private JPopupMenu popupMenu;
 
 
 	public ListadoPedidoRetiro(IApi api) throws EmptyListException {
@@ -71,6 +80,28 @@ public class ListadoPedidoRetiro extends JFrame{
 		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
 		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(arg0.getButton()==1) {
+					popupMenu.setVisible(false);
+				}
+				
+				if(table.getSelectedRow()!=-1) {
+						
+						if (arg0.getButton()==3) {
+							if(!popupMenu.isVisible()) {
+								popupMenu.setLocation(arg0.getLocationOnScreen());
+								popupMenu.setVisible(true);
+							}
+							
+							
+							
+						}
+				}
+			}
+		});
+		
 		scrollPane.setViewportView(table);
 		
 		
@@ -84,6 +115,23 @@ public class ListadoPedidoRetiro extends JFrame{
 			dispose();
 		});
 		pnlBotonesOperaciones.add(botonCerrar);
+		
+		popupMenu= new JPopupMenu();
+		JMenuItem menuItemPopupMenu = new JMenuItem("Ver residuos a retirar");
+		menuItemPopupMenu.addActionListener((ActionEvent arg0) ->{
+			
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				popupMenu.setVisible(false);
+				Integer idPedido=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+
+				ListadoResiduosARetirar listadoResRetirar = new ListadoResiduosARetirar(api, idPedido);
+				listadoResRetirar.setVisible(true);
+			}
+		});
+		popupMenu.add(menuItemPopupMenu);
 		
 		
 	}

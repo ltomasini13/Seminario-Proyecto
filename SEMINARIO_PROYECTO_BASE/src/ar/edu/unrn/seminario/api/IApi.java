@@ -63,10 +63,6 @@ public interface IApi {
 
 	List<ViviendaDTO> obtenerViviendas() throws EmptyListException; //recupera todas las viviendas registradas
 	
-
-	
-	void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion);
-	
 	List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException;
 	
 
@@ -83,6 +79,10 @@ public interface IApi {
 	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException ;
 	
 	void generarOrden(String estado, Integer id_pedido);
+	
+	List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido);
+	
+	void ejecutarOrden(Integer idOrden);
 	
 	
 }
