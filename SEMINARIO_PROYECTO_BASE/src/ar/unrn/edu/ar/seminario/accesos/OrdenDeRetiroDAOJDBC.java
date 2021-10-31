@@ -126,13 +126,79 @@ try {
 
 	@Override
 	public OrdenDeRetiro buscar(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		OrdenDeRetiro orden=null;
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("select * from ordenes o join pedidos p on(p.id_pedido=o.id_pedido)"
+							+ " join recolectores r on (o.id_recolector=r.id_recolector) where o.id_orden=?");
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+			
+			
+			while(rs.next()) {
+				boolean cargaPesada=true;
+				if(rs.getString("p.carga_pesada").equals("NO")) {
+					cargaPesada=false;
+				}
+				PedidoRetiro pedidoRetiro = new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(), cargaPesada,
+						rs.getString("p.observacion"), null);
+				Recolector recolector = new Recolector(rs.getString("r.nombre"), rs.getString("r.apellido"), rs.getString("r.dni"),
+						rs.getString("r.email"));
+				orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), rs.getString("o.estado"), pedidoRetiro, recolector);
+				orden.editarId(rs.getInt("o.id_orden"));
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viviendas");
+			// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		return orden;
+		
 	}
 
 	@Override
 	public void actualizar(OrdenDeRetiro orden) {
-		// TODO Auto-generated method stub
+		Connection conn = ConnectionManager.getConnection();
+		
+		try {
+		PreparedStatement statement = conn
+				.prepareStatement("UPDATE ordenes" + 
+						"SET fecha_orden=?, estado=?, id_pedido=?, id_recolector=?" + 
+						"WHERE id_orden=?");
+		
+		statement.setTimestamp(1,  Timestamp.valueOf(orden.obtenerFecha()));
+		statement.setString(2, orden.obtenerEstado());
+		statement.setInt(3, orden.obtenerPedido().obtenerId());
+		statement.setInt(3, orden.obtenerRecolector().obtenerId());
+		
+		
+	
+		int cantidad = statement.executeUpdate();
+		if (cantidad==1) {
+				System.out.println("La orden se modificó correctamente");
+		}
+	
+	    
+	
+		}
+		catch (SQLException sq){
+			//throw new SintaxisSQLException("Hubo un error con la base de datos");
+			System.out.println("Error al procesar consulta");
+			
+		}
+		catch(Exception e) {
+			System.out.println("Error en la base de datos");
+		}
 		
 	}
 

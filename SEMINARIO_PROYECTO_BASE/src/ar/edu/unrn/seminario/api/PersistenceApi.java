@@ -33,6 +33,8 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
+import ar.unrn.edu.ar.seminario.accesos.OrdenDeRetiroDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.OrdenDeRetiroDao;
 import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.PedidoRetiroDao;
 import ar.unrn.edu.ar.seminario.accesos.RecolectorDAOJDBC;
@@ -51,7 +53,7 @@ public class PersistenceApi implements IApi {
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
 	private CiudadanoDao ciudadanoDao;
-
+	private OrdenDeRetiroDao ordenDao;
 	private Sesion sesion;
 
 	private ResiduoDao residuoDao;
@@ -66,6 +68,7 @@ public class PersistenceApi implements IApi {
 		residuoDao= new ResiduoDAOJDBC();
 		pedidoDao= new PedidoRetiroDAOJDBC();
 		recolectorDao= new RecolectorDAOJDBC();
+		ordenDao = new OrdenDeRetiroDAOJDBC();
 	}
 
 
@@ -531,25 +534,57 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void generarOrden(String estado, Integer id_pedido, Integer id_orden) {
+	public void generarOrden(String estado, Integer id_pedido) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	
+	
+
+	
 	@Override
-	public void ejecutarOrden(Integer idOrden) {
+	public void generarOrden(Integer id_pedido, Integer id_recolector) {
+		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void ejecutarOrden(Integer idOrden) throws StateException {
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		orden.ejecutarOrden();
+		this.ordenDao.actualizar(orden);
+	}
+	
+	@Override
+	public void cancelarOrden(Integer idOrden) throws StateException {
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		orden.cancelarOrden();
+		this.ordenDao.actualizar(orden);
 		
 	}
 
 
-
-
+	@Override
+	public void finalizarOrden(Integer idOrden) throws StateException {
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		orden.finalizarOrden();
+		this.ordenDao.actualizar(orden);
 		
-	
-	public List<OrdenDeRetiroDTO> obtenerOrdenes(){
+	}
+
+	@Override
+	public List<OrdenDeRetiroDTO> obtenerOrdenes() {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
+
+
+
+
+		
 	
 }
