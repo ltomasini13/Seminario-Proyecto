@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public class Visita {
 	private LocalDateTime fecha;
-	private 
+	//private List<ResiduoRetirado> residuosRetirados;
 }

@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
@@ -25,6 +27,7 @@ import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
@@ -70,19 +73,10 @@ public class Prueba {
 //			ConnectionManager.disconnect();
 //		}
 		
-//		IApi api = new PersistenceApi();
-//		List<ResiduoARetirarDTO> resRet = new ArrayList<ResiduoARetirarDTO>();
-//		resRet.add(new ResiduoARetirarDTO(null, "CARTON", 5.0));
-//		
-//		apigenerarPedido(1, false, " nada que decir", resRet);.
-//	
+		IApi api = new PersistenceApi();
+		 
 
 		
-		Timestamp fecha = Timestamp.valueOf(LocalDateTime.now());
-		
-		String otraFecha = fecha.toLocalDateTime().toString();
-		
-		System.out.println(LocalDateTime.parse(otraFecha));
 	}
 	
 	

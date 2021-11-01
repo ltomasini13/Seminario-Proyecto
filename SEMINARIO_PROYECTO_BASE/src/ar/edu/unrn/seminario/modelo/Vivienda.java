@@ -7,7 +7,9 @@ public class Vivienda {
 	private Ubicacion ubicacion;
 	private Ciudadano ciudadano;
 	
-	
+	public Vivienda() {
+		
+	}
 	public Vivienda(Ubicacion ubicacion, Ciudadano ciudadano) throws NotNullException {
 		this.ubicacion = ubicacion;
 		this.ciudadano = ciudadano;

@@ -18,7 +18,7 @@ public class OrdenDeRetiro {
 	private PedidoRetiro pedido;
 	private Recolector recolector;
 	
-	public OrdenDeRetiro(String fecha, String estado, PedidoRetiro pedido, Recolector recolector) {
+	public OrdenDeRetiro(String fecha, PedidoRetiro pedido, Recolector recolector) {
 		
 		this.fechaOrden = LocalDateTime.parse(fecha);
 		this.estado = "PENDIENTE";
@@ -89,9 +89,9 @@ public class OrdenDeRetiro {
 	
 	
 
-//	public void editarEstado(String estado) {
-//		this.estado = estado;
-//	}
+	public void editarEstado(String estado) {
+		this.estado = estado;
+	}
 //	
 	public LocalDateTime obtenerFecha() {
 		return fechaOrden;

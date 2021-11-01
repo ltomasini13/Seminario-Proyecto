@@ -102,7 +102,8 @@ try {
 				Vivienda viv= new Vivienda(ubicacion, ciudadano);
 				PedidoRetiro pedido = new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(),cargaPesada, rs.getString("p.observacion"), viv);
 				pedido.editarFechaCumplimiento(rs.getTimestamp("p.fecha_cumplimiento"));
-				OrdenDeRetiro orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), rs.getString("o.estado"), pedido, recolector);
+				OrdenDeRetiro orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedido, recolector);
+				orden.editarEstado(rs.getString("o.estado"));
 				
 				orden.editarId(rs.getInt("o.id_orden"));
 				ordenes.add(orden);
@@ -125,7 +126,7 @@ try {
 	}
 
 	@Override
-	public OrdenDeRetiro buscar(Integer id) {
+	public OrdenDeRetiro buscar(Integer idOrden) {
 		OrdenDeRetiro orden=null;
 		try {
 
@@ -133,7 +134,7 @@ try {
 			PreparedStatement statement = conn
 					.prepareStatement("select * from ordenes o join pedidos p on(p.id_pedido=o.id_pedido)"
 							+ " join recolectores r on (o.id_recolector=r.id_recolector) where o.id_orden=?");
-			statement.setInt(1, id);
+			statement.setInt(1, idOrden);
 			ResultSet rs = statement.executeQuery();
 			
 			
@@ -143,10 +144,13 @@ try {
 					cargaPesada=false;
 				}
 				PedidoRetiro pedidoRetiro = new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(), cargaPesada,
-						rs.getString("p.observacion"), null);
+						rs.getString("p.observacion"), new Vivienda());
+				pedidoRetiro.editarId(rs.getInt("p.id_pedido"));
 				Recolector recolector = new Recolector(rs.getString("r.nombre"), rs.getString("r.apellido"), rs.getString("r.dni"),
 						rs.getString("r.email"));
-				orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), rs.getString("o.estado"), pedidoRetiro, recolector);
+				recolector.editarId(rs.getInt("r.id_recolector"));
+				orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedidoRetiro, recolector);
+				orden.editarEstado(rs.getString("o.estado"));
 				orden.editarId(rs.getInt("o.id_orden"));
 			}
 		
@@ -172,15 +176,13 @@ try {
 		
 		try {
 		PreparedStatement statement = conn
-				.prepareStatement("UPDATE ordenes" + 
-						"SET fecha_orden=?, estado=?, id_pedido=?, id_recolector=?" + 
-						"WHERE id_orden=?");
+				.prepareStatement("UPDATE ordenes SET fecha_orden=?, estado=?, id_pedido=?, id_recolector=? WHERE id_orden=?");
 		
 		statement.setTimestamp(1,  Timestamp.valueOf(orden.obtenerFecha()));
 		statement.setString(2, orden.obtenerEstado());
 		statement.setInt(3, orden.obtenerPedido().obtenerId());
-		statement.setInt(3, orden.obtenerRecolector().obtenerId());
-		
+		statement.setInt(4, orden.obtenerRecolector().obtenerId());
+		statement.setInt(5, orden.obtenerId());
 		
 	
 		int cantidad = statement.executeUpdate();
@@ -197,7 +199,7 @@ try {
 			
 		}
 		catch(Exception e) {
-			System.out.println("Error en la base de datos");
+			System.out.println("Error en la bd");
 		}
 		
 	}
