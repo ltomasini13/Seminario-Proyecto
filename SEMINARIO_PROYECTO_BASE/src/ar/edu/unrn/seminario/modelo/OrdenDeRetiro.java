@@ -18,12 +18,15 @@ public class OrdenDeRetiro {
 	private PedidoRetiro pedido;
 	private Recolector recolector;
 	
+<<<<<<< HEAD
 	public OrdenDeRetiro(String fecha, PedidoRetiro pedido, Recolector recolector) {
+=======
+	public OrdenDeRetiro(String fecha, PedidoRetiro pedido) {
+>>>>>>> f18d8ce1e48e7cd6334ea5b253376ea73b53a981
 		
 		this.fechaOrden = LocalDateTime.parse(fecha);
 		this.estado = "PENDIENTE";
 		this.pedido = pedido;
-		this.recolector = recolector;
 		
 	}
 
@@ -37,6 +40,10 @@ public class OrdenDeRetiro {
 	
 	public String obtenerEstado() {
 		return estado;
+	}
+	
+	public void editarEstado(String estado) {
+		this.estado = estado;
 	}
 	
 	public void ejecutarOrden() throws StateException {

@@ -14,6 +14,8 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
+import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 
 public class RecolectorDAOJDBC implements RecolectorDao {
@@ -98,9 +100,38 @@ public class RecolectorDAOJDBC implements RecolectorDao {
 	}
 
 	@Override
-	public Recolector buscar(String nombreDeUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+	public Recolector buscar(Integer id) {
+		Recolector recolector = null;
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("select * from recolectores r where r.id_recolector=?");
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+			
+			
+			while(rs.next()) {
+				
+				recolector = new Recolector(rs.getString("r.nombre"), rs.getString("r.apellido"), rs.getString("r.dni"),
+						rs.getString("r.email"));
+				recolector.editarId(rs.getInt("id_recolector"));
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viviendas");
+			// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+
+		return recolector;
 	}
 
 	@Override

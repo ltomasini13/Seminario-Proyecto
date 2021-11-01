@@ -18,4 +18,6 @@ public interface OrdenDeRetiroDao {
 	void eliminar(Integer id);
 
 	void eliminar(OrdenDeRetiro orden);
+	
+	List<OrdenDeRetiro> buscarPedido(Integer idPedido);
 }

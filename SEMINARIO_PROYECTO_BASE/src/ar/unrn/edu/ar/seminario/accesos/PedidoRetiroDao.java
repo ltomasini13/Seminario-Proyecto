@@ -15,4 +15,5 @@ public interface PedidoRetiroDao {
 	List<PedidoRetiro> buscarPorUsuario(Integer idUsuario);
 	List<PedidoRetiro> listarTodos();
 	List<ResiduoARetirar> buscarResiduosARetirar(Integer idPedido);
+	PedidoRetiro buscarPedido(Integer idPedido);
 }

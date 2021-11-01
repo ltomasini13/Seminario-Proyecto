@@ -194,10 +194,10 @@ List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 			
 			while(rs.next()) {
 				
-					boolean cargaPesada=true;
-					if(rs.getString("p.carga_pesada").equals("NO")) {
-						cargaPesada=false;
-					}
+				boolean cargaPesada=true;
+				if(rs.getString("p.carga_pesada").equals("NO")) {
+					cargaPesada=false;
+				}
 //				
 				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
 						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
@@ -259,4 +259,44 @@ List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 		return residuosARetirar;
 	}
 
+	public PedidoRetiro buscarPedido(Integer idPedido) {
+		PedidoRetiro pedido =null;
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM viviendas v JOIN ciudadanos c ON (v.id_ciudadano=c.id_ciudadano) WHERE v.id_vivienda=?");
+		
+			statement.setInt(1, idPedido);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				
+				boolean cargaPesada=true;
+				if(rs.getString("p.carga_pesada").equals("NO")) {
+					cargaPesada=false;
+				}
+				
+				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
+						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
+				Ciudadano ciudadano = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), null);
+				Vivienda vivienda=new Vivienda(ubicacion, ciudadano);
+				pedido=  new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(), cargaPesada, rs.getString("p.observacion"), vivienda);
+				pedido.editarFechaCumplimiento(rs.getTimestamp("p.fecha_cumplimiento"));
+				pedido.editarId(idPedido);
+			}
+		}
+		catch (SQLException e) {
+			System.out.println("Error al procesar consulta");
+		// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viviendas");
+		// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+		}
+		return pedido;
+	}
 }
+		
