@@ -517,9 +517,6 @@ public class PersistenceApi implements IApi {
 		this.recolectorDao.crear(recolector);
 		
 	}
-
-
-	
 	
 	@Override
 	public List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException {
@@ -531,21 +528,19 @@ public class PersistenceApi implements IApi {
 		
 		return recolectoresDTO;
 	}
-
-
+	
 	@Override
-	public void generarOrden(String estado, Integer id_pedido) {
-		// TODO Auto-generated method stub
+	public void generarOrden(Integer idPedido) throws SintaxisSQLException, UnfinishedException {
 		
-	}
-
-	
-	
-
-	
-	@Override
-	public void generarOrden(Integer id_pedido, Integer id_recolector) {
-		// TODO Auto-generated method stub
+		List<OrdenDeRetiro> ordenes = ordenDao.buscarPedido(idPedido);
+		if(!ordenes.isEmpty()) {
+			throw new UnfinishedException("El pedido ya tiene asignado una orden."); 
+		}
+		else {
+			PedidoRetiro pedido = pedidoDao.buscarPedido(idPedido);
+			OrdenDeRetiro orden = new OrdenDeRetiro(LocalDateTime.now().toString(), pedido);
+			ordenDao.crear(orden);
+		}
 		
 	}
 	
@@ -580,11 +575,11 @@ public class PersistenceApi implements IApi {
 	}
 
 
-
-
-
-
-
+	@Override
+	public void asignarRecolector(Integer idOrden) {
+		// TODO Auto-generated method stub
 		
+	}
+	
 	
 }

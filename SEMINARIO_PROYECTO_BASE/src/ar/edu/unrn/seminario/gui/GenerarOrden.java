@@ -1,16 +1,22 @@
 package ar.edu.unrn.seminario.gui;
 
-import javax.swing.JFrame;
+import javax.swing.JFrame; 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.modelo.PedidoRetiro;
+import ar.edu.unrn.seminario.modelo.Recolector;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class GenerarOrden extends JFrame {
@@ -21,8 +27,11 @@ public class GenerarOrden extends JFrame {
 	private JTextField dniText;
 	private JTextField emailText;
 	private JTextField estadoText;
+	List<PedidoRetiro> listaPedido = null;
+	List<Recolector> listaRecolector = null;
 	
-	public GenerarOrden(IApi api) {
+	
+	public GenerarOrden(IApi api, Integer idPedido) {
 		setTitle("GENERAR ORDEN DE RETIRO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -64,6 +73,19 @@ public class GenerarOrden extends JFrame {
 		contentPane.add(cancelarBoton);
 		
 		JButton aceptarBoton = new JButton("ACEPTAR");
+		aceptarBoton.addActionListener((ActionEvent arg0) ->{
+			
+			try {
+				api.generarOrden(idPedido);
+				JOptionPane.showMessageDialog(null, "La orden se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
+				dispose();
+			} catch (SintaxisSQLException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (UnfinishedException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			};
+		
+		});
 		aceptarBoton.setBounds(261, 22, 97, 25);
 		contentPane.add(aceptarBoton);
 	}

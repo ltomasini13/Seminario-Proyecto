@@ -69,7 +69,7 @@ try {
 			System.out.println("Error al procesar la consulta");
 			
 		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
+			System.out.println("Error en la bd");
 		} finally {
 			ConnectionManager.disconnect();
 		}
@@ -102,9 +102,10 @@ try {
 				Vivienda viv= new Vivienda(ubicacion, ciudadano);
 				PedidoRetiro pedido = new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(),cargaPesada, rs.getString("p.observacion"), viv);
 				pedido.editarFechaCumplimiento(rs.getTimestamp("p.fecha_cumplimiento"));
-				OrdenDeRetiro orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), rs.getString("o.estado"), pedido, recolector);
+				OrdenDeRetiro orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedido);
 				
 				orden.editarId(rs.getInt("o.id_orden"));
+				orden.editarEstado(rs.getString("o.estado"));
 				ordenes.add(orden);
 				
 			}
@@ -126,6 +127,7 @@ try {
 
 	@Override
 	public OrdenDeRetiro buscar(Integer id) {
+		
 		OrdenDeRetiro orden=null;
 		try {
 
@@ -146,7 +148,7 @@ try {
 						rs.getString("p.observacion"), null);
 				Recolector recolector = new Recolector(rs.getString("r.nombre"), rs.getString("r.apellido"), rs.getString("r.dni"),
 						rs.getString("r.email"));
-				orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), rs.getString("o.estado"), pedidoRetiro, recolector);
+				orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedidoRetiro);
 				orden.editarId(rs.getInt("o.id_orden"));
 			}
 		
@@ -166,6 +168,47 @@ try {
 		
 	}
 
+	public List<OrdenDeRetiro> buscarPedido(Integer idPedido) {
+		List<OrdenDeRetiro> ordenes=new ArrayList<OrdenDeRetiro>();
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("select * from ordenes o join pedidos p on (o.id_pedido=p.id_pedido) where p.id_pedido=?");
+			
+			statement.setInt(1, idPedido);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				boolean cargaPesada=true;
+				if(rs.getString("p.carga_pesada").equals("NO")) {
+					cargaPesada=false;
+				}
+				
+				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
+						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
+				Vivienda vivienda = new Vivienda(ubicacion, new Ciudadano());
+				PedidoRetiro pedido = new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(), cargaPesada, rs.getString("p.observacion"), vivienda);
+				OrdenDeRetiro orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedido);
+				orden.editarId(rs.getInt("o.id_pedido"));
+				ordenes.add(orden);
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			
+		} catch (Exception e) {
+			System.out.println("Error al buscar vivienda");
+		
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		return ordenes;
+	}
 	@Override
 	public void actualizar(OrdenDeRetiro orden) {
 		Connection conn = ConnectionManager.getConnection();

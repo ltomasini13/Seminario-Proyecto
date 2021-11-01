@@ -12,7 +12,7 @@ public interface RecolectorDao {
 	
 	List<Recolector> listarTodos()throws SintaxisSQLException;
 
-	Recolector buscar(String nombreDeUsuario);
+	Recolector buscar(Integer id);
 	
 	void actualizar(Recolector recolector);
 
