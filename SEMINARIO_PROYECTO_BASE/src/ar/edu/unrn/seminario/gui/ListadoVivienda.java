@@ -118,7 +118,7 @@ public class ListadoVivienda extends JFrame {
 					api.pedidoPendiente(id_vivienda);
 					SeleccionResiduos sr = new SeleccionResiduos(api, id_vivienda);
 					sr.setVisible(true);
-					this.setVisible(false);
+					dispose();
 				} catch (UnfinishedException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
