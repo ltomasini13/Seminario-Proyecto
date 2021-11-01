@@ -523,7 +523,7 @@ public class PersistenceApi implements IApi {
 		List<RecolectorDTO> recolectoresDTO=new ArrayList<RecolectorDTO>();
 		
 		for(Recolector r: recolectorDao.listarTodos()) {
-			recolectoresDTO.add(new RecolectorDTO(r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail()));
+			recolectoresDTO.add(new RecolectorDTO(r.obtenerId(), r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail()));
 		}
 		
 		return recolectoresDTO;
@@ -569,15 +569,31 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<OrdenDeRetiroDTO> obtenerOrdenes() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException {
+		List<OrdenDeRetiroDTO> listaOrdenes = new ArrayList<OrdenDeRetiroDTO>();
+		
+		for(OrdenDeRetiro o : this.ordenDao.listarTodos()) {
+			if(o.obtenerRecolector()!=null) {
+				listaOrdenes.add(new OrdenDeRetiroDTO(o.obtenerId(), o.obtenerFecha().toString(), o.obtenerEstado(),
+						o.obtenerPedido().obtenerFechaEmision().toString(), o.obtenerRecolector().obtenerNombre()+" "+o.obtenerRecolector().obtenerApellido()));
+			}
+			else{
+				listaOrdenes.add(new OrdenDeRetiroDTO(o.obtenerId(), o.obtenerFecha().toString(), o.obtenerEstado(),
+						o.obtenerPedido().obtenerFechaEmision().toString(), null));
+			}
+			
+		}
+		return listaOrdenes;
 	}
 
 
 	@Override
-	public void asignarRecolector(Integer idOrden) {
-		// TODO Auto-generated method stub
+	public void asignarRecolector(Integer idOrden, Integer idRecolector) {
+		
+		Recolector recolector  = this.recolectorDao.buscar(idRecolector);
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		orden.asignarRecolector(recolector);
+		this.ordenDao.actualizar(orden);
 		
 	}
 	

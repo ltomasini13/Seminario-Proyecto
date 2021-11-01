@@ -1,26 +1,38 @@
 package ar.edu.unrn.seminario.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 
 public class OrdenDeRetiroDTO {
-
+	private Integer id;
 	private String estado;
-	private LocalDate fechaOrden;
-	private PedidoRetiro pedido;
-	private Recolector recolector;
+	private LocalDateTime fechaOrden;
+	private LocalDateTime fechaPedido;
+	private String nombreApeRecolector;
+
 	
-	public OrdenDeRetiroDTO(String fecha, String estado, PedidoRetiro pedido, Recolector recolector) {
-		
-		this.fechaOrden = LocalDate.parse(fecha);
-		this.estado = "PENDIENTE";
-		this.pedido = pedido;
-		this.recolector = recolector;
-		
+	public OrdenDeRetiroDTO(Integer id, String fecha, String estado,String fechaPedido ,String nombreApeRecolector) {
+		this.id=id;
+		this.fechaOrden = LocalDateTime.parse(fecha);
+		this.estado = estado;
+		this.fechaPedido=LocalDateTime.parse(fechaPedido);
+		this.nombreApeRecolector=nombreApeRecolector;
 	}
 	
+	
+	public Integer obtenerId() {
+		return id;
+	}
+
+
+	public void editarId(Integer id) {
+		this.id = id;
+	}
+
+
 	public String obtenerEstado() {
 		return estado;
 	}
@@ -29,23 +41,35 @@ public class OrdenDeRetiroDTO {
 		this.estado = estado;
 	}
 	
-	public LocalDate obtenerFecha() {
+	public LocalDateTime obtenerFecha() {
 		return fechaOrden;
 	}
 	
-	public void editarFecha(LocalDate fecha) {
+	public void editarFecha(LocalDateTime fecha) {
 		this.fechaOrden = fecha;
 	}
-	
-	public PedidoRetiro obtenerPedido() {
-		return pedido;
-	}
-	
-	public void editarPedido(PedidoRetiro pedido) {
-		this.pedido = pedido;
+
+
+	public LocalDateTime obtenerFechaPedido() {
+		return fechaPedido;
 	}
 
-	public Recolector obtenerRecolector() {
-		return recolector;
+
+	public void editarFechaPedido(LocalDateTime fechaPedido) {
+		this.fechaPedido = fechaPedido;
 	}
+
+
+	public String obtenerNombreApeRecolector() {
+		return nombreApeRecolector;
+	}
+
+
+	public void editarNombreApeRecolector(String nombreApeRecolector) {
+		this.nombreApeRecolector = nombreApeRecolector;
+	}
+	
+	
+	
+
 }

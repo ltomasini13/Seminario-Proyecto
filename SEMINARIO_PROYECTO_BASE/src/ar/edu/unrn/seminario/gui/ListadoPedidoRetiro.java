@@ -88,7 +88,8 @@ public class ListadoPedidoRetiro extends JFrame{
 				this.idPedido=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 				try {
 					api.generarOrden(idPedido);
-					this.setVisible(false);
+					JOptionPane.showMessageDialog(null, "La orden se creo con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
+					
 				} catch (SintaxisSQLException | UnfinishedException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}

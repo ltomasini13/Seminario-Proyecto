@@ -43,7 +43,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		if(api.esUsuarioAdmin()) { // pregunta que tipo de usuario para mostrar el menu
+		if(api.esUsuarioAdmin()) { // pregunta que tipo de usuario es  para mostrar el menu
 			JMenu adminUsuarioMenu = new JMenu("Usuarios");
 			menuBar.add(adminUsuarioMenu);
 
@@ -155,12 +155,13 @@ public class VentanaPrincipal extends JFrame {
 			JMenu ordenMenu = new JMenu("Ordenes");
 			menuBar.add(ordenMenu);
 			
-			JMenuItem ordenesMenuItem = new JMenuItem("Generar Orden");
+			JMenuItem ordenesMenuItem = new JMenuItem("Generar");
 			ordenesMenuItem.addActionListener((ActionEvent e) -> {
 					ListadoPedidoRetiro listado;
 					try {
 						listado = new ListadoPedidoRetiro(api);
 						listado.setVisible(true);
+						
 					} catch (EmptyListException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -171,7 +172,12 @@ public class VentanaPrincipal extends JFrame {
 
 			JMenuItem listadoOrdenesMenuItem = new JMenuItem("Listado");
 			listadoOrdenesMenuItem.addActionListener((ActionEvent e) -> {
-				
+				try {
+					ListadoOrdenDeRetiro listado = new ListadoOrdenDeRetiro(api);
+					listado.setVisible(true);
+				} catch (SintaxisSQLException e1) {
+					
+				}
 				
 			});
 			ordenMenu.add(listadoOrdenesMenuItem);

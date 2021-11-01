@@ -266,7 +266,7 @@ List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("SELECT * FROM viviendas v JOIN ciudadanos c ON (v.id_ciudadano=c.id_ciudadano) WHERE v.id_vivienda=?");
+					.prepareStatement("SELECT * FROM pedidos p join viviendas v on(p.id_vivienda=v.id_vivienda) join ciudadanos c ON (v.id_ciudadano=c.id_ciudadano) WHERE p.id_pedido=?");
 		
 			statement.setInt(1, idPedido);
 			ResultSet rs = statement.executeQuery();

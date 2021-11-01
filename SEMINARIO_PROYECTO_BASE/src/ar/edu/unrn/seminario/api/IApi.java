@@ -81,13 +81,13 @@ public interface IApi {
 	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException ;
 	
 	List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido);
-	List<OrdenDeRetiroDTO> obtenerOrdenes();
+	List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException;
 	void generarOrden(Integer id_pedido)throws SintaxisSQLException, UnfinishedException ;
 	void ejecutarOrden(Integer idOrden) throws StateException;
 	void cancelarOrden(Integer idOrden) throws StateException;
 	void finalizarOrden(Integer idOrden) throws StateException;
 	
-	void asignarRecolector(Integer idOrden);
+	void asignarRecolector(Integer idOrden, Integer idRecolector);
 	
 	
 }

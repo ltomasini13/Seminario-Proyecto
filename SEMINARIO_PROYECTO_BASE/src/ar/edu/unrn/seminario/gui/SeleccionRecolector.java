@@ -17,22 +17,22 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
-public class ListadoOrdenDeRetiro extends JFrame {
+public class SeleccionRecolector extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private JButton asignar, realizarVisita;
-	DefaultTableModel modelo;
-	IApi api;
+	private JButton asignar;
+	private DefaultTableModel modelo;
+	private IApi api;
+	private Integer idOrden;
 	
-	public ListadoOrdenDeRetiro(IApi api) throws SintaxisSQLException {
-		setTitle("LISTADO ORDENES");
+	public SeleccionRecolector(IApi api, Integer idOrden) throws SintaxisSQLException {
+		setTitle("LISTADO RECOLECTORES");
 		this.api = api;
-
+		this.idOrden=idOrden;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -44,7 +44,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
-		String[] titulos = { "ID", "FECHA ORDEN", "ESTADO", "FECHA DEL PEDIDO", "RECOLECTOR"};  //falta agregar para que pueda ver el pedido a que esta asociada
+		String[] titulos = { "ID" ,"NOMBRE", "APELLIDO", "DNI", "EMAIL" };
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -57,10 +57,10 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		
-		List<OrdenDeRetiroDTO> ordenes = api.obtenerOrdenes();
+		List<RecolectorDTO> recolectores = api.obtenerRecolectores();
 		// Agrega los usuarios en el model
-		for (OrdenDeRetiroDTO o : ordenes) {
-			modelo.addRow(new Object[] { o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector() });
+		for (RecolectorDTO r : recolectores) {
+			modelo.addRow(new Object[] { r.obtenerId(), r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail() });
 			
 		}
 	
@@ -70,30 +70,22 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 		scrollPane.setViewportView(table);
 
-		asignar = new JButton("ASIGNAR RECOLECTOR");
+		asignar = new JButton("ELEGIR");
 		asignar.addActionListener((ActionEvent e) -> {
-			
+			Integer idRecolector = (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+			api.asignarRecolector(idOrden, idRecolector);
+			JOptionPane.showMessageDialog(null, "Se asigno el recolecor correctamente", "INFO", JOptionPane.INFORMATION_MESSAGE);
 			try {
-				Integer idOrden= (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
-				SeleccionRecolector seleccionRecolector = new SeleccionRecolector(api, idOrden);
-				seleccionRecolector.setVisible(true);
-				dispose();
+				ListadoOrdenDeRetiro listadoOrdenes = new ListadoOrdenDeRetiro(api);
+				listadoOrdenes.setVisible(true);
 			} catch (SintaxisSQLException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-			}
-			
-			
-		});
-		
-		realizarVisita = new JButton("REALIZAR VISITA");
-		realizarVisita.addActionListener((ActionEvent e) -> {
-			
 				
-			
+			}
 		});
 
 		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
+				setVisible(false);
 				dispose();
 		});
 
@@ -101,7 +93,6 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		pnlBotonesOperaciones.add(asignar);
-		pnlBotonesOperaciones.add(realizarVisita);
 		pnlBotonesOperaciones.add(cerrarButton);
 
 		// Deshabilitar botones que requieren tener una fila seleccionada
@@ -110,7 +101,6 @@ public class ListadoOrdenDeRetiro extends JFrame {
 
 	private void habilitarBotones(boolean b) {
 		asignar.setEnabled(b);
-		realizarVisita.setEnabled(b);
 
 	}
 

@@ -24,7 +24,6 @@ public class ListadoRecolector extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private JButton asignar;
 	DefaultTableModel modelo;
 	IApi api;
 	
@@ -45,14 +44,6 @@ public class ListadoRecolector extends JFrame {
 		table = new JTable();
 		String[] titulos = { "NOMBRE", "APELLIDO", "DNI", "EMAIL" };
 
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// Habilitar botones
-				habilitarBotones(true);
-
-			}
-		});
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		
@@ -67,10 +58,7 @@ public class ListadoRecolector extends JFrame {
 
 		scrollPane.setViewportView(table);
 
-		asignar = new JButton("ELEGIR");
-		asignar.addActionListener((ActionEvent e) -> {
-		
-		});
+	
 
 		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
@@ -81,16 +69,12 @@ public class ListadoRecolector extends JFrame {
 		JPanel pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
-		pnlBotonesOperaciones.add(asignar);
+		
 		pnlBotonesOperaciones.add(cerrarButton);
 
-		// Deshabilitar botones que requieren tener una fila seleccionada
-		habilitarBotones(false);
+		
 	}
 
-	private void habilitarBotones(boolean b) {
-		asignar.setEnabled(b);
-
-	}
+	
 
 }
