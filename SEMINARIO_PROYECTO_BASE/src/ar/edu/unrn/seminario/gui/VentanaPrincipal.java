@@ -19,7 +19,7 @@ import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 
 import ar.edu.unrn.seminario.exception.EmptyListException;
-
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
@@ -36,6 +36,7 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	public VentanaPrincipal(IApi api) {
 		
+		setTitle("SISTEMA GRU");
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -206,12 +207,51 @@ public class VentanaPrincipal extends JFrame {
 				
 			});
 			recolectorMenu.add(listadoRecolectoresMenuItem);
+			
+			JMenu beneficioMenu = new JMenu("Beneficios");
+			menuBar.add(beneficioMenu);
+			
+			JMenuItem registrarBeneficioMenuItem = new JMenuItem("Registrar");
+			registrarBeneficioMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarBeneficio regBeneficio = new RegistrarBeneficio(api);
+				regBeneficio.setLocationRelativeTo(null);
+				regBeneficio.setVisible(true);
+			});
+			beneficioMenu.add(registrarBeneficioMenuItem);
+			
+			JMenuItem listadoBeneficiosMenuItem = new JMenuItem("Listado");
+			listadoBeneficiosMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoBeneficio beneficios;
+				try {
+					beneficios = new ListadoBeneficio(api);
+					beneficios.setLocationRelativeTo(null);
+					beneficios.setVisible(true);
+				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			});
+			beneficioMenu.add(listadoBeneficiosMenuItem);
 
+			JMenu canjeMenu = new JMenu("Canjes");
+			menuBar.add(canjeMenu);
+			
+			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
+			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
+				
+			});
+			canjeMenu.add(elegirCanjeMenuItem);
+			
+			JMenuItem listadoCanjesMenuItem = new JMenuItem("Listado");
+			listadoCanjesMenuItem.addActionListener((ActionEvent e) -> {
+				
+			});
+			canjeMenu.add(listadoCanjesMenuItem);
 		}
 
 		if(api.esUsuarioReciclador()) {
 			
-			JMenu viviendasMenu = new JMenu("Mis viviendas");
+			JMenu viviendasMenu = new JMenu("Mis Viviendas");
 			menuBar.add(viviendasMenu);
 			
 			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
@@ -267,6 +307,25 @@ public class VentanaPrincipal extends JFrame {
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 		
+			JMenu canjeMenu = new JMenu("Mis Canjes");
+			menuBar.add(canjeMenu);
+			
+			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
+			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
+				try {
+					ListadoBeneficio listado = new ListadoBeneficio(api);
+					listado.setVisible(true);
+				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			});
+			canjeMenu.add(elegirCanjeMenuItem);
+			
+			JMenuItem listadoCanjesMenuItem = new JMenuItem("Listado");
+			listadoCanjesMenuItem.addActionListener((ActionEvent e) -> {
+			});
+			canjeMenu.add(listadoCanjesMenuItem);
 		}
 		
 		

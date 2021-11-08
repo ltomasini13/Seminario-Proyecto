@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -12,6 +14,7 @@ import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
@@ -21,6 +24,7 @@ import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -31,6 +35,10 @@ import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import ar.unrn.edu.ar.seminario.accesos.BeneficioDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.BeneficioDao;
+import ar.unrn.edu.ar.seminario.accesos.CampañaDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.CampañaDao;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
 import ar.unrn.edu.ar.seminario.accesos.OrdenDeRetiroDAOJDBC;
@@ -59,6 +67,8 @@ public class PersistenceApi implements IApi {
 	private ResiduoDao residuoDao;
 	private PedidoRetiroDao pedidoDao;
 	private RecolectorDao recolectorDao;
+	private BeneficioDao beneficioDao;
+	private CampañaDao campañaDao;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -69,6 +79,8 @@ public class PersistenceApi implements IApi {
 		pedidoDao= new PedidoRetiroDAOJDBC();
 		recolectorDao= new RecolectorDAOJDBC();
 		ordenDao = new OrdenDeRetiroDAOJDBC();
+		beneficioDao = new BeneficioDAOJDBC();
+		campañaDao = new CampañaDAOJDBC();
 	}
 
 
@@ -595,6 +607,47 @@ public class PersistenceApi implements IApi {
 		orden.asignarRecolector(recolector);
 		this.ordenDao.actualizar(orden);
 		
+	}
+
+
+	@Override
+	public void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException {
+		
+		if(!puntos.matches("[0-9]+")) {
+			throw new NumbersException("El valor ingresado para el campo 'Puntos' no es numérico");
+		}
+		int nro = Integer.parseInt(puntos);
+		Beneficio beneficio = new Beneficio(nombre, nro);
+		
+		beneficioDao.crear(beneficio);
+		
+	}
+
+
+	@Override
+	public List<BeneficioDTO> obtenerBeneficios() throws AppException, DataEmptyException, NotNullException, NumbersException {
+		List<BeneficioDTO> beneficiosDTO=new ArrayList<BeneficioDTO>();
+		
+		for(Beneficio b : beneficioDao.listarTodos()) {	
+			beneficiosDTO.add(new BeneficioDTO(b.obtenerNombreBeneficio(), b.obtenerPuntos()));
+		}
+		
+		return beneficiosDTO;
+	}
+
+
+	@Override
+	public void registrarCampaña(String nombre, String puntos)
+			throws DataEmptyException, NotNullException, AppException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<CampañaDTO> obtenerCampañas() throws AppException, DataEmptyException, NotNullException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

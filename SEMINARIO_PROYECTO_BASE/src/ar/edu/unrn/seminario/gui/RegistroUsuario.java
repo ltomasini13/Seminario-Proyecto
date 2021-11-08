@@ -40,6 +40,8 @@ public class RegistroUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public RegistroUsuario(IApi api) {
+		
+		setTitle("REGISTRAR USUARIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		panelLogin = new JPanel();

@@ -30,7 +30,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	IApi api;
 	
 	public ListadoOrdenDeRetiro(IApi api) throws SintaxisSQLException {
-		setTitle("LISTADO ORDENES");
+		setTitle("LISTADO DE ORDENES");
 		this.api = api;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

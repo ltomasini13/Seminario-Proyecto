@@ -3,6 +3,8 @@ package ar.edu.unrn.seminario.api;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -11,6 +13,7 @@ import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
@@ -89,5 +92,11 @@ public interface IApi {
 	
 	void asignarRecolector(Integer idOrden, Integer idRecolector);
 	
+	void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException;
 	
+	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
+	
+	void registrarCampaña(String nombre, String puntos) throws DataEmptyException, NotNullException, AppException;
+	
+	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException;
 }

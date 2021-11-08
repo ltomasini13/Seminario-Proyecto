@@ -28,7 +28,7 @@ public class ListadoRecolector extends JFrame {
 	IApi api;
 	
 	public ListadoRecolector(IApi api) throws SintaxisSQLException {
-		setTitle("LISTADO RECOLECTORES");
+		setTitle("LISTADO DE RECOLECTORES");
 		this.api = api;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

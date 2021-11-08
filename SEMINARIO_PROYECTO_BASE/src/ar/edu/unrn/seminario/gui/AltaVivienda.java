@@ -41,7 +41,7 @@ public class AltaVivienda extends JFrame {
 	
 
 	public AltaVivienda(IApi api) {
-		setTitle("Registrar Vivienda");
+		setTitle("REGISTRAR VIVIENDA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		

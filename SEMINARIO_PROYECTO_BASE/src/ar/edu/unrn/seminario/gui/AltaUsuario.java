@@ -44,7 +44,7 @@ public class AltaUsuario extends JFrame {
 			JOptionPane.showMessageDialog(null, "Hubo un error en la conexion con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
-		setTitle("Alta Usuario");
+		setTitle("ALTA USUARIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 

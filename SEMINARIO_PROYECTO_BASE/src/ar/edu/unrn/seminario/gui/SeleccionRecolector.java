@@ -30,7 +30,7 @@ public class SeleccionRecolector extends JFrame {
 	private Integer idOrden;
 	
 	public SeleccionRecolector(IApi api, Integer idOrden) throws SintaxisSQLException {
-		setTitle("LISTADO RECOLECTORES");
+		setTitle("LISTADO DE RECOLECTORES");
 		this.api = api;
 		this.idOrden=idOrden;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
