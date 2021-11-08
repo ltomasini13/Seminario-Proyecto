@@ -75,7 +75,7 @@ try {
 				}
 				PedidoRetiro pedido = new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(),cargaPesada, rs.getString("p.observacion"), new Vivienda());
 				pedido.editarFechaCumplimiento(rs.getTimestamp("p.fecha_cumplimiento"));
-
+				pedido.editarId(rs.getInt("p.id_pedido"));
 				OrdenDeRetiro orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedido);
 				orden.asignarRecolector(recolector);
 				orden.editarId(rs.getInt("o.id_orden"));
@@ -87,7 +87,7 @@ try {
 
 		} catch (SQLException e) {
 			
-			System.out.println("Error al procesar cons");
+			System.out.println("Error al procesar consulta");
 			// TODO: disparar Exception propia
 		} catch (Exception e) {
 			System.out.println("Error al listar viviendas");
@@ -134,6 +134,7 @@ try {
 				
 
 				orden = new OrdenDeRetiro(rs.getTimestamp("o.fecha_orden").toLocalDateTime().toString(), pedidoRetiro);
+				orden.asignarRecolector(recolector);
 				orden.editarEstado(rs.getString("o.estado"));
 				orden.editarId(rs.getInt("o.id_orden"));
 			}
@@ -211,7 +212,7 @@ try {
 	
 		int cantidad = statement.executeUpdate();
 		if (cantidad==1) {
-				System.out.println("La orden se modificó correctamente");
+				System.out.println("La orden se modifico correctamente");
 		}
 	
 	    
@@ -223,7 +224,7 @@ try {
 			
 		}
 		catch(Exception e) {
-			System.out.println("Error en la bd");
+			System.out.println("Error en la base de dato");
 		}
 		
 	}

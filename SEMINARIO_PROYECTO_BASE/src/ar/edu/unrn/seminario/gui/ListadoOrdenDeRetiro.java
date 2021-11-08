@@ -20,14 +20,16 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.StateException;
 
 public class ListadoOrdenDeRetiro extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private JButton asignar, realizarVisita;
+	private JButton botonAsignar, botonRealizarVisita;
 	DefaultTableModel modelo;
-	IApi api;
+	private IApi api;
+	private JButton botonCancelarOrden;
 	
 	public ListadoOrdenDeRetiro(IApi api) throws SintaxisSQLException {
 		setTitle("LISTADO DE ORDENES");
@@ -70,8 +72,8 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 		scrollPane.setViewportView(table);
 
-		asignar = new JButton("ASIGNAR RECOLECTOR");
-		asignar.addActionListener((ActionEvent e) -> {
+		botonAsignar = new JButton("ASIGNAR RECOLECTOR");
+		botonAsignar.addActionListener((ActionEvent e) -> {
 			
 			try {
 				Integer idOrden= (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
@@ -85,32 +87,46 @@ public class ListadoOrdenDeRetiro extends JFrame {
 			
 		});
 		
-		realizarVisita = new JButton("REALIZAR VISITA");
-		realizarVisita.addActionListener((ActionEvent e) -> {
+		botonRealizarVisita = new JButton("REALIZAR VISITA");
+		botonRealizarVisita.addActionListener((ActionEvent e) -> {
 			
 				
 			
 		});
 
-		JButton cerrarButton = new JButton("Cerrar");
-		cerrarButton.addActionListener((ActionEvent e) -> {
+		JButton botonCerrarButton = new JButton("Cerrar");
+		botonCerrarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
 
 		JPanel pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
-		pnlBotonesOperaciones.add(asignar);
-		pnlBotonesOperaciones.add(realizarVisita);
-		pnlBotonesOperaciones.add(cerrarButton);
+		
+		botonCancelarOrden = new JButton("CANCELAR ORDEN");
+		botonCancelarOrden.addActionListener((ActionEvent e) -> {
+			Integer idOrden= (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+			try {
+				api.cancelarOrden(idOrden);
+				JOptionPane.showMessageDialog(null, "La orden ha sido cancelada", "Información", JOptionPane.INFORMATION_MESSAGE);
+			} catch (StateException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		pnlBotonesOperaciones.add(botonCancelarOrden);
+		pnlBotonesOperaciones.add(botonAsignar);
+		pnlBotonesOperaciones.add(botonRealizarVisita);
+		pnlBotonesOperaciones.add(botonCerrarButton);
 
 		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
 	}
 
 	private void habilitarBotones(boolean b) {
-		asignar.setEnabled(b);
-		realizarVisita.setEnabled(b);
+		botonAsignar.setEnabled(b);
+		botonRealizarVisita.setEnabled(b);
+		botonCancelarOrden.setEnabled(b);
 
 	}
 

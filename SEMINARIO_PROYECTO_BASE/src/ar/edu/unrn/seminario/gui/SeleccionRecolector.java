@@ -85,7 +85,6 @@ public class SeleccionRecolector extends JFrame {
 
 		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
-				setVisible(false);
 				dispose();
 		});
 
