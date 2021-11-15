@@ -27,6 +27,10 @@ public class OrdenDeRetiro {
 		
 	}
 
+	public OrdenDeRetiro() {
+	
+	}
+
 	public Integer obtenerId() {
 		return id;
 	}
@@ -43,17 +47,45 @@ public class OrdenDeRetiro {
 		this.estado = estado;
 	}
 	
+	public boolean estaCancelada() {
+		if (estado.equals(CANCELADA)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean estaEnEjecucion() {
+		if (estado.equals(EN_EJECUCION)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean estaPendiente() {
+		if (estado.equals(PENDIENTE)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean estaConcretada() {
+		if (estado.equals(CONCRETADA)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void ejecutarOrden() throws StateException {
-		if(this.estado.equals(EN_EJECUCION)) {
+		if(estaEnEjecucion()) {
 			throw new StateException("La orden ya está ejecutandose");
 		}
 		
-		if(this.estado.equals(CONCRETADA)) {
+		if(estaConcretada()) {
 			throw new StateException("No se puede ejecutar la orden porque ya finalizó");
 		}
 		
 		
-		if(this.estado.equals(CANCELADA)) {
+		if(estaCancelada()) {
 			throw new StateException("No se puede ejecutar la orden porque está cancelada");
 		}
 		
@@ -62,11 +94,15 @@ public class OrdenDeRetiro {
 	
 	
 	public void cancelarOrden() throws StateException {
+		
+		if(estaEnEjecucion()) {
+			throw new StateException("No se puede cancelar la orden porque está en ejecución") ;
+		}
 
-		if(this.estado.equals(CANCELADA)) {
+		if(estaCancelada()) {
 			throw new StateException("La orden ya está cancelada");
 		}
-		if(this.estado.equals(CONCRETADA)) {
+		if(estaConcretada()) {
 			throw new StateException("No se puede cancelar la orden porque ya finalizó");
 		}
 
@@ -76,15 +112,15 @@ public class OrdenDeRetiro {
 	
 	public void finalizarOrden() throws StateException {
 		
-		if(this.estado.equals(CONCRETADA)) {
+		if(estaConcretada()) {
 			throw new StateException("La orden ya está finalizada");
 		}
 
-		if(this.estado.equals(CANCELADA)) {
+		if(estaCancelada()) {
 			throw new StateException("No se puede finalizar la orden porque fue cancelada");
 		}
 		
-		if(this.estado.equals(PENDIENTE)) {
+		if(estaPendiente()) {
 			throw new StateException("No se puede finalizar la orden porque todavia no comenzó su ejecución");
 		}
 		

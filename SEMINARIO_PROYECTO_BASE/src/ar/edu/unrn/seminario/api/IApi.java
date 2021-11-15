@@ -3,15 +3,19 @@ package ar.edu.unrn.seminario.api;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
+import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.VisitaDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
+import ar.edu.unrn.seminario.exception.CollectorException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
@@ -19,9 +23,12 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
-import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.exception.WasteException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
+import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.modelo.Visita;
 
 public interface IApi {
 
@@ -63,7 +70,7 @@ public interface IApi {
 	
 
 	List<ViviendaDTO> obtenerViviendas() throws EmptyListException; //recupera todas las viviendas registradas
-	
+	ViviendaDTO obtenerVivienda(Integer idVivienda);
 
 	List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException;
 	
@@ -74,7 +81,7 @@ public interface IApi {
 	void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion, List<ResiduoARetirarDTO> residuosARetirar) throws NotNullException;
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException;
 
-	void pedidoPendiente(Integer id_vivienda) throws UnfinishedException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
+	void pedidoPendiente(Integer id_vivienda) throws CreationValidationException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
 
 	void registrarRecolector(String nombre, String apellido, String dni, String email) throws  NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException;
 	
@@ -82,12 +89,18 @@ public interface IApi {
 	
 	List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido);
 	List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException;
-	void generarOrden(Integer id_pedido)throws SintaxisSQLException, UnfinishedException ;
+	void generarOrden(Integer id_pedido)throws SintaxisSQLException, CreationValidationException ;
 	void ejecutarOrden(Integer idOrden) throws StateException;
 	void cancelarOrden(Integer idOrden) throws StateException;
 	void finalizarOrden(Integer idOrden) throws StateException;
 	
 	void asignarRecolector(Integer idOrden, Integer idRecolector);
+	void cambiarDueño(Integer idVivienda, String dni);
+	void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException;
+	List<CiudadanoDTO> obtenerCiudadanos(); 
 	
+	void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException;
+	List<VisitaDTO> obtenerVisitas() throws EmptyListException;
+	OrdenDeRetiroDTO obtenerOrden(Integer idVisita);
 	
 }

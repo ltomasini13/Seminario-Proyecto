@@ -1,5 +1,4 @@
 package ar.edu.unrn.seminario.gui;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -11,13 +10,19 @@ import javax.swing.event.ChangeListener;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
+import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.CollectorException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
+import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -57,40 +62,32 @@ import java.awt.event.MouseEvent;
 import java.awt.Component;
 import javax.swing.JMenuItem;
 
-public class SeleccionResiduos extends JFrame{
+public class SeleccionResiduosRetirados extends JFrame{
 
 	private JPanel contentPane;
 	
 	private JTextField observacionText;
 	private IApi api;
 	private	JScrollPane scrollPanelListaRes;
-	private JRadioButton noRadioButton;
-	private JRadioButton siRadioButton;
 	private JList jListResiduos;
 	private List<ResiduoDTO> residuos;
 	private JList jListResAgregados;
 	private DefaultListModel modeloResAgregados;
-	private List<ResiduoARetirarDTO> residuosAgregados;
+	private List<ResiduoRetiradoDTO> residuosAgregados;
 	private JFormattedTextField formatoCantidad ;
 	private boolean cargaPesada;
 	private JPopupMenu popupMenu ;
 	
-	public SeleccionResiduos(IApi api, Integer id_vivienda) {
+	public SeleccionResiduosRetirados(IApi api, Integer idOrden) {
 		this.api=api;
-		setTitle("Datos del pedido");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("DATOS DE LA VISITA");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		
-		
-		
-		JLabel cargaPesadaLabel = new JLabel("Carga Pesada:");
-		cargaPesadaLabel.setBounds(12, 22, 84, 16);
-		contentPane.add(cargaPesadaLabel);
 		
 		JLabel observacionLabel = new JLabel("Observaci\u00F3n:");
 		observacionLabel.setBounds(12, 180, 84, 16);
@@ -108,27 +105,6 @@ public class SeleccionResiduos extends JFrame{
 		contentPane.add(observacionText);
 		observacionText.setColumns(10);
 		
-		 siRadioButton = new JRadioButton("SI");
-		siRadioButton.addActionListener((ActionEvent arg0) ->{
-			if (noRadioButton.isSelected()) {
-				noRadioButton.setSelected(false);
-			}
-			this.cargaPesada=true;
-		});
-		siRadioButton.setBounds(102, 18, 56, 25);
-		contentPane.add(siRadioButton);
-		
-		noRadioButton = new JRadioButton("NO");
-		noRadioButton.setSelected(true);
-		noRadioButton.addActionListener((ActionEvent arg0) ->{
-			if (siRadioButton.isSelected()) {
-				siRadioButton.setSelected(false);
-			}
-			this.cargaPesada=false;
-		});
-		noRadioButton.setBounds(164, 14, 110, 32);
-		contentPane.add(noRadioButton);
-		
 		
 		
 		
@@ -137,10 +113,10 @@ public class SeleccionResiduos extends JFrame{
 		JButton botonVolver = new JButton("VOLVER");
 		botonVolver.addActionListener((ActionEvent arg0) ->{
 			try {
-				ListadoVivienda listado = new ListadoVivienda(api);
+				ListadoOrdenDeRetiro listado = new ListadoOrdenDeRetiro(api);
 				listado.setVisible(true);
 				dispose();
-			} catch (EmptyListException e) {
+			} catch (SintaxisSQLException e) {
 				
 			}
 		});
@@ -153,12 +129,14 @@ public class SeleccionResiduos extends JFrame{
 		btnContinuar.addActionListener((ActionEvent arg0) ->{
 			
 			try {
-				api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
-				JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
+				api.agregarVisita(idOrden, observacionText.getText(), residuosAgregados);
+				JOptionPane.showMessageDialog(null,"Visita agregada con éxito", "INFORMACIÒN", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
-			} catch (NotNullException e) {
+				ListadoOrdenDeRetiro listadoOrden = new ListadoOrdenDeRetiro(api);
+				listadoOrden.setVisible(true);
+			} catch (NotNullException | CreationValidationException | StateException | SintaxisSQLException | WasteException | CollectorException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
-			};
+			}
 		
 		});
 		btnContinuar.setBounds(47, 227, 93, 23);
@@ -208,14 +186,14 @@ public class SeleccionResiduos extends JFrame{
 				peso=Double.parseDouble(formatoCantidad.getText());
 				if(!jListResiduos.isSelectionEmpty()) {
 					String tipoResiduo = (String)modelo.getElementAt(jListResiduos.getSelectedIndex());
-					ResiduoARetirarDTO residuoARetirarDTO = new ResiduoARetirarDTO(null, tipoResiduo, peso);
+					ResiduoRetiradoDTO residuoRetirado = new ResiduoRetiradoDTO(null, tipoResiduo, peso);
 					
-					if(estaAgregado(residuoARetirarDTO)) {
+					if(estaAgregado(residuoRetirado)) {
 
 						JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.WARNING_MESSAGE); 
 					}
 					else {
-						residuosAgregados.add(residuoARetirarDTO);
+						residuosAgregados.add(residuoRetirado);
 						modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
 						jListResAgregados.removeAll();
 						jListResAgregados.setModel(modeloResAgregados);
@@ -241,11 +219,11 @@ public class SeleccionResiduos extends JFrame{
 		scrollPaneResiduosAgregados.setBounds(284, 60, 140, 98);
 		contentPane.add(scrollPaneResiduosAgregados);
 		
-		 JLabel lblResiduosAgregados = new JLabel("Residuos agregados:");
+		 JLabel lblResiduosAgregados = new JLabel("Residuos retirados");
 		scrollPaneResiduosAgregados.setColumnHeaderView(lblResiduosAgregados);
 		
 		
-		residuosAgregados=new ArrayList<ResiduoARetirarDTO>();
+		residuosAgregados=new ArrayList<ResiduoRetiradoDTO>();
 		jListResAgregados = new JList();
 		jListResAgregados.addMouseListener(new MouseAdapter() {
 			@Override
@@ -275,12 +253,12 @@ public class SeleccionResiduos extends JFrame{
 			
 			if(confirmacion==0) {
 				popupMenu.setVisible(false);
-				Iterator<ResiduoARetirarDTO> itResiduosAgregados = residuosAgregados.iterator();
+				Iterator<ResiduoRetiradoDTO> itResiduosAgregados = residuosAgregados.iterator();
 				while(itResiduosAgregados.hasNext()) {
-					ResiduoARetirarDTO resRetirar = itResiduosAgregados.next();
+					ResiduoRetiradoDTO resRetirado = itResiduosAgregados.next();
 					String tipoResiduo = (String)(modeloResAgregados.getElementAt(jListResAgregados.getSelectedIndex()));
 					String[] partResAgregado = tipoResiduo.split("-");
-					if(resRetirar.obetenerTipoResiduo().equals(partResAgregado[1])) {   
+					if(resRetirado.obtenerTipo().equals(partResAgregado[1])) {   
 						itResiduosAgregados.remove();
 					}
 				}
@@ -305,10 +283,10 @@ public class SeleccionResiduos extends JFrame{
 	
 	}
 	
-	private boolean estaAgregado(ResiduoARetirarDTO residuoARetirarDTO) {
+	private boolean estaAgregado(ResiduoRetiradoDTO residuoRetiradoDTO) {
 		boolean existe=false;
-		for(ResiduoARetirarDTO res : residuosAgregados) {
-			if(res.equals(residuoARetirarDTO)) {
+		for(ResiduoRetiradoDTO res : residuosAgregados) {
+			if(res.equals(residuoRetiradoDTO)) {
 				existe=true;
 				break;
 			}	

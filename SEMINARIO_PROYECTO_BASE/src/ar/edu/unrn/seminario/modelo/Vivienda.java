@@ -73,4 +73,8 @@ public class Vivienda {
 		return ciudadano.obtenerDni();
 	}
 	
+	public Integer obtenerIdCiudadano() {
+		return this.ciudadano.obtenerId();
+	}
+	
 }

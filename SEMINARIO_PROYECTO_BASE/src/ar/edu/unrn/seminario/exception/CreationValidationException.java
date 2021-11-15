@@ -1,14 +1,14 @@
 package ar.edu.unrn.seminario.exception;
 
-public class UnfinishedException extends Exception {
+public class CreationValidationException extends Exception {
 
 	
-	public UnfinishedException () {
+	public CreationValidationException () {
 			
 		}
 	
 	
-	public UnfinishedException (String message) {
+	public CreationValidationException (String message) {
 		super(message);
 	}
 }

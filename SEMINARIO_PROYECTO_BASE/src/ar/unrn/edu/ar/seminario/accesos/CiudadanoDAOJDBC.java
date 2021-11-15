@@ -83,23 +83,28 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 		
 		try {
 		PreparedStatement statement = conn
-				.prepareStatement("SELECT * FROM ciudadanos c join usuarios u join roles r "
-						+ "WHERE c.id_usuario = u.id_usuario && u.id_rol=r.id_rol && c.dni =?");
+				.prepareStatement("SELECT * FROM ciudadanos c left join usuarios u on (c.id_usuario=u.id_usuario)" + 
+						"left join roles r on(r.id_rol=u.id_rol) where c.dni=?");
 		
 		statement.setString(1, dni);
 		ResultSet rs = statement.executeQuery();
 		
 		while(rs.next()) {
-			Rol rol= new Rol(rs.getInt("r.id_rol"),rs.getString("r.nombre"));
-			 if(rs.getString("r.estado").equals("ACTIVO")) {
-					rol.activar();
-			 }
-			 else {
-					rol.desactivar();
-			 }
-			 
-			Usuario usu = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), rol);
+			Usuario usu =null;
+			if(rs.getString("u.id_usuario")!=null) {
+				
+				Rol rol= new Rol(rs.getInt("r.id_rol"),rs.getString("r.nombre"));
+				 if(rs.getString("r.estado").equals("ACTIVO")) {
+						rol.activar();
+				 }
+				 else {
+						rol.desactivar();
+				 }
+				 usu = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), rol);
+				 usu.editarId(rs.getInt("u.id_usuario"));
+			}
 			ciu=new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), usu);
+			ciu.editarId(rs.getInt("c.id_ciudadano"));
 		}
 		
 	  
@@ -155,9 +160,10 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 	@Override
 	public Ciudadano buscar(Usuario usuario) {
 		Ciudadano ciu=null;
-		Connection conn = ConnectionManager.getConnection();
+		
 		
 		try {
+			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
 					.prepareStatement("SELECT * FROM ciudadanos c where c.id_usuario=?");
 			
@@ -181,6 +187,46 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 		}
 		
 		return ciu;
+	}
+
+	@Override
+	public List<Ciudadano> listarTodos() {
+
+		List<Ciudadano> ciudadanos=new ArrayList<Ciudadano>();
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM ciudadanos c left join "
+							+ "usuarios u on (c.id_usuario=u.id_usuario) ");
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				Usuario usuario=null;
+				if(rs.getString("u.usuario")!=null) {
+					usuario = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), new Rol());
+				}
+				
+				Ciudadano ciu= new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"),rs.getString("c.dni"),  usuario);
+				ciu.editarId(rs.getInt("c.id_ciudadano"));
+				
+				
+				ciudadanos.add(ciu);
+			}
+	 
+		}
+		catch (SQLException sq){
+			System.out.println("Error al procesar consulta");			
+		}
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+		}
+		finally {
+			ConnectionManager.disconnect();
+		}
+		
+		return ciudadanos;
 	}
 
 	

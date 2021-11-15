@@ -12,7 +12,7 @@ public interface OrdenDeRetiroDao {
 	List<OrdenDeRetiro> listarTodos()throws SintaxisSQLException;
 
 	OrdenDeRetiro buscar(Integer id);
-	
+	OrdenDeRetiro buscarPorVisita(Integer idVisita);
 	void actualizar(OrdenDeRetiro orden);
 
 	void eliminar(Integer id);

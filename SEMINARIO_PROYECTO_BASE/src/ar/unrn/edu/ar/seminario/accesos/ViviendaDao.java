@@ -10,9 +10,12 @@ public interface ViviendaDao {
 	Vivienda buscar(Integer idVivienda);
 	
 	Vivienda buscar(Vivienda vivienda);
-	void modificar(Vivienda vivienda);
-
+	
 	List<Vivienda> listarTodas();
 
 	void crearParaRecic(Vivienda vivienda);
+
+	void actualizarYcrear(Vivienda vivienda);
+
+	void actualizar(Vivienda vivienda);
 }

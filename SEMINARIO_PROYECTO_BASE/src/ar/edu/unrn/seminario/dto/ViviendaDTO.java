@@ -10,11 +10,11 @@ public class ViviendaDTO {
 		private double latitud;
 		private double longitud;
 		private String nomApeDueño;
-		private LocalDateTime fechaYhora;
+		//private LocalDateTime fechaYhora;
 		
 		
-		public ViviendaDTO(Integer id, String calle, int numero, String barrio, double latitud, double longitud, String nomApeDueño,
-				LocalDateTime fechaYhora) {
+		public ViviendaDTO(Integer id, String calle, int numero, String barrio, double latitud, double longitud, String nomApeDueño
+				/*LocalDateTime fechaYhora*/) {
 			this.id=id;
 			this.calle = calle;
 			this.numero = numero;
@@ -22,7 +22,7 @@ public class ViviendaDTO {
 			this.latitud = latitud;
 			this.longitud = longitud;
 			this.nomApeDueño = nomApeDueño;
-			this.fechaYhora = fechaYhora;
+			//this.fechaYhora = fechaYhora;
 		}
 
 		public Integer obtenerId() {
@@ -73,12 +73,12 @@ public class ViviendaDTO {
 		}
 
 
-		public double obtenerLongitu() {
+		public double obtenerLongitud() {
 			return longitud;
 		}
 
 
-		public void editarLongitu(float longitu) {
+		public void editarLongitud(float longitu) {
 			this.longitud = longitu;
 		}
 
@@ -93,15 +93,15 @@ public class ViviendaDTO {
 		}
 
 
-		public LocalDateTime obtenerFechaYhora() {
-			return fechaYhora;
-		}
+//		public LocalDateTime obtenerFechaYhora() {
+//			return fechaYhora;
+//		}
 
 
-		public void editarFechaYhora(LocalDateTime fechaYhora) {
-			this.fechaYhora = fechaYhora;
-		} 
-		
+//		public void editarFechaYhora(LocalDateTime fechaYhora) {
+//			this.fechaYhora = fechaYhora;
+//		} 
+//		
 		
 		
 }

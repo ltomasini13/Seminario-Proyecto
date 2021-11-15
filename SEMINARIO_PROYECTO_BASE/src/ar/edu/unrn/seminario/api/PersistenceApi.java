@@ -2,17 +2,25 @@ package ar.edu.unrn.seminario.api;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
+import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.VisitaDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
+import ar.edu.unrn.seminario.exception.CollectorException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
@@ -20,16 +28,20 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
-import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
+import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
+import ar.edu.unrn.seminario.modelo.ResiduoRestante;
+import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
@@ -41,10 +53,14 @@ import ar.unrn.edu.ar.seminario.accesos.RecolectorDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.RecolectorDao;
 import ar.unrn.edu.ar.seminario.accesos.ResiduoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ResiduoDao;
+import ar.unrn.edu.ar.seminario.accesos.ResiduosDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.ResiduosDao;
 import ar.unrn.edu.ar.seminario.accesos.RolDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.RolDao;
 import ar.unrn.edu.ar.seminario.accesos.UsuarioDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.UsuarioDao;
+import ar.unrn.edu.ar.seminario.accesos.VisitaDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.VisitaDao;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDao;
 
@@ -54,11 +70,12 @@ public class PersistenceApi implements IApi {
 	private UsuarioDao usuarioDao;
 	private CiudadanoDao ciudadanoDao;
 	private OrdenDeRetiroDao ordenDao;
+	private VisitaDao visitaDao;
 	private Sesion sesion;
-
-	private ResiduoDao residuoDao;
+	private ResiduoDao residuoDao; //hay que cambiarla por TipoDao
 	private PedidoRetiroDao pedidoDao;
 	private RecolectorDao recolectorDao;
+	private ResiduosDao residuosDao;   //dao para trabajar con los residuos a retirar y residuos retirados
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -69,6 +86,8 @@ public class PersistenceApi implements IApi {
 		pedidoDao= new PedidoRetiroDAOJDBC();
 		recolectorDao= new RecolectorDAOJDBC();
 		ordenDao = new OrdenDeRetiroDAOJDBC();
+		visitaDao = new VisitaDAOJDBC();
+		residuosDao= new ResiduosDAOJDBC();//dao para trabajar con los residuos a retirar y residuos retirados
 	}
 
 
@@ -302,7 +321,7 @@ public class PersistenceApi implements IApi {
 			}
 			for(Vivienda v : viviendas ) {
 				viviendasDTO.add(new ViviendaDTO(v.obtenerId(), v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(),
-						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
+						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+" "+v.obtenerApellidoCiudadano()));
 			}
 		}
 		
@@ -317,14 +336,19 @@ public class PersistenceApi implements IApi {
 			
 			for(Vivienda v : viviendas) {
 				viviendasDTO.add(new ViviendaDTO(v.obtenerId(), v.obtenerUbicacionCalle(), v.obtenerUbicacionNro(), v.obtenerUbicacionBarrio(), 
-						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano(), null));
+						v.obtenerUbicacionLatitud(), v.obtenerUbicacionLongitud(), v.obtenerNombreCiudadano()+v.obtenerApellidoCiudadano()));
 			}
 		}
 		
 		return viviendasDTO;
 	}
 
-
+	@Override
+	public ViviendaDTO obtenerVivienda(Integer idVivienda) {
+		Vivienda viv = this.viviendaDao.buscar(idVivienda);
+		return (new ViviendaDTO(viv.obtenerId(), viv.obtenerUbicacionCalle(), viv.obtenerUbicacionNro(), viv.obtenerUbicacionBarrio(),
+				viv.obtenerUbicacionLatitud(), viv.obtenerUbicacionLongitud(), viv.obtenerNombreCiudadano()+" "+viv.obtenerApellidoCiudadano()));
+	}
 	
 	@Override
 	public void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
@@ -495,13 +519,13 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void pedidoPendiente(Integer id_vivienda) throws UnfinishedException {
+	public void pedidoPendiente(Integer id_vivienda) throws CreationValidationException {
 		
 		List<PedidoRetiro> pedidos = pedidoDao.buscar(id_vivienda);
 		if(!pedidos.isEmpty()) {
 			for(PedidoRetiro p : pedidos) {
 				if(p.obtenerFechaCumplimiento()==null) {
-					throw new UnfinishedException("La vivienda tiene un pedido que todavía no concluyó");
+					throw new CreationValidationException("La vivienda tiene un pedido que todavía no concluyó");
 				}
 			}
 		}
@@ -530,11 +554,11 @@ public class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public void generarOrden(Integer idPedido) throws SintaxisSQLException, UnfinishedException {
+	public void generarOrden(Integer idPedido) throws SintaxisSQLException, CreationValidationException {
 		
 		List<OrdenDeRetiro> ordenes = ordenDao.buscarPedido(idPedido);
 		if(!ordenes.isEmpty()) {
-			throw new UnfinishedException("El pedido ya tiene asignado una orden."); 
+			throw new CreationValidationException("El pedido ya tiene asignado una orden."); 
 		}
 		else {
 			PedidoRetiro pedido = pedidoDao.buscarPedido(idPedido);
@@ -596,6 +620,179 @@ public class PersistenceApi implements IApi {
 		this.ordenDao.actualizar(orden);
 		
 	}
+
+
+	@Override
+	public void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException {
+		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
+		Vivienda vivienda = this.viviendaDao.buscar(idVivienda);
+		
+		vivienda.editarCiudadano(ciudadano);
+		viviendaDao.actualizarYcrear(vivienda);
+		
+	}
+
+	
+	@Override
+	public void cambiarDueño(Integer idVivienda, String dni) {
+		Ciudadano ciudadano = this.ciudadanoDao.buscar(dni);
+		Vivienda vivienda = this.viviendaDao.buscar(idVivienda);
+		
+		vivienda.editarCiudadano(ciudadano);
+		viviendaDao.actualizar(vivienda);
+	}
+
+	@Override
+	public List<CiudadanoDTO> obtenerCiudadanos() {
+		List<CiudadanoDTO> ciudadanosDTO = new ArrayList<CiudadanoDTO>();
+		
+		for (Ciudadano ciu  :  this.ciudadanoDao.listarTodos()) {
+			ciudadanosDTO.add(new CiudadanoDTO(ciu.obtenerId(),ciu.obtenerNombre(), ciu.obtenerApellido(), ciu.obtenerDni()));
+		}
+		
+		return ciudadanosDTO;
+	}
+
+
+	@Override
+	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, StateException, WasteException, CollectorException {
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		
+		if(!orden.tieneRecolector()) {    //Valida que la orden tenga un recolector asignado
+			throw new CollectorException("La orden no tiene ningún recolector asignado");
+		}
+		
+		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
+		List<ResiduoRestante> residuosRestantes = this.calcularResiduosRestantes(orden);   //Almacena en una lista los residuos que faltan para completar el pedido
+		
+		for(ResiduoRetiradoDTO res : residuosretiradosDTO) {
+			TipoResiduo tipoRes = this.residuoDao.buscar(res.obtenerTipo());
+			residuosRetirados.add(new ResiduoRetirado(tipoRes, res.obtenerCantidadKg()));
+		}
+		
+		
+		if(!estanTodosResiduosDeclarados(residuosRetirados, orden.obtenerPedido().obtenerId())) {   //valida que los residuos retirados que se quieren agregar
+																									//al sistema estén declarados en el pedido
+			throw new WasteException("Alguno de los residuos que se quiere ingresar\n no esta declarado en el pedido");
+		}
+		
+		
+		if(orden.estaPendiente()) {   //si la orden estaba pendiente se cambia de estado
+			orden.ejecutarOrden();
+		}
+		
+	
+	
+		List<ResiduoRestante> nuevosResiduosRestantes = this.calcularResiduosNuevosRestantes(residuosRetirados, residuosRestantes); //Dispara una excepcion WasteExcepcion si las cantidades declaradas en el pedido
+																																	//no coinciden con las cantidades que se quiere ingresar
+		if(!quedanResiduosRestantes(nuevosResiduosRestantes)) {    //si no quedan residuos restantes para poder completar el pedido
+																   //la orden se cambia de estado
+			orden.finalizarOrden();
+		}
+		
+		Visita visita = new Visita(LocalDateTime.now().toString(), observacion, orden);
+		visita.editarResiduosRetirados(residuosRetirados);
+		visitaDao.crear(visita);
+	}
+
+
+	
+	private boolean quedanResiduosRestantes(List<ResiduoRestante> residuosRestantes) {
+		for(ResiduoRestante resRestante : residuosRestantes) {
+			if(resRestante.obtenerCantkg()>0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean estanTodosResiduosDeclarados(List<ResiduoRetirado> residuosRetirados, Integer idPedido) { //se fija que esten declarados esos residuos pasados por parametro para el pedido idPedido
+		List<ResiduoARetirar> residuosARetirar = this.residuosDao.buscarResiduosARetirar(idPedido);
+		
+		for(ResiduoRetirado resRetirado : residuosRetirados) {
+			if(!residuosARetirar.contains(resRetirado)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
+
+	private List<ResiduoRestante> calcularResiduosNuevosRestantes(List<ResiduoRetirado> residuosRetirados, List<ResiduoRestante> residuosRestantes) throws WasteException {
+		List<ResiduoRestante> nuevosResiduosRestantes = new ArrayList<>();
+		
+		for(ResiduoRetirado  resRetirado: residuosRetirados) {
+			for (ResiduoRestante resRestante : residuosRestantes) {
+				if(resRetirado.obtenerTipoResiduo().equals(resRestante.obtenerTipoResiduo())) {
+					if(resRestante.obtenerCantkg()-resRetirado.obtenerCantkg()<0) {
+						throw new WasteException("Las cantidades no coinciden con lo declarado en el pedido");
+					}
+					try {
+						nuevosResiduosRestantes.add(new ResiduoRestante(resRetirado.obtenerTipo(), resRestante.obtenerCantkg()-resRetirado.obtenerCantkg()));
+					} catch (NotNullException e) {
+						//TRATAR
+					}
+				}
+			}
+		}
+		
+		return nuevosResiduosRestantes;
+		
+	}
+	
+	
+	
+	private List<ResiduoRestante> calcularResiduosRestantes(OrdenDeRetiro orden){ 	//devuelve los residuos restantes de cada tipo
+		List<ResiduoRetirado>  residuosRetiradosEnTotal = this.residuosDao.buscarResiduosRetiradosEnTotal(orden.obtenerId());
+		List<ResiduoARetirar>residuosARetirar=this.residuosDao.buscarResiduosARetirar(orden.obtenerPedido().obtenerId());
+		
+		List<ResiduoRestante> residuosRestantes=new ArrayList<ResiduoRestante>();
+		
+		for(ResiduoARetirar resRetirar : residuosARetirar) {
+			for(ResiduoRetirado resRetirado : residuosRetiradosEnTotal) {
+				if(resRetirar.obtenerTipoResiduo().equals(resRetirado.obtenerTipoResiduo())) {
+					try {
+						TipoResiduo tipoRes=new TipoResiduo(resRetirar.obtenerTipoResiduo(), resRetirar.obtenerPuntosTipoResiduo());
+						residuosRestantes.add(new ResiduoRestante(tipoRes, resRetirar.obtenerCantkg()-resRetirado.obtenerCantkg()));
+					} catch (NotNullException | DataEmptyException | NumbersException e) {
+						//que hago aca?
+					}
+					break;
+				}
+			}
+			
+		}
+		return residuosRestantes;
+	}
+
+
+	@Override
+	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
+		List<Visita> visitas = this.visitaDao.listarTodas();
+		List<VisitaDTO> visitasDTO = new ArrayList<>();
+
+		if(visitas.isEmpty()) {
+			throw new EmptyListException("Aun no hay ninguna visita en el sistema");
+		}
+		
+		for (Visita visita : visitas) {
+			visitasDTO.add(new VisitaDTO(visita.obtenerId(), visita.obtenerFecha(), visita.obtenerObservacion(), visita.obtenerOrden().obtenerFecha()));
+		}
+		
+		return visitasDTO;
+	}
+
+
+	@Override
+	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
+		OrdenDeRetiro orden = this.ordenDao.buscarPorVisita(idVisita);
+		OrdenDeRetiroDTO ordenDTO = new OrdenDeRetiroDTO(orden.obtenerId(), orden.obtenerFecha().toString(), orden.obtenerEstado(), orden.obtenerPedido().obtenerFechaEmision().toString(),
+				orden.obtenerRecolector().obtenerNombre()+" "+ orden.obtenerRecolector().obtenerApellido());
+		return (ordenDTO);
+	}
+
+	
 	
 	
 }

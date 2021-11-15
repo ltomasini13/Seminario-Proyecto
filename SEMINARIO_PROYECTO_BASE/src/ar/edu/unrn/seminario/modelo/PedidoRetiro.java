@@ -48,6 +48,10 @@ public class PedidoRetiro {
 		this.residuosARetirar=residuosARetirar;
 	}
 
+	public PedidoRetiro() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Integer obtenerId() {
 		return id;
 	}

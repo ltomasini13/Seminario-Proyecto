@@ -83,7 +83,7 @@ public class VentanaPrincipal extends JFrame {
 						listadoViv.setLocationRelativeTo(null);
 						listadoViv.setVisible(true);
 					} catch (EmptyListException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});
@@ -107,13 +107,7 @@ public class VentanaPrincipal extends JFrame {
 					residuos = new ListadoResiduo(api);
 					residuos.setLocationRelativeTo(null);
 					residuos.setVisible(true);
-				} catch (SintaxisSQLException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				} catch (NotNullException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				} catch (DataEmptyException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				} catch (NumbersException e1) {
+				} catch (SintaxisSQLException | NotNullException | DataEmptyException | NumbersException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				
@@ -182,6 +176,40 @@ public class VentanaPrincipal extends JFrame {
 			});
 			ordenMenu.add(listadoOrdenesMenuItem);
 			
+			
+			JMenu visitaMenu = new JMenu("Visitas");
+			menuBar.add(visitaMenu);
+			
+			JMenuItem visitasMenuItemAgregar = new JMenuItem("Agregar");
+			visitasMenuItemAgregar.addActionListener((ActionEvent e) -> {
+					ListadoOrdenDeRetiro listadoOrdenes;
+					try {
+						listadoOrdenes = new ListadoOrdenDeRetiro(api);
+						listadoOrdenes.setVisible(true);
+						
+					} catch (SintaxisSQLException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
+			});
+			
+			visitaMenu.add(visitasMenuItemAgregar);
+			
+			
+			JMenuItem visitasMenuItemListado = new JMenuItem("Listado");
+			visitasMenuItemListado.addActionListener((ActionEvent e) -> {
+					try {
+						ListadoVisitas listadoVisitas = new ListadoVisitas(api);
+						listadoVisitas.setVisible(true);
+					} catch (EmptyListException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
+			});
+			
+			visitaMenu.add(visitasMenuItemListado);
+			
+			
 			JMenu recolectorMenu = new JMenu("Recolectores");
 			menuBar.add(recolectorMenu);
 			
@@ -230,7 +258,7 @@ public class VentanaPrincipal extends JFrame {
 						listadoViv.setLocationRelativeTo(null);
 						listadoViv.setVisible(true);
 					} catch (EmptyListException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});
@@ -247,7 +275,7 @@ public class VentanaPrincipal extends JFrame {
 					altaPedido.setLocationRelativeTo(null);
 					altaPedido.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			});
@@ -261,7 +289,7 @@ public class VentanaPrincipal extends JFrame {
 					pedidos.setLocationRelativeTo(null);
 					pedidos.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			});

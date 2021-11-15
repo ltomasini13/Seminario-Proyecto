@@ -51,6 +51,7 @@ public class Loguin extends JFrame {
 	 * Create the frame.
 	 */
 	public Loguin(IApi api) {
+		
 		setTitle("Iniciar Sesi\u00F3n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

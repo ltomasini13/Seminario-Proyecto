@@ -28,14 +28,19 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
+import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
+import ar.edu.unrn.seminario.modelo.ResiduoRestante;
+import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
+import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class Prueba {
 
 
-	public static void main(String[] args) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException, EmptyListException, DuplicateUniqueKeyException {
+	public static void main(String[] args) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException, EmptyListException, DuplicateUniqueKeyException, NumbersException {
 
 
 //		try {
@@ -73,10 +78,28 @@ public class Prueba {
 //			ConnectionManager.disconnect();
 //		}
 		
-		IApi api = new PersistenceApi();
-		 
-
 		
+		
+		PersistenceApi api = new PersistenceApi();
+	
+		List<ResiduoRetirado > listResRetirados= new ArrayList<>();
+		listResRetirados.add(new ResiduoRetirado(new TipoResiduo("PLASTICO", 150), 5));
+		listResRetirados.add(new ResiduoRetirado(new TipoResiduo("METAL", 200), 8));
+		listResRetirados.add(new ResiduoRetirado(new TipoResiduo("CARTON", 100), 9));
+		
+		
+		List<ResiduoARetirar> listResARetirar = new ArrayList<>();
+		listResARetirar.add(new ResiduoARetirar(new TipoResiduo("PLASTICO", 150), 6));
+		listResARetirar.add(new ResiduoARetirar(new TipoResiduo("CARTON", 100), 7));
+		listResARetirar.add(new ResiduoARetirar(new TipoResiduo("METAL", 200), 6));
+		
+
+		for(ResiduoRetirado resRetirado : listResRetirados) {
+			if(!listResARetirar.contains(resRetirado)) {
+				System.out.println("NO ESTAN TODOS DECLARADOS");
+			}
+			
+		}
 	}
 	
 	

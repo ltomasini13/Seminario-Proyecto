@@ -26,7 +26,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
-import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -46,8 +46,9 @@ public class ListadoPedidoRetiro extends JFrame{
 	private Integer idPedido;
 
 	public ListadoPedidoRetiro(IApi api) throws EmptyListException {
+		setTitle("Listado de pedidos");
 		this.api=api;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -59,8 +60,8 @@ public class ListadoPedidoRetiro extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulosAdmin = {"ID", "FECHA EMISIÓN", "FECHA CUMPLIMIENTO", "CARGA PESADA", "OBSERVACION", "DIR. VIVIENDA", "DUEÑO"};
-		String[] titulosRecic = {"ID", "FECHA EMISIÓN", "FECHA CUMPLIMIENTO", "CARGA PESADA", "OBSERVACION", "DIR. VIVIENDA"};
+		String[] titulos = {"ID", "FECHA EMISIÓN", "FECHA CUMPLIMIENTO", "CARGA PESADA", "OBSERVACION", "DIR. VIVIENDA"};
+		
 		
 		pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -76,11 +77,11 @@ public class ListadoPedidoRetiro extends JFrame{
 		});
 		
 		if(api.esUsuarioAdmin()) {
-			modelo = new DefaultTableModel(new Object[][] {}, titulosAdmin);
+			modelo = new DefaultTableModel(new Object[][] {}, titulos);
 			List<PedidoRetiroDTO> pedidosDTO= api.obtenerPedidos();
 			for (PedidoRetiroDTO p : pedidosDTO) {
 				modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
-						p.obtenerCalle()+" "+p.obtenerNumero(), p.obtenerNombre()+" "+p.obtenerApellido()});
+						p.obtenerCalle()+" "+p.obtenerNumero()});
 			}
 			
 			botonGenerar= new JButton("GENERAR ORDEN");
@@ -90,7 +91,7 @@ public class ListadoPedidoRetiro extends JFrame{
 					api.generarOrden(idPedido);
 					JOptionPane.showMessageDialog(null, "La orden se creo con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
 					
-				} catch (SintaxisSQLException | UnfinishedException e1) {
+				} catch (SintaxisSQLException | CreationValidationException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				
@@ -102,7 +103,7 @@ public class ListadoPedidoRetiro extends JFrame{
 		}
 		
 		if(api.esUsuarioReciclador()) {
-			modelo = new DefaultTableModel(new Object[][] {}, titulosRecic);
+			modelo = new DefaultTableModel(new Object[][] {}, titulos);
 			List<PedidoRetiroDTO> pedidosDTO= api.obtenerPedidos();
 			for (PedidoRetiroDTO p : pedidosDTO) {
 				modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
@@ -146,8 +147,8 @@ public class ListadoPedidoRetiro extends JFrame{
 		pnlBotonesOperaciones.add(botonCerrar);
 		
 		popupMenu= new JPopupMenu();
-		JMenuItem menuItemPopupMenu = new JMenuItem("Ver residuos a retirar");
-		menuItemPopupMenu.addActionListener((ActionEvent arg0) ->{
+		JMenuItem menuItemResiduosARetirar = new JMenuItem("Ver residuos a retirar");
+		menuItemResiduosARetirar.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
 				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
@@ -160,7 +161,24 @@ public class ListadoPedidoRetiro extends JFrame{
 				listadoResRetirar.setVisible(true);
 			}
 		});
-		popupMenu.add(menuItemPopupMenu);
+		popupMenu.add(menuItemResiduosARetirar);
+		
+		
+		JMenuItem menuItemInfoVivienda = new JMenuItem("Más info. de la vivienda");
+		menuItemInfoVivienda.addActionListener((ActionEvent arg0) ->{
+			
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				popupMenu.setVisible(false);
+				Integer idPedido=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+
+				
+				
+			}
+		});
+		popupMenu.add(menuItemInfoVivienda);
 		
 		
 	}

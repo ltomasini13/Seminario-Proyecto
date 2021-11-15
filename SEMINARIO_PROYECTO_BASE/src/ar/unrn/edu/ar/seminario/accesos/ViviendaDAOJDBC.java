@@ -119,9 +119,99 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		
 	}
 	
+	
+	
+	
 	@Override
-	public void modificar(Vivienda vivienda) {
-		// TODO Auto-generated method stub
+	public void actualizarYcrear(Vivienda vivienda) {
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+
+			PreparedStatement statement = conn
+					.prepareStatement("INSERT INTO ciudadanos (nombre, apellido, dni)"
+							+ "VALUES (?, ?, ?)",  Statement.RETURN_GENERATED_KEYS);
+			
+			statement.setString(1, vivienda.obtenerNombreCiudadano());
+			statement.setString(2, vivienda.obtenerApellidoCiudadano());
+			statement.setString(3, vivienda.obtenerDniCiudadano());
+			
+			
+			int cantidad = statement.executeUpdate();
+			if (cantidad==1) 
+				System.out.println("El ciudadano se agregó correctamente.");
+			
+			
+			ResultSet miResult = statement.getGeneratedKeys();
+			miResult.next();
+		    int idCiudadano=miResult.getInt(1);
+		    
+		    //vivienda.obtenerCiudadano().editarId(Long.valueOf(idCiudadano));
+		    miResult.close();
+		    
+		    
+		    PreparedStatement statement2 = conn
+					.prepareStatement("UPDATE viviendas set id_ciudadano=?, calle=?, numero=?, barrio=?, latitud=?, longitud=? where id_vivienda=?");
+		    
+		    statement2.setInt(1, idCiudadano);
+		    statement2.setString(2, vivienda.obtenerUbicacionCalle());
+		    statement2.setInt(3, vivienda.obtenerUbicacionNro());
+		    statement2.setString(4, vivienda.obtenerUbicacionBarrio());
+		    statement2.setDouble(5, vivienda.obtenerUbicacionLatitud());
+		    statement2.setDouble(6, vivienda.obtenerUbicacionLongitud());
+		    statement2.setInt(7, vivienda.obtenerId());
+		    int cantidad2 = statement2.executeUpdate();
+		    
+		    if(cantidad2==1) {
+				   System.out.println("La vivienda se modificó correctamente");
+			 }
+		   
+		  
+		 	
+		} catch (SQLException e) {
+			System.out.println("Error al procesar la consulta");
+		
+		} catch (Exception e) {
+			System.out.println("Error en la base de datos");
+		} finally {
+			ConnectionManager.disconnect();
+		}
+		
+	}
+	
+	
+	@Override
+	public void actualizar(Vivienda vivienda) {
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+		    
+		    PreparedStatement statement2 = conn
+					.prepareStatement("UPDATE viviendas set id_ciudadano=?, calle=?, numero=?, barrio=?, latitud=?, longitud=? where id_vivienda=?");
+		    
+		    statement2.setInt(1, vivienda.obtenerIdCiudadano());
+		    statement2.setString(2, vivienda.obtenerUbicacionCalle());
+		    statement2.setInt(3, vivienda.obtenerUbicacionNro());
+		    statement2.setString(4, vivienda.obtenerUbicacionBarrio());
+		    statement2.setDouble(5, vivienda.obtenerUbicacionLatitud());
+		    statement2.setDouble(6, vivienda.obtenerUbicacionLongitud());
+		    statement2.setInt(7, vivienda.obtenerId());
+		    int cantidad2 = statement2.executeUpdate();
+		    
+		    if(cantidad2==1) {
+				   System.out.println("La vivienda se modificó correctamente");
+			 }
+		   
+		  
+		 	
+		} catch (SQLException e) {
+			System.out.println("Error al procesar la consulta");
+		
+		} catch (Exception e) {
+			System.out.println("Error en la base de datos");
+		} finally {
+			ConnectionManager.disconnect();
+		}
 		
 	}
 
@@ -206,7 +296,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	
 
 	@Override
-	public Vivienda buscar(Integer idDeVivienda) {
+	public Vivienda buscar(Integer idVivienda) {
 		Vivienda vivienda =null;
 		
 		try {
@@ -215,15 +305,16 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			PreparedStatement statement = conn
 					.prepareStatement("SELECT * FROM viviendas v JOIN ciudadanos c ON (v.id_ciudadano=c.id_ciudadano) WHERE v.id_vivienda=?");
 		
-			statement.setInt(1, idDeVivienda);
+			statement.setInt(1, idVivienda);
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
 				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
 						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
 				Ciudadano ciudadano = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), null);
+				ciudadano.editarId(rs.getInt("c.id_ciudadano"));
 				vivienda=new Vivienda(ubicacion, ciudadano);
-				vivienda.editarId(idDeVivienda);
+				vivienda.editarId(idVivienda);
 			}
 		
 		  
@@ -233,7 +324,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			System.out.println("Error al procesar consulta");
 			// TODO: disparar Exception propia
 		} catch (Exception e) {
-			System.out.println("Error al listar viviendas");
+			System.out.println("Error al listar viv");
 			// TODO: disparar Exception propia
 		} finally {
 			ConnectionManager.disconnect();

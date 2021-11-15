@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
-import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 
@@ -33,7 +33,7 @@ public class GenerarOrden extends JFrame {
 	
 	public GenerarOrden(IApi api, Integer idPedido) {
 		setTitle("GENERAR ORDEN DE RETIRO");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
 		contentPane = new JPanel();
@@ -81,7 +81,7 @@ public class GenerarOrden extends JFrame {
 				dispose();
 			} catch (SintaxisSQLException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (UnfinishedException e1) {
+			} catch (CreationValidationException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			};
 		
