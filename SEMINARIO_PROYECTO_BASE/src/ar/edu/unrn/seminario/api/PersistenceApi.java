@@ -7,7 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+=======
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -18,6 +23,7 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.VisitaDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.CollectorException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
@@ -28,7 +34,12 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+<<<<<<< HEAD
 import ar.edu.unrn.seminario.exception.WasteException;
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.modelo.Beneficio;
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -43,6 +54,10 @@ import ar.edu.unrn.seminario.modelo.Ubicacion;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import ar.unrn.edu.ar.seminario.accesos.BeneficioDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.BeneficioDao;
+import ar.unrn.edu.ar.seminario.accesos.CampañaDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.CampañaDao;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
 import ar.unrn.edu.ar.seminario.accesos.OrdenDeRetiroDAOJDBC;
@@ -75,7 +90,12 @@ public class PersistenceApi implements IApi {
 	private ResiduoDao residuoDao; //hay que cambiarla por TipoDao
 	private PedidoRetiroDao pedidoDao;
 	private RecolectorDao recolectorDao;
+<<<<<<< HEAD
 	private ResiduosDao residuosDao;   //dao para trabajar con los residuos a retirar y residuos retirados
+=======
+	private BeneficioDao beneficioDao;
+	private CampañaDao campañaDao;
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -86,8 +106,13 @@ public class PersistenceApi implements IApi {
 		pedidoDao= new PedidoRetiroDAOJDBC();
 		recolectorDao= new RecolectorDAOJDBC();
 		ordenDao = new OrdenDeRetiroDAOJDBC();
+<<<<<<< HEAD
 		visitaDao = new VisitaDAOJDBC();
 		residuosDao= new ResiduosDAOJDBC();//dao para trabajar con los residuos a retirar y residuos retirados
+=======
+		beneficioDao = new BeneficioDAOJDBC();
+		campañaDao = new CampañaDAOJDBC();
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 	}
 
 
@@ -623,6 +648,7 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
+<<<<<<< HEAD
 	public void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException {
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
 		Vivienda vivienda = this.viviendaDao.buscar(idVivienda);
@@ -764,10 +790,35 @@ public class PersistenceApi implements IApi {
 			
 		}
 		return residuosRestantes;
+=======
+	public void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException {
+		
+		if(!puntos.matches("[0-9]+")) {
+			throw new NumbersException("El valor ingresado para el campo 'Puntos' no es numérico");
+		}
+		int nro = Integer.parseInt(puntos);
+		Beneficio beneficio = new Beneficio(nombre, nro);
+		
+		beneficioDao.crear(beneficio);
+		
 	}
 
 
 	@Override
+	public List<BeneficioDTO> obtenerBeneficios() throws AppException, DataEmptyException, NotNullException, NumbersException {
+		List<BeneficioDTO> beneficiosDTO=new ArrayList<BeneficioDTO>();
+		
+		for(Beneficio b : beneficioDao.listarTodos()) {	
+			beneficiosDTO.add(new BeneficioDTO(b.obtenerNombreBeneficio(), b.obtenerPuntos()));
+		}
+		
+		return beneficiosDTO;
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
+	}
+
+
+	@Override
+<<<<<<< HEAD
 	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
 		List<Visita> visitas = this.visitaDao.listarTodas();
 		List<VisitaDTO> visitasDTO = new ArrayList<>();
@@ -781,10 +832,17 @@ public class PersistenceApi implements IApi {
 		}
 		
 		return visitasDTO;
+=======
+	public void registrarCampaña(String nombre, String puntos)
+			throws DataEmptyException, NotNullException, AppException {
+		// TODO Auto-generated method stub
+		
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 	}
 
 
 	@Override
+<<<<<<< HEAD
 	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
 		OrdenDeRetiro orden = this.ordenDao.buscarPorVisita(idVisita);
 		OrdenDeRetiroDTO ordenDTO = new OrdenDeRetiroDTO(orden.obtenerId(), orden.obtenerFecha().toString(), orden.obtenerEstado(), orden.obtenerPedido().obtenerFechaEmision().toString(),
@@ -793,6 +851,12 @@ public class PersistenceApi implements IApi {
 	}
 
 	
+=======
+	public List<CampañaDTO> obtenerCampañas() throws AppException, DataEmptyException, NotNullException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 	
 	
 }

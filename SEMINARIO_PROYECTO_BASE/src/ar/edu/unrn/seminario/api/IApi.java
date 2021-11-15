@@ -3,7 +3,12 @@ package ar.edu.unrn.seminario.api;
 import java.time.LocalDateTime;
 import java.util.List;
 
+<<<<<<< HEAD
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+=======
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -14,6 +19,7 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.VisitaDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.CollectorException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
@@ -99,8 +105,17 @@ public interface IApi {
 	void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException;
 	List<CiudadanoDTO> obtenerCiudadanos(); 
 	
+<<<<<<< HEAD
 	void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException;
 	List<VisitaDTO> obtenerVisitas() throws EmptyListException;
 	OrdenDeRetiroDTO obtenerOrden(Integer idVisita);
+=======
+	void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException;
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 	
+	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
+	
+	void registrarCampaña(String nombre, String puntos) throws DataEmptyException, NotNullException, AppException;
+	
+	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException;
 }

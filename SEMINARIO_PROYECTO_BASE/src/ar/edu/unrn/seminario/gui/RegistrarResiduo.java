@@ -28,8 +28,13 @@ public class RegistrarResiduo extends JFrame {
 	private JTextField puntosTextField;
 	
 	public RegistrarResiduo(IApi api) {
+<<<<<<< HEAD
 		setTitle("Registrar Residuo");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+=======
+		setTitle("REGISTRAR RESIDUO");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 		setBounds(100, 100, 450, 300);
 		
 		contentPane = new JPanel();

@@ -14,29 +14,25 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
-import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
-import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+
 import java.awt.event.ActionListener;
 
-public class ListadoResiduo extends JFrame{
+public class ListadoBeneficio extends JFrame{
 
-	JPanel contentPane;
+	private JPanel contentPane;
 	private JTable table;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
 	
-	public ListadoResiduo(IApi api) throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+	public ListadoBeneficio(IApi api) throws AppException, DataEmptyException, NotNullException, NumbersException {
 		
-<<<<<<< HEAD
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-=======
-		setTitle("LISTADO DE RESIDUOS");
+		setTitle("CATÁLOGO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -48,29 +44,37 @@ public class ListadoResiduo extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "ID", "TIPO RESIDUO", "PUNTOS"};
+		String[] titulos = { "NOMBRE BENEFICIO", "PUNTOS"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
-		List<ResiduoDTO> residuos= api.obtenerResiduos();
-		for (ResiduoDTO residuo : residuos) {
-			modelo.addRow(new Object[] { residuo.obtenerId(), residuo.obtenerTipo(), residuo.obtenerPunto() });
+		List<BeneficioDTO> beneficios= api.obtenerBeneficios();
+		for (BeneficioDTO beneficio : beneficios) {
+			modelo.addRow(new Object[] { beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
 		}
 		table.setModel(modelo);
-		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 		scrollPane.setViewportView(table);
 		
 		JPanel pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		JButton botonCerrar = new JButton("Cerrar");
+		JButton botonCerrar = new JButton("CERRAR");
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			dispose();
 		});
-		pnlBotonesOperaciones.add(botonCerrar);
-
+		
+		if(api.esUsuarioAdmin()){
+			JButton btnRegistrarNuevoBeneficio = new JButton("AGREGAR BENEFICIO");
+			btnRegistrarNuevoBeneficio.addActionListener((ActionEvent e) -> {
+				RegistrarBeneficio regBeneficio = new RegistrarBeneficio(api);
+				regBeneficio.setVisible(true);
+				this.dispose();
+			});
+			pnlBotonesOperaciones.add(btnRegistrarNuevoBeneficio);
+			pnlBotonesOperaciones.add(botonCerrar);
+		}
+		
 	}
+	
 }

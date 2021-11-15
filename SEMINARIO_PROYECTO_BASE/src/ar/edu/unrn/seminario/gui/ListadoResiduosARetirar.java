@@ -34,7 +34,12 @@ public class ListadoResiduosARetirar extends JFrame {
 	 */
 	public ListadoResiduosARetirar(IApi api, Integer idPedido) {
 		this.api=api;
+<<<<<<< HEAD
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+=======
+		setTitle("LISTADO DE RESIDUOS A RETIRAR");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+>>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -77,7 +77,7 @@ public class SeleccionResiduos extends JFrame{
 	
 	public SeleccionResiduos(IApi api, Integer id_vivienda) {
 		this.api=api;
-		setTitle("Datos del pedido");
+		setTitle("PEDIDO DE RECOLECCIÓN");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
