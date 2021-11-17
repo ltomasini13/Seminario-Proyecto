@@ -9,7 +9,11 @@ import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+>>>>>>> Stashed changes
 =======
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 >>>>>>> Stashed changes
@@ -40,6 +44,7 @@ import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
@@ -48,6 +53,9 @@ import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Visita;
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+>>>>>>> Stashed changes
 =======
 import ar.edu.unrn.seminario.exception.UnfinishedException;
 >>>>>>> Stashed changes
@@ -137,11 +145,14 @@ public interface IApi {
 	
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException;
 	
 
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 	List<CampañaDTO> obtenerCampañas()throws AppException, NotNullException, DateException, DataEmptyException;
@@ -154,6 +165,9 @@ public interface IApi {
 	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
 	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
