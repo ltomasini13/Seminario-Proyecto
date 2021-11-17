@@ -29,7 +29,11 @@ public class Ciudadano {
 		this.dni = dni;
 		this.usuario=usuario;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		this.puntaje=0;
+=======
+		this.puntaje = 0;
+>>>>>>> Stashed changes
 =======
 		this.puntaje = 0;
 >>>>>>> Stashed changes
