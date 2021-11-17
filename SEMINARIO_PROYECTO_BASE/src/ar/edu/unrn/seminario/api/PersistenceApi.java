@@ -42,7 +42,11 @@ import ar.edu.unrn.seminario.modelo.Beneficio;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+import ar.edu.unrn.seminario.modelo.Campaña;
+>>>>>>> Stashed changes
 =======
 import ar.edu.unrn.seminario.modelo.Campaña;
 >>>>>>> Stashed changes
@@ -932,6 +936,7 @@ public class PersistenceApi implements IApi {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
 		List<Visita> visitas = this.visitaDao.listarTodas();
 		List<VisitaDTO> visitasDTO = new ArrayList<>();
@@ -975,6 +980,8 @@ public class PersistenceApi implements IApi {
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
 		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
 		
@@ -994,6 +1001,7 @@ public class PersistenceApi implements IApi {
 		if(ciudadano.puntaje() >= beneficio.obtenerPuntos() ) {
 			
 		}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 >>>>>>> Stashed changes
 		
@@ -1017,12 +1025,15 @@ public class PersistenceApi implements IApi {
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 		
 
 	}
 
 
 	@Override
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
@@ -1035,6 +1046,9 @@ public class PersistenceApi implements IApi {
 	
 
 	public List<CampañaDTO> obtenerCampañas() throws AppException, DataEmptyException, NotNullException {
+=======
+	public void actualizarPuntaje(double puntaje) {
+>>>>>>> Stashed changes
 =======
 	public void actualizarPuntaje(double puntaje) {
 >>>>>>> Stashed changes
@@ -1085,6 +1099,7 @@ public class PersistenceApi implements IApi {
 		return 0;
 	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		
 
 
@@ -1115,6 +1130,8 @@ public class PersistenceApi implements IApi {
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 	@Override
 	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
 		
@@ -1123,6 +1140,9 @@ public class PersistenceApi implements IApi {
 		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
 	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
