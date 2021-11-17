@@ -121,6 +121,6 @@ public interface IApi {
 	
 	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException;
 	
-
+	boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto);
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
 }
