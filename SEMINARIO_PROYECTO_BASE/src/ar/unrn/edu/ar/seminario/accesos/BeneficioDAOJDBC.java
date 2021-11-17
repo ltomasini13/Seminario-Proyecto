@@ -40,33 +40,21 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			statement.setString(1, beneficio.obtenerNombreBeneficio());
 			statement.setInt(2, beneficio.obtenerPuntos());
 			
-			try {
-				int cantidad = statement.executeUpdate();
-				if (cantidad==1) 
-					System.out.println("El beneficio se creo correctamente.");
-			}
-			catch(MySQLIntegrityConstraintViolationException e){
-		    	throw new DuplicateUniqueKeyException("El beneficio de tipo: "+beneficio.obtenerNombreBeneficio()+" ya existe");
-		    }
+			int cantidad = statement.executeUpdate();
+			if (cantidad==1) 
+				System.out.println("El beneficio se creo correctamente.");
+			
 			
 			ResultSet miResult = statement.getGeneratedKeys();
 			miResult.next();
 
 		    miResult.close(); 
 		    
-		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error al procesar la consulta");
-				throw new AppException("No se pudo crear el beneficio por un error en la Base de Datos");
-			}
-			
-		
-		} catch (DuplicateUniqueKeyException e) {
-			System.out.println(e.getMessage());;
-			
-		} finally {
+		} catch (SQLException e1) {
+			System.out.println("Error al procesar la consulta");
+			throw new AppException("No se pudo crear el beneficio por un error en la Base de Datos");
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		

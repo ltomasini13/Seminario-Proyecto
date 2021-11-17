@@ -21,6 +21,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -285,7 +286,15 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
 			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
-				//SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idBeneficio, idCampaña)
+				Integer idCampaña;
+				try {
+					idCampaña = api.obtenerCampañaVigente().obtenerId();
+					SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idCampaña);
+					selBeneficio.setVisible(true);
+				} catch (AppException | DateException | NotNullException | DataEmptyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			});
 			canjeMenu.add(elegirCanjeMenuItem);
 			
