@@ -28,7 +28,23 @@ public class Ciudadano {
 		this.apellido = apellido;
 		this.dni = dni;
 		this.usuario=usuario;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		this.puntaje=0;
+=======
+		this.puntaje = 0;
+>>>>>>> Stashed changes
+=======
+		this.puntaje = 0;
+>>>>>>> Stashed changes
+=======
+		this.puntaje = 0;
+>>>>>>> Stashed changes
+=======
+		this.puntaje = 0;
+>>>>>>> Stashed changes
 	} 	
  
 	public Ciudadano() {
@@ -76,6 +92,19 @@ public class Ciudadano {
 
 	public void editarId(Integer id) {
 		this.id = id;
+	}   
+	
+	public double puntaje() {
+		return this.puntaje();
+	}
+	
+	
+	public double sumarPuntos(double puntos) {
+		return this.puntaje + puntos;
+	}
+	
+	public double restarPuntos(double puntos) {
+		return this.puntaje - puntos; 
 	}
 	
 	

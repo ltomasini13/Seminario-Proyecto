@@ -6,7 +6,14 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -37,10 +44,23 @@ public class RegistrarCampaña extends JFrame {
 		contentPane.add(descripcionLabel);
 		
 		JButton aceptarBoton = new JButton("ACEPTAR");
+		aceptarBoton.addActionListener((ActionEvent e) -> {
+			try {
+				api.registrarCampaña(nombreText.getText(), descripcionText.getText());
+				this.dispose();
+			} catch (AppException | DataEmptyException | NotNullException | DateException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+			}
+			this.dispose();
+		});
 		aceptarBoton.setBounds(12, 193, 97, 25);
 		contentPane.add(aceptarBoton);
 		
 		JButton borrarBoton = new JButton("BORRAR");
+		borrarBoton.addActionListener((ActionEvent e) -> {
+			nombreText.setText(null);
+			descripcionText.setText(null);
+		});
 		borrarBoton.setBounds(138, 193, 97, 25);
 		contentPane.add(borrarBoton);
 		
@@ -61,11 +81,18 @@ public class RegistrarCampaña extends JFrame {
 		contentPane.add(descripcionText);
 		descripcionText.setColumns(10);
 		
-		JButton seleccionarCatalogo = new JButton("SELECCIONAR CAT\u00C1LOGO");
-		seleccionarCatalogo.addActionListener((ActionEvent e) -> {
-			
-		});
-		seleccionarCatalogo.setBounds(96, 120, 181, 25);
-		contentPane.add(seleccionarCatalogo);
+//		JButton seleccionarCatalogo = new JButton("SELECCIONAR CAT\u00C1LOGO");
+//		seleccionarCatalogo.addActionListener((ActionEvent e) -> {
+//			try {
+//				ListadoBeneficio beneficios = new ListadoBeneficio(api);
+//				beneficios.setVisible(true);
+//			} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
+//				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE); 
+//				
+//			}
+//			
+//		});
+//		seleccionarCatalogo.setBounds(102, 120, 199, 25);
+//		contentPane.add(seleccionarCatalogo);
 	}
 }

@@ -1,6 +1,5 @@
 package ar.edu.unrn.seminario.api;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -8,7 +7,23 @@ import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+>>>>>>> Stashed changes
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -24,12 +39,17 @@ import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.CollectorException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
@@ -38,6 +58,18 @@ import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Visita;
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+>>>>>>> Stashed changes
 
 public interface IApi {
 
@@ -117,10 +149,40 @@ public interface IApi {
 
 	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
 	
-	void registrarCampaña(String nombre, String puntos) throws DataEmptyException, NotNullException, AppException;
+	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException;
 	
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException;
 	
 	boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto);
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+	List<CampañaDTO> obtenerCampañas()throws AppException, NotNullException, DateException, DataEmptyException;
+	
+	
+	void realizarCanje(Integer idBeneficio, String dni);
+	
+	void actualizarPuntaje(double puntaje);
+	
+	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 }

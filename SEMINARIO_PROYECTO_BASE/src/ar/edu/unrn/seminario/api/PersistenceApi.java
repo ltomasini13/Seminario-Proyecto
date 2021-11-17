@@ -28,6 +28,7 @@ import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.CollectorException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -38,7 +39,23 @@ import ar.edu.unrn.seminario.exception.StateException;
 import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+import ar.edu.unrn.seminario.modelo.Campaña;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.modelo.Campaña;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.modelo.Campaña;
+>>>>>>> Stashed changes
+=======
+import ar.edu.unrn.seminario.modelo.Campaña;
+>>>>>>> Stashed changes
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -899,14 +916,27 @@ public class PersistenceApi implements IApi {
 		List<BeneficioDTO> beneficiosDTO=new ArrayList<BeneficioDTO>();
 		
 		for(Beneficio b : beneficioDao.listarTodos()) {	
-			beneficiosDTO.add(new BeneficioDTO(b.obtenerNombreBeneficio(), b.obtenerPuntos()));
+			
+			beneficiosDTO.add(new BeneficioDTO(b.obtenerId(), b.obtenerNombreBeneficio(), b.obtenerPuntos()));
 		}
-		
 		return beneficiosDTO;
+	}
+	
+	@Override
+	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException {
+		
+		Campaña camp = new Campaña(nombre, LocalDateTime.now().toString(), LocalDateTime.now().plusMonths(2).toString(), descripcion);	
+		campañaDao.crear(camp);
+		campañaDao.buscar(camp.obtenerId());
+		System.out.println(camp.obtenerId());
 	}
 
 
 	@Override
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
 		List<Visita> visitas = this.visitaDao.listarTodas();
 		List<VisitaDTO> visitasDTO = new ArrayList<>();
@@ -944,12 +974,68 @@ public class PersistenceApi implements IApi {
 	public void registrarCampaña(String nombre, String puntos)
 			throws DataEmptyException, NotNullException, AppException {
 		// TODO Auto-generated method stub
+=======
+	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
+		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
+		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
+		
+		for(Campaña camp : campañaDao.listarTodos()) {
+			campañasDTO.add(new CampañaDTO(camp.obtenerId(), camp.obtenerNombreCampaña(), camp.obtenerFechaInicio().toString(), camp.obtenerFechaFin().toString(), camp.obtenerDescripcion()));	
+		}
+		return campañasDTO;
+	}
+
+
+	@Override
+	public void realizarCanje(Integer idBeneficio, String dni) {
+		
+		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+		Ciudadano ciudadano = ciudadanoDao.buscar(dni);
+		
+		if(ciudadano.puntaje() >= beneficio.obtenerPuntos() ) {
+			
+		}
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+		
+		for(Campaña camp : campañaDao.listarTodos()) {
+			campañasDTO.add(new CampañaDTO(camp.obtenerId(), camp.obtenerNombreCampaña(), camp.obtenerFechaInicio().toString(), camp.obtenerFechaFin().toString(), camp.obtenerDescripcion()));	
+		}
+		return campañasDTO;
+	}
+
+
+	@Override
+<<<<<<< Updated upstream
+	public void realizarCanje(Integer idBeneficio, String dni) {
+		
+		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+		Ciudadano ciudadano = ciudadanoDao.buscar(dni);
+		
+		if(ciudadano.puntaje() >= beneficio.obtenerPuntos() ) {
+			
+		}
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 		
 
 	}
 
 
 	@Override
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
 		OrdenDeRetiro orden = this.ordenDao.buscarPorVisita(idVisita);
 		OrdenDeRetiroDTO ordenDTO = new OrdenDeRetiroDTO(orden.obtenerId(), orden.obtenerFecha().toString(), orden.obtenerEstado(), orden.obtenerPedido().obtenerFechaEmision().toString(),
@@ -960,8 +1046,17 @@ public class PersistenceApi implements IApi {
 	
 
 	public List<CampañaDTO> obtenerCampañas() throws AppException, DataEmptyException, NotNullException {
+=======
+	public void actualizarPuntaje(double puntaje) {
+>>>>>>> Stashed changes
+=======
+	public void actualizarPuntaje(double puntaje) {
+>>>>>>> Stashed changes
+=======
+	public void actualizarPuntaje(double puntaje) {
+>>>>>>> Stashed changes
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 
@@ -1003,10 +1098,17 @@ public class PersistenceApi implements IApi {
 		
 		return 0;
 	
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		
 
 
 		
+=======
+	public void actualizarPuntaje(double puntaje) {
+		// TODO Auto-generated method stub
+		
+>>>>>>> Stashed changes
 	}
 
 
@@ -1017,5 +1119,54 @@ public class PersistenceApi implements IApi {
 
 
 	
+	@Override
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
+		
+		Campaña campaña = campañaDao.buscar(idCampaña);			
+			
+		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
 	
+<<<<<<< Updated upstream
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+	@Override
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
+		
+		Campaña campaña = campañaDao.buscar(idCampaña);			
+			
+		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+	
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+		campaña.agregarBeneficioCatalogo(beneficio);
+		campañaDao.actualizarCatalogo(campaña);
+			
+	}
+
+
+	@Override
+	public List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException {
+		
+		Campaña camp = campañaDao.buscar(idCampaña);
+		
+		List<BeneficioDTO> catalogo = new ArrayList<BeneficioDTO>();
+		
+		for(Beneficio b : beneficioDao.ListarCatalogo(camp)) {	
+			
+			catalogo.add(new BeneficioDTO(b.obtenerId(), b.obtenerNombreBeneficio(), b.obtenerPuntos()));
+		}
+		return catalogo;
+	}
+	
+//	private validarfechaCanje() {
+//		
+//	}
 }
