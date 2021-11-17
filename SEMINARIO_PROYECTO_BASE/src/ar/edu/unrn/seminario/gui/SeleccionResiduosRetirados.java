@@ -206,18 +206,28 @@ public class SeleccionResiduosRetirados extends JFrame{
 					}
 					else {
 						
+						if(api.residuoEstaDeclarado(residuoRetirado, idOrden)) {
 						
-						
-						if(api.calcularResiduoRestanteDelResiduo(residuoRetirado, idOrden)==0) {
-							int confirmacion = JOptionPane.showConfirmDialog(null, "Se esta agregando mas "+residuoRetirado.obtenerTipo()+" de lo declarado\n¿Desea continuar?");
-							
-							if(confirmacion==0) {
+							if(api.calcularResiduoRestanteDelResiduo(residuoRetirado, idOrden)<0) {
+								int confirmacion = JOptionPane.showConfirmDialog(null, "Se esta agregando mas "+residuoRetirado.obtenerTipo()+" de lo declarado\n¿Desea continuar?");
+								
+								if(confirmacion==0) {
+									residuosAgregados.add(residuoRetirado);
+									modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
+									jListResAgregados.removeAll();
+									jListResAgregados.setModel(modeloResAgregados);
+								}
+								}
+							else {
 								residuosAgregados.add(residuoRetirado);
 								modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
 								jListResAgregados.removeAll();
 								jListResAgregados.setModel(modeloResAgregados);
 							}
-							}
+						}	
+						else {
+							JOptionPane.showMessageDialog(null, "El residuo "+residuoRetirado.obtenerTipo()+" no esta declarado en el pedido", "Error", JOptionPane.WARNING_MESSAGE); 
+						}
 					}
 					
 				}
