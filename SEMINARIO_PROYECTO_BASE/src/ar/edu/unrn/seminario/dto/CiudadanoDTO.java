@@ -9,6 +9,8 @@ public class CiudadanoDTO {
 	private String nombre;
 	private String apellido;
 	private String dni;
+	private String nombreDeUsuario;
+	
 	
 	public CiudadanoDTO (Integer id, String nombre, String apellido, String dni) {
 		this.id=id;
@@ -17,6 +19,14 @@ public class CiudadanoDTO {
 		this.dni = dni;
 	} 	
  
+	public String obtenerNombreDeUsuario() {
+		return nombreDeUsuario;
+	}
+
+	public void editarNombreDeUsuario(String nombreDeUsuario) {
+		this.nombreDeUsuario = nombreDeUsuario;
+	}
+
 	public String obtenerNombre() {
 		return nombre;
 	}

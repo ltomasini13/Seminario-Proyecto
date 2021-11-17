@@ -11,6 +11,8 @@ public interface ViviendaDao {
 	
 	Vivienda buscar(Vivienda vivienda);
 	
+	Vivienda buscarPorPedido(Integer idPedido);
+	
 	List<Vivienda> listarTodas();
 
 	void crearParaRecic(Vivienda vivienda);

@@ -34,7 +34,8 @@ public class ListadoVisitas extends JFrame {
 	private JTable table;
 	private DefaultTableModel modelo;
 	private JPopupMenu popupMenu;
-	
+	String[] titulos = { "ID", "FECHA VISITA", "OBSERVACIÓN", "FECHA ORDEN"}; 
+	private JButton cerrarButton; 
 	/**
 	 * Create the frame.
 	 * @throws EmptyListException 
@@ -43,40 +44,46 @@ public class ListadoVisitas extends JFrame {
 		setTitle("LISTADO ORDENES");
 		this.api = api;
 
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		inicializarVentana();
+		cargarEstructuraTabla();
+		cargarDatosTabla();
+		visibilizarTabla();
+		cargarPanelDeOperaciones();
+		cargarMenuPopup();
+		
+	}
 
-		scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
-		
-		
-		table = new JTable();
-		String[] titulos = { "ID", "FECHA VISITA", "OBSERVACIÓN", "FECHA ORDEN"}; 
+	public ListadoVisitas(IApi api, Integer idOrden) throws EmptyListException {
+		setTitle("LISTADO ORDENES");
+		this.api = api;
 
-//		table.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				// Habilitar botones
-//				habilitarBotones(true);
-//
-//			}
-//
-//			
-//		});
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-		List<VisitaDTO> visitas = api.obtenerVisitas();
+		inicializarVentana();
+		cargarEstructuraTabla();
+		cargarDatosTabla(idOrden);
+		visibilizarTabla();
+		cargarPanelDeOperaciones();
+		cargarMenuPopup();
 		
-		for (VisitaDTO v : visitas) {
-			modelo.addRow(new Object[] {v.obtenerId(), v.obtenerFechaVisita(), v.obtenerObservacion(), v.obtenerFechaOrden()});
-			
-		}
+	}
+	
+
+
+	private void cargarPanelDeOperaciones() {
+		cerrarButton = new JButton("Cerrar");
+		cerrarButton.addActionListener((ActionEvent e) -> {
+				dispose();
+		});
 		
+		JPanel pnlBotonesOperaciones = new JPanel();
+		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
+		pnlBotonesOperaciones.add(cerrarButton);
+	}
+
+
+
+	private void visibilizarTabla() {
 		table.setModel(modelo);
 		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
 		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
@@ -104,23 +111,64 @@ public class ListadoVisitas extends JFrame {
 			}
 		});
 		scrollPane.setViewportView(table);
+	}
+
+
+
+	private void cargarDatosTabla() throws EmptyListException {
+		List<VisitaDTO> visitas = api.obtenerVisitas();
+		for (VisitaDTO v : visitas) {
+			modelo.addRow(new Object[] {v.obtenerId(), v.obtenerFechaVisita(), v.obtenerObservacion(), v.obtenerFechaOrden()});
+			
+		}
+	}
+
+
+	private void cargarDatosTabla(Integer idOrden) throws EmptyListException {
+		List<VisitaDTO> visitas = api.obtenerVisitasDeLaOrden(idOrden);
+		for (VisitaDTO vis : visitas) {
+			modelo.addRow(new Object[] {vis.obtenerId(), vis.obtenerFechaVisita(), vis.obtenerObservacion(), vis.obtenerFechaOrden()});
+			
+		}
+	}
+	
+	
+	private void cargarEstructuraTabla() {
+		scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		table = new JTable();
 		
-		
-		JButton cerrarButton = new JButton("Cerrar");
-		cerrarButton.addActionListener((ActionEvent e) -> {
-				dispose();
-		});
-		
-		JPanel pnlBotonesOperaciones = new JPanel();
-		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
-		
-		pnlBotonesOperaciones.add(cerrarButton);
-		
-		
+
+//		table.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent arg0) {
+//				// Habilitar botones
+//				habilitarBotones(true);
+//
+//			}
+//
+//			
+//		});
+		modelo = new DefaultTableModel(new Object[][] {}, titulos);
+	}
+
+
+
+	private void inicializarVentana() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+	}
+
+
+
+	private void cargarMenuPopup() {
 		popupMenu= new JPopupMenu();
-		JMenuItem menuItemPopupMenu = new JMenuItem("Mas info. de la orden");
-		menuItemPopupMenu.addActionListener((ActionEvent arg0) ->{
+		JMenuItem menuItemPopopInfoDeLaOrden = new JMenuItem("Mas info. de la orden");
+		menuItemPopopInfoDeLaOrden.addActionListener((ActionEvent arg0) ->{
 			popupMenu.setVisible(false);
 			if(table.getSelectedRow()==-1) {
 				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
@@ -137,10 +185,23 @@ public class ListadoVisitas extends JFrame {
 				}
 			}
 		});
-		popupMenu.add(menuItemPopupMenu);
+		popupMenu.add(menuItemPopopInfoDeLaOrden);
+		
+		JMenuItem menuItemPopupResiduosRetirados = new JMenuItem("Ver los residuos retirados");
+		menuItemPopupResiduosRetirados.addActionListener((ActionEvent arg0) ->{
+			popupMenu.setVisible(false);
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				
+				Integer idVisita= (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+				ListadoResiduosRetirados listadoResiduosRetirados=new ListadoResiduosRetirados(api, idVisita);
+				listadoResiduosRetirados.setVisible(true);
+			}
+		});
+		popupMenu.add(menuItemPopupResiduosRetirados);
 	}
-
-	
 //	private void habilitarBotones(boolean b) {
 //		// TODO Auto-generated method stub
 //		

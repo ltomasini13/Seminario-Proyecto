@@ -9,6 +9,7 @@ import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 
 public interface ResiduosDao {
 	List<ResiduoARetirar> listarTodosResiduosARetirar();
+	List<ResiduoRetirado> buscarResiduosRetirados(Integer idVisita);
 	List<ResiduoRetirado> listarTodosResiduosRetirados();
 	List<ResiduoRetirado> buscarResiduosRetiradosEnTotal(Integer idOrden);
 	List<ResiduoARetirar> buscarResiduosARetirar(Integer idPedido);

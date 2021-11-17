@@ -19,6 +19,9 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 
 public class ListadoUsuario extends JFrame {
@@ -27,55 +30,49 @@ public class ListadoUsuario extends JFrame {
 	private JTable table;
 	DefaultTableModel modelo;
 	IApi api;
-	JButton activarButton;
-	JButton desactivarButton;
+	JButton activarButton, desactivarButton,cerrarButton ;
+
+	private JScrollPane scrollPane;
 
 	/**
 	 * Create the frame.
 	 */
 	public ListadoUsuario(IApi api) {
 		this.api = api;
-<<<<<<< HEAD
-
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-=======
 		setTitle("LISTADO DE USUARIOS");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		
+		inicializarVentana();
+		
+		cargarEstructuraTabla();
+		
+		cargarDatosTabla();
+		
+		visibilizarTabla();
+		
+		cargarPanelDeOperaciones();
+		
+	}
 
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
+	
+	
+	
+	public ListadoUsuario(IApi api, String nombreUsuario) throws SintaxisSQLException, NotNullException, DataEmptyException {
+		this.api = api;
+		setTitle("INFORMACIÓN DEL USUARIO");
+		
+		inicializarVentana();
+		
+		cargarEstructuraTabla();
+		
+		cargarDatosTabla(nombreUsuario);
+		
+		visibilizarTabla();
+		
+		cargarPanelDeOperaciones();
+	}
 
-		table = new JTable();
-		String[] titulos = { "USUARIO", "NOMBRE", "EMAIL", "ESTADO", "ROL" };
-
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// Habilitar botones
-				habilitarBotones(true);
-
-			}
-		});
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-
-		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
-		// Agrega los usuarios en el model
-		for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
-			
-		}
-
-		table.setModel(modelo);
-
-		scrollPane.setViewportView(table);
-
+	
+	private void cargarPanelDeOperaciones() {
 		activarButton = new JButton("Activar");
 		activarButton.addActionListener((ActionEvent e) -> {
 				int reply = JOptionPane.showConfirmDialog(null,
@@ -113,7 +110,7 @@ public class ListadoUsuario extends JFrame {
 		
 		});
 
-		JButton cerrarButton = new JButton("Cerrar");
+		cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
@@ -128,6 +125,61 @@ public class ListadoUsuario extends JFrame {
 
 		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
+	}
+
+	private void visibilizarTabla() {
+		table.setModel(modelo);
+
+		scrollPane.setViewportView(table);
+	}
+
+	private void cargarDatosTabla() {
+		// Obtiene la lista de usuarios a mostrar
+		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
+		// Agrega los usuarios en el model
+		for (UsuarioDTO u : usuarios) {
+			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			
+		}
+
+	}
+
+	
+	private void cargarDatosTabla(String nombreUsuario) throws SintaxisSQLException, NotNullException, DataEmptyException {
+		// Obtiene el usuario para el ciudadano pasado como parametro
+		UsuarioDTO u = api.obtenerUsuario(nombreUsuario);
+		
+		// Agrega el usuario en el model
+		modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+		
+
+	}
+
+	private void cargarEstructuraTabla() {
+		scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+
+		table = new JTable();
+		String[] titulos = { "USUARIO", "NOMBRE", "EMAIL", "ESTADO", "ROL" };
+
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Habilitar botones
+				habilitarBotones(true);
+
+			}
+		});
+		modelo = new DefaultTableModel(new Object[][] {}, titulos);
+	}
+
+	private void inicializarVentana() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 	}
 
 	private void habilitarBotones(boolean b) {
@@ -150,5 +202,4 @@ public class ListadoUsuario extends JFrame {
 		}
 
 	}
-
 }

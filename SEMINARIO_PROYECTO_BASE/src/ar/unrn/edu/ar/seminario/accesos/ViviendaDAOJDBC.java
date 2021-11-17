@@ -335,6 +335,48 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 
+	@Override
+	public Vivienda buscarPorPedido(Integer idPedido) {
+		Vivienda vivienda =null;
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM pedidos p JOIN viviendas v ON (v.id_vivienda=p.id_vivienda)"
+							+ " JOIN ciudadanos c ON (c.id_ciudadano=v.id_ciudadano)"
+							+ "WHERE p.id_pedido=?");
+		
+			statement.setInt(1, idPedido);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
+						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
+				Ciudadano ciudadano = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), null);
+				ciudadano.editarId(rs.getInt("c.id_ciudadano"));
+				vivienda=new Vivienda(ubicacion, ciudadano);
+				vivienda.editarId(rs.getInt("v.id_vivienda"));
+			}
+		
+		  
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viv");
+			// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		
+		return vivienda;
+	}
+
+
 	
 	
 	

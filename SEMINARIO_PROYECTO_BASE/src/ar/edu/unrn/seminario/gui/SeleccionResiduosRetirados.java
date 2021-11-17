@@ -77,6 +77,7 @@ public class SeleccionResiduosRetirados extends JFrame{
 	private JFormattedTextField formatoCantidad ;
 	private boolean cargaPesada;
 	private JPopupMenu popupMenu ;
+	private JCheckBox concretarOrdenCheckBox;
 	
 	public SeleccionResiduosRetirados(IApi api, Integer idOrden) {
 		this.api=api;
@@ -129,11 +130,23 @@ public class SeleccionResiduosRetirados extends JFrame{
 		btnContinuar.addActionListener((ActionEvent arg0) ->{
 			
 			try {
-				api.agregarVisita(idOrden, observacionText.getText(), residuosAgregados);
-				JOptionPane.showMessageDialog(null,"Visita agregada con éxito", "INFORMACIÒN", JOptionPane.INFORMATION_MESSAGE);
-				dispose();
-				ListadoOrdenDeRetiro listadoOrden = new ListadoOrdenDeRetiro(api);
-				listadoOrden.setVisible(true);
+				if(!residuosAgregados.isEmpty()) {
+					api.agregarVisita(idOrden, observacionText.getText(), residuosAgregados);
+					
+					if(concretarOrdenCheckBox.isSelected()) {
+						api.concretarOrden(idOrden);
+						JOptionPane.showMessageDialog(null,"Visita agregada con éxito y la orden concretada", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"Visita agregada con éxito", "INFORMACIÒN", JOptionPane.INFORMATION_MESSAGE);
+					}
+					dispose();
+					ListadoOrdenDeRetiro listadoOrden = new ListadoOrdenDeRetiro(api);
+					listadoOrden.setVisible(true);
+				}
+				else {
+					JOptionPane.showMessageDialog(null,"No se eligió ningun residuo", "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
+				}
 			} catch (NotNullException | CreationValidationException | StateException | SintaxisSQLException | WasteException | CollectorException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			}
@@ -189,15 +202,22 @@ public class SeleccionResiduosRetirados extends JFrame{
 					ResiduoRetiradoDTO residuoRetirado = new ResiduoRetiradoDTO(null, tipoResiduo, peso);
 					
 					if(estaAgregado(residuoRetirado)) {
-
 						JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.WARNING_MESSAGE); 
 					}
 					else {
-						residuosAgregados.add(residuoRetirado);
-						modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
-						jListResAgregados.removeAll();
-						jListResAgregados.setModel(modeloResAgregados);
 						
+						
+						
+						if(api.calcularResiduoRestanteDelResiduo(residuoRetirado, idOrden)==0) {
+							int confirmacion = JOptionPane.showConfirmDialog(null, "Se esta agregando mas "+residuoRetirado.obtenerTipo()+" de lo declarado\n¿Desea continuar?");
+							
+							if(confirmacion==0) {
+								residuosAgregados.add(residuoRetirado);
+								modeloResAgregados.addElement(peso+"KG-"+tipoResiduo);
+								jListResAgregados.removeAll();
+								jListResAgregados.setModel(modeloResAgregados);
+							}
+							}
 					}
 					
 				}
@@ -245,6 +265,10 @@ public class SeleccionResiduosRetirados extends JFrame{
 		jListResAgregados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
 		jListResAgregados.setModel(modeloResAgregados);
 		scrollPaneResiduosAgregados.setViewportView(jListResAgregados);
+		
+		concretarOrdenCheckBox = new JCheckBox("Concretar orden");
+		concretarOrdenCheckBox.setBounds(284, 177, 140, 23);
+		contentPane.add(concretarOrdenCheckBox);
 		
 		popupMenu = new JPopupMenu();
 		JMenuItem menuItemPopupMenu = new JMenuItem("Eliminar");

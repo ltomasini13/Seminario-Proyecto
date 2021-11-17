@@ -4,6 +4,7 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
+import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 
 public interface OrdenDeRetiroDao {
 
@@ -13,6 +14,7 @@ public interface OrdenDeRetiroDao {
 
 	OrdenDeRetiro buscar(Integer id);
 	OrdenDeRetiro buscarPorVisita(Integer idVisita);
+	OrdenDeRetiro buscarOrdenPorPedido(PedidoRetiro pedido);
 	void actualizar(OrdenDeRetiro orden);
 
 	void eliminar(Integer id);

@@ -15,28 +15,24 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
-import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
-import java.awt.event.ActionListener;
+import ar.edu.unrn.seminario.dto.ResiduoRestanteDTO;
 
-public class ListadoResiduosARetirar extends JFrame {
+public class ListadoResiduosRestantes extends JFrame {
 
 	private JPanel contentPane;
+	private IApi api;
 	private JTable table;
 	private DefaultTableModel modelo;
-	private IApi api;
 	private JButton btnCerrar;
-
 
 	/**
 	 * Create the frame.
 	 */
-	public ListadoResiduosARetirar(IApi api, Integer idPedido) {
+	public ListadoResiduosRestantes(IApi api, Integer idPedido) {
 		this.api=api;
-
-		setTitle("LISTADO DE RESIDUOS A RETIRAR");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -51,9 +47,9 @@ public class ListadoResiduosARetirar extends JFrame {
 		String[] titulos = {"ID", "TIPO DE RESIDUO", "CANTIDAD A RETIRAR"};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-		List<ResiduoARetirarDTO> residuosRetirarDTO= api.obtenerResiduosARetirar(idPedido);
-		for (ResiduoARetirarDTO r : residuosRetirarDTO) {
-			modelo.addRow(new Object[] { r.obetenerId(), r.obetenerTipoResiduo(), r.obetenerCantidad()});
+		List<ResiduoRestanteDTO> residuosRestantesDTO= api.obtenerResiduosRestantes(idPedido);
+		for (ResiduoRestanteDTO r : residuosRestantesDTO) {
+			modelo.addRow(new Object[] { r.obtenerId(), r.obtenerTipo(), r.obtenerCantidadKg()});
 		}
 		
 		table.setModel(modelo);

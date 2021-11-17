@@ -7,17 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
+
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
-=======
+
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
+import ar.edu.unrn.seminario.dto.ResiduoRestanteDTO;
 import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
@@ -34,12 +34,11 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
-<<<<<<< HEAD
+
 import ar.edu.unrn.seminario.exception.WasteException;
-=======
-import ar.edu.unrn.seminario.exception.UnfinishedException;
+import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
+
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -90,12 +89,10 @@ public class PersistenceApi implements IApi {
 	private ResiduoDao residuoDao; //hay que cambiarla por TipoDao
 	private PedidoRetiroDao pedidoDao;
 	private RecolectorDao recolectorDao;
-<<<<<<< HEAD
 	private ResiduosDao residuosDao;   //dao para trabajar con los residuos a retirar y residuos retirados
-=======
 	private BeneficioDao beneficioDao;
 	private CampañaDao campañaDao;
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
+
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -106,13 +103,11 @@ public class PersistenceApi implements IApi {
 		pedidoDao= new PedidoRetiroDAOJDBC();
 		recolectorDao= new RecolectorDAOJDBC();
 		ordenDao = new OrdenDeRetiroDAOJDBC();
-<<<<<<< HEAD
 		visitaDao = new VisitaDAOJDBC();
 		residuosDao= new ResiduosDAOJDBC();//dao para trabajar con los residuos a retirar y residuos retirados
-=======
 		beneficioDao = new BeneficioDAOJDBC();
 		campañaDao = new CampañaDAOJDBC();
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
+
 	}
 
 
@@ -241,7 +236,7 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-
+	
 	@Override
 	public void eliminarUsuario(String username) {
 		// TODO Auto-generated method stub
@@ -375,6 +370,17 @@ public class PersistenceApi implements IApi {
 				viv.obtenerUbicacionLatitud(), viv.obtenerUbicacionLongitud(), viv.obtenerNombreCiudadano()+" "+viv.obtenerApellidoCiudadano()));
 	}
 	
+	
+	@Override
+	public ViviendaDTO obtenerViviendaDelPedido(Integer idPedido) {
+		Vivienda vivienda = this.viviendaDao.buscarPorPedido(idPedido);
+		ViviendaDTO viviendaDTO = new ViviendaDTO(vivienda.obtenerId(), vivienda.obtenerUbicacionCalle(), vivienda.obtenerUbicacionNro(), 
+				vivienda.obtenerUbicacionBarrio(), vivienda.obtenerUbicacionLatitud(), vivienda.obtenerUbicacionLongitud(), 
+				vivienda.obtenerNombreCiudadano()+" "+vivienda.obtenerApellidoCiudadano());
+		
+		return viviendaDTO;
+	}
+	
 	@Override
 	public void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
 		if(username==null || contrasena==null) {
@@ -388,11 +394,11 @@ public class PersistenceApi implements IApi {
 		Usuario usuario = this.usuarioDao.buscar(username);
 		
 		if(usuario==null) {
-			throw new AuthenticationException("Usuario y/o contraseña");
+			throw new AuthenticationException("Usuario y/o contraseña incorrecto");
 		}
 		else {
 			if(!contrasena.equals(usuario.obtenerContrasena())) {
-				throw new AuthenticationException("Usuario y/o contraseña");
+				throw new AuthenticationException("Usuario y/o contraseña incorrecto");
 			}
 		}
 		
@@ -482,6 +488,20 @@ public class PersistenceApi implements IApi {
 	}
 
 
+	@Override
+	public PedidoRetiroDTO obtenerPedidoDeLaOrden(Integer idOrden) {
+		PedidoRetiro pedido = this.pedidoDao.buscarPorOrden(idOrden);
+		PedidoRetiroDTO pedidoDTO=null;
+		
+		try {
+			 pedidoDTO = new PedidoRetiroDTO(pedido.obtenerId(), pedido.obtenerFechaEmision(), pedido.obtenerFechaCumplimiento(), pedido.isCargaPesada(), pedido.obtenerObservacion(), pedido.obtenerVivienda().obtenerUbicacionCalle(), pedido.obtenerVivienda().obtenerUbicacionNro(),pedido.obtenerVivienda().obtenerUbicacionBarrio(),
+					pedido.obtenerVivienda().obtenerUbicacionLatitud(), pedido.obtenerVivienda().obtenerUbicacionLongitud(), pedido.obtenerNombreCiudadanoVivienda(),pedido.obtenerApellidoCiudadanoVivienda());
+		} catch (NotNullException e) {
+			//ver
+		}
+		
+		return pedidoDTO;
+	}
 
 	@Override
 	public List<ResiduoDTO> obtenerResiduos()  {
@@ -515,7 +535,15 @@ public class PersistenceApi implements IApi {
 		
 	}
 	
-	
+	@Override
+	public List<ResiduoRetiradoDTO> obtenerResiduosRetirados(Integer idVisita){
+		List<ResiduoRetiradoDTO> residuosRetiradosDTO = new ArrayList<ResiduoRetiradoDTO>();
+		
+		for(ResiduoRetirado res : this.residuosDao.buscarResiduosRetirados(idVisita)) {
+			residuosRetiradosDTO.add(new ResiduoRetiradoDTO(res.obtenerId(), res.obtenerTipoResiduo(), res.obtenerCantkg()));
+		}
+		return residuosRetiradosDTO;
+	}
 
 	@Override
 	public void cerrarSesion() {
@@ -525,7 +553,8 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion,
-			List<ResiduoARetirarDTO> residuosARetirarDTO) throws NotNullException {
+			List<ResiduoARetirarDTO> residuosARetirarDTO) throws NotNullException, ZeroNegativeNumberException, EmptyListException {
+		
 		
 		List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
 		Vivienda vivienda = viviendaDao.buscar(id_vivienda);
@@ -593,12 +622,7 @@ public class PersistenceApi implements IApi {
 		
 	}
 	
-	@Override
-	public void ejecutarOrden(Integer idOrden) throws StateException {
-		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
-		orden.ejecutarOrden();
-		this.ordenDao.actualizar(orden);
-	}
+	
 	
 	@Override
 	public void cancelarOrden(Integer idOrden) throws StateException {
@@ -610,7 +634,7 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void finalizarOrden(Integer idOrden) throws StateException {
+	public void concretarOrden(Integer idOrden) throws StateException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		orden.finalizarOrden();
 		this.ordenDao.actualizar(orden);
@@ -648,7 +672,6 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-<<<<<<< HEAD
 	public void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException {
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
 		Vivienda vivienda = this.viviendaDao.buscar(idVivienda);
@@ -679,11 +702,22 @@ public class PersistenceApi implements IApi {
 		return ciudadanosDTO;
 	}
 
+	
+	@Override
+	public CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda) {
+		Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(idVivienda);
+		CiudadanoDTO ciudadanoDTO= new CiudadanoDTO(ciudadano.obtenerId(), ciudadano.obtenerNombre(), ciudadano.obtenerApellido(),ciudadano.obtenerDni());
+		if(ciudadano.obtenerUsuario()!=null) {
+			ciudadanoDTO.editarNombreDeUsuario(ciudadano.obtenerNombreDeUsuario());
+		}
+		return ciudadanoDTO;
+	}
+
 
 	@Override
-	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, StateException, WasteException, CollectorException {
+	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, StateException, WasteException, CollectorException, SintaxisSQLException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
-		
+		System.out.println();
 		if(!orden.tieneRecolector()) {    //Valida que la orden tenga un recolector asignado
 			throw new CollectorException("La orden no tiene ningún recolector asignado");
 		}
@@ -711,18 +745,40 @@ public class PersistenceApi implements IApi {
 	
 		List<ResiduoRestante> nuevosResiduosRestantes = this.calcularResiduosNuevosRestantes(residuosRetirados, residuosRestantes); //Dispara una excepcion WasteExcepcion si las cantidades declaradas en el pedido
 																																	//no coinciden con las cantidades que se quiere ingresar
-		if(!quedanResiduosRestantes(nuevosResiduosRestantes)) {    //si no quedan residuos restantes para poder completar el pedido
-																   //la orden se cambia de estado
-			orden.finalizarOrden();
-		}
+		
 		
 		Visita visita = new Visita(LocalDateTime.now().toString(), observacion, orden);
 		visita.editarResiduosRetirados(residuosRetirados);
+		
+		
 		visitaDao.crear(visita);
+		if(!quedanResiduosRestantes(nuevosResiduosRestantes)) {    //si no quedan residuos restantes para poder completar el pedido
+			   //la orden se cambia de estado
+				orden.finalizarOrden();	
+				Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(orden.obtenerViviendaDelPedido().obtenerId());
+				ciudadano.sumarPuntos(calcularPuntaje(orden));
+				ciudadanoDao.actualizar(ciudadano);
+				
+				PedidoRetiro pedido = this.pedidoDao.buscarPedido(orden.obtenerPedido().obtenerId());
+				pedido.editarFechaCumplimiento(LocalDateTime.now());
+				pedidoDao.actualizar(pedido);
+		}
+	
 	}
 
 
 	
+	private double calcularPuntaje(OrdenDeRetiro orden) {
+		double puntaje=0;
+		List<ResiduoRetirado>  residuosRetiradosEnTotal = this.residuosDao.buscarResiduosRetiradosEnTotal(orden.obtenerId());
+		
+		for(ResiduoRetirado res : residuosRetiradosEnTotal) {
+			puntaje =puntaje+(res.obtenerCantkg()*res.obtenerPuntosTipoResiduo());
+		}
+		return puntaje;
+	}
+
+
 	private boolean quedanResiduosRestantes(List<ResiduoRestante> residuosRestantes) {
 		for(ResiduoRestante resRestante : residuosRestantes) {
 			if(resRestante.obtenerCantkg()>0) {
@@ -747,20 +803,35 @@ public class PersistenceApi implements IApi {
 
 	private List<ResiduoRestante> calcularResiduosNuevosRestantes(List<ResiduoRetirado> residuosRetirados, List<ResiduoRestante> residuosRestantes) throws WasteException {
 		List<ResiduoRestante> nuevosResiduosRestantes = new ArrayList<>();
-		
-		for(ResiduoRetirado  resRetirado: residuosRetirados) {
-			for (ResiduoRestante resRestante : residuosRestantes) {
-				if(resRetirado.obtenerTipoResiduo().equals(resRestante.obtenerTipoResiduo())) {
-					if(resRestante.obtenerCantkg()-resRetirado.obtenerCantkg()<0) {
-						throw new WasteException("Las cantidades no coinciden con lo declarado en el pedido");
-					}
-					try {
-						nuevosResiduosRestantes.add(new ResiduoRestante(resRetirado.obtenerTipo(), resRestante.obtenerCantkg()-resRetirado.obtenerCantkg()));
-					} catch (NotNullException e) {
-						//TRATAR
+		for (ResiduoRestante resRestante : residuosRestantes) {
+				if(residuosRetirados.contains(resRestante)) {
+					for(ResiduoRetirado  resRetirado: residuosRetirados) {
+						if(resRetirado.obtenerTipoResiduo().equals(resRestante.obtenerTipoResiduo())) {
+							if(resRestante.obtenerCantkg()-resRetirado.obtenerCantkg()<0) {
+								try {
+									nuevosResiduosRestantes.add(new ResiduoRestante(resRetirado.obtenerTipo(),0));
+								} catch (NotNullException e) {
+									//TRATAR
+								}
+							}
+							else {
+								try {
+									nuevosResiduosRestantes.add(new ResiduoRestante(resRetirado.obtenerTipo(), resRestante.obtenerCantkg()-resRetirado.obtenerCantkg()));
+								} catch (NotNullException e) {
+									//TRATAR
+								}
+							}
+							
+						}
 					}
 				}
-			}
+				else {
+					try {
+						nuevosResiduosRestantes.add(new ResiduoRestante(resRestante.obtenerResiduo(),resRestante.obtenerCantkg()));
+					} catch (NotNullException e) {
+						
+					}
+				}
 		}
 		
 		return nuevosResiduosRestantes;
@@ -770,27 +841,46 @@ public class PersistenceApi implements IApi {
 	
 	
 	private List<ResiduoRestante> calcularResiduosRestantes(OrdenDeRetiro orden){ 	//devuelve los residuos restantes de cada tipo
+		System.out.println();
 		List<ResiduoRetirado>  residuosRetiradosEnTotal = this.residuosDao.buscarResiduosRetiradosEnTotal(orden.obtenerId());
 		List<ResiduoARetirar>residuosARetirar=this.residuosDao.buscarResiduosARetirar(orden.obtenerPedido().obtenerId());
-		
 		List<ResiduoRestante> residuosRestantes=new ArrayList<ResiduoRestante>();
+		if(!residuosRetiradosEnTotal.isEmpty()) {
 		
-		for(ResiduoARetirar resRetirar : residuosARetirar) {
-			for(ResiduoRetirado resRetirado : residuosRetiradosEnTotal) {
-				if(resRetirar.obtenerTipoResiduo().equals(resRetirado.obtenerTipoResiduo())) {
-					try {
-						TipoResiduo tipoRes=new TipoResiduo(resRetirar.obtenerTipoResiduo(), resRetirar.obtenerPuntosTipoResiduo());
-						residuosRestantes.add(new ResiduoRestante(tipoRes, resRetirar.obtenerCantkg()-resRetirado.obtenerCantkg()));
-					} catch (NotNullException | DataEmptyException | NumbersException e) {
-						//que hago aca?
+			for(ResiduoARetirar resRetirar : residuosARetirar) {
+				for(ResiduoRetirado resRetirado : residuosRetiradosEnTotal) {
+					if(resRetirar.obtenerTipoResiduo().equals(resRetirado.obtenerTipoResiduo())) {
+						try {
+							TipoResiduo tipoRes=new TipoResiduo(resRetirar.obtenerTipoResiduo(), resRetirar.obtenerPuntosTipoResiduo());
+							if( resRetirar.obtenerCantkg()-resRetirado.obtenerCantkg()<0) 
+								residuosRestantes.add(new ResiduoRestante(tipoRes, 0));
+							else
+								residuosRestantes.add(new ResiduoRestante(tipoRes, resRetirar.obtenerCantkg()-resRetirado.obtenerCantkg()));
+						} catch (NotNullException | DataEmptyException | NumbersException e) {
+							//
+						}
+						break;
 					}
-					break;
 				}
+				
 			}
-			
+		}
+		else {
+			for(ResiduoARetirar resRetirar : residuosARetirar) {
+				TipoResiduo tipoRes;
+				try {
+					tipoRes = new TipoResiduo(resRetirar.obtenerTipoResiduo(), resRetirar.obtenerPuntosTipoResiduo());
+					residuosRestantes.add(new ResiduoRestante(tipoRes, resRetirar.obtenerCantkg()));
+				} catch (NotNullException | DataEmptyException | NumbersException e) {
+					//VEEER
+				}
+				
+			}
 		}
 		return residuosRestantes;
-=======
+	}
+	
+	
 	public void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException {
 		
 		if(!puntos.matches("[0-9]+")) {
@@ -813,12 +903,10 @@ public class PersistenceApi implements IApi {
 		}
 		
 		return beneficiosDTO;
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
 	}
 
 
 	@Override
-<<<<<<< HEAD
 	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
 		List<Visita> visitas = this.visitaDao.listarTodas();
 		List<VisitaDTO> visitasDTO = new ArrayList<>();
@@ -832,17 +920,36 @@ public class PersistenceApi implements IApi {
 		}
 		
 		return visitasDTO;
-=======
+
+	}
+	
+	
+	@Override
+	public List<VisitaDTO> obtenerVisitasDeLaOrden(Integer idOrden) throws EmptyListException{
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		List<Visita> visitas = this.visitaDao.listarTodas(orden);
+		List<VisitaDTO> visitasDTO = new ArrayList<>();
+
+		if(visitas.isEmpty()) {
+			throw new EmptyListException("Aun no hay ninguna visita para la orden");
+		}
+		
+		for (Visita visita : visitas) {
+			visitasDTO.add(new VisitaDTO(visita.obtenerId(), visita.obtenerFecha(), visita.obtenerObservacion(), visita.obtenerOrden().obtenerFecha()));
+		}
+		
+		return visitasDTO;
+		
+	}
 	public void registrarCampaña(String nombre, String puntos)
 			throws DataEmptyException, NotNullException, AppException {
 		// TODO Auto-generated method stub
 		
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
+
 	}
 
 
 	@Override
-<<<<<<< HEAD
 	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
 		OrdenDeRetiro orden = this.ordenDao.buscarPorVisita(idVisita);
 		OrdenDeRetiroDTO ordenDTO = new OrdenDeRetiroDTO(orden.obtenerId(), orden.obtenerFecha().toString(), orden.obtenerEstado(), orden.obtenerPedido().obtenerFechaEmision().toString(),
@@ -851,12 +958,64 @@ public class PersistenceApi implements IApi {
 	}
 
 	
-=======
+
 	public List<CampañaDTO> obtenerCampañas() throws AppException, DataEmptyException, NotNullException {
 		// TODO Auto-generated method stub
 		return null;
 	}
->>>>>>> faa774a12db86042a74432ed9e2562339e70ac1c
+
+
+	@Override
+	public List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) {
+		List<ResiduoRestanteDTO> residuosRestantesDTO=new ArrayList<ResiduoRestanteDTO>();
+		PedidoRetiro pedido = this.pedidoDao.buscarPedido(idPedido);
+		OrdenDeRetiro orden = this.ordenDao.buscarOrdenPorPedido(pedido);
+		for(ResiduoRestante res : this.calcularResiduosRestantes(orden)) {
+			residuosRestantesDTO.add(new ResiduoRestanteDTO(res.obtenerId(), res.obtenerTipoResiduo(), res.obtenerCantkg()));
+		}
+		return residuosRestantesDTO;
+	}
+
+
+	@Override
+	public double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden) {
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		List<ResiduoRestante> residuosRestantes = calcularResiduosRestantes(orden);
+		TipoResiduo tipo = this.residuoDao.buscar(residuoRetiradoDTO.obtenerTipo());
+		ResiduoRetirado residuoRetirado=null;
+		
+		try {
+			residuoRetirado = new ResiduoRetirado(tipo, residuoRetiradoDTO.obtenerCantidadKg());
+		} catch (NotNullException e) {
+			//VERR
+		}
+		
+		
+		for(ResiduoRestante res : residuosRestantes) {
+			if(residuoRetirado.obtenerTipoResiduo().equals(res.obtenerTipoResiduo())) {
+				if(res.obtenerCantkg()-residuoRetirado.obtenerCantkg()>0) {
+					return res.obtenerCantkg()-residuoRetirado.obtenerCantkg();		
+				}
+						
+			}
+		}
+			
+		
+		return 0;
+	
+		
+
+
+		
+	}
+
+
+	
+
+
+
+
+
 	
 	
 }

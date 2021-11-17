@@ -104,7 +104,9 @@ public class VisitaDAOJDBC implements VisitaDao{
 			ResultSet rs = statementSelectVisitas.executeQuery();
 			
 			while(rs.next()) {
-				visitas.add(new Visita(rs.getTimestamp("v.fecha_visita").toLocalDateTime().toString(), rs.getString("v.observacion"), orden));
+				Visita visita = new Visita(rs.getTimestamp("v.fecha_visita").toLocalDateTime().toString(), rs.getString("v.observacion"), orden);
+				visita.editarId(rs.getInt("v.id_visita"));
+				visitas.add(visita);
 			}
 		} catch (SQLException e) {
 			System.out.println("Error al procesar la consulta");

@@ -14,9 +14,6 @@ public class Residuo {
 		if(residuo == null) {
 			throw new NotNullException("El tipo de residuo no puede ser nulo.");
 		}
-		if(cantKg <0) {
-			throw new NumberFormatException("El valor que se ingreso para la cantidad de kg debe ser > 0");
-		}
 	}
 	
 	

@@ -10,6 +10,7 @@ public class Ciudadano {
 	private String apellido;
 	private String dni;
 	private Usuario usuario;
+	private double puntaje;
 	
 	public Ciudadano (String nombre, String apellido, String dni, Usuario usuario) throws NotNullException, DataEmptyException, NumbersException {
 		
@@ -27,6 +28,7 @@ public class Ciudadano {
 		this.apellido = apellido;
 		this.dni = dni;
 		this.usuario=usuario;
+		this.puntaje=0;
 	} 	
  
 	public Ciudadano() {
@@ -75,6 +77,8 @@ public class Ciudadano {
 	public void editarId(Integer id) {
 		this.id = id;
 	}
+	
+	
 
 	@Override
 	public int hashCode() {
@@ -84,6 +88,22 @@ public class Ciudadano {
 		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		return result;
+	}
+	
+	public double obtenerPuntaje() {
+		return puntaje;
+	}
+
+	public void editarPuntaje(double puntaje) {
+		this.puntaje = puntaje;
+	}
+	
+	public void sumarPuntos(double puntaje) {
+		this.puntaje= this.puntaje+puntaje;
+	}
+	
+	public void restarPuntos(double puntaje) {
+		this.puntaje= this.puntaje-puntaje;
 	}
 
 	@Override
@@ -112,4 +132,8 @@ public class Ciudadano {
 			return false;
 		return true;
 	}
+
+	
+
+	
 }

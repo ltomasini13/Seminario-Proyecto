@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +126,55 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 	}
 
 	@Override
+	public Ciudadano buscarPorVivienda(Integer idVivienda) {
+		Ciudadano ciu=null;
+		Connection conn = ConnectionManager.getConnection();
+		
+		try {
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM viviendas v JOIN ciudadanos c "
+							+ "ON (c.id_ciudadano=v.id_ciudadano) "
+							+ "LEFT JOIN usuarios u on(u.id_usuario=c.id_usuario) "
+							+ "LEFT JOIN roles r on(r.id_rol=u.id_rol)"
+							+ "WHERE v.id_vivienda=?");
+			
+			statement.setInt(1, idVivienda);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				Usuario usu =null;
+				if(rs.getString("u.id_usuario")!=null) {
+					
+					Rol rol= new Rol(rs.getInt("r.id_rol"),rs.getString("r.nombre"));
+					 if(rs.getString("r.estado").equals("ACTIVO")) {
+							rol.activar();
+					 }
+					 else {
+							rol.desactivar();
+					 }
+					 usu = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), rol);
+					 usu.editarId(rs.getInt("u.id_usuario"));
+				}
+				ciu=new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), usu);
+				ciu.editarId(rs.getInt("c.id_ciudadano"));
+			}
+		
+		}
+		catch (SQLException sq){
+			System.out.println("Error al procesar consulta");			
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+		}
+		finally {
+			ConnectionManager.disconnect();
+		}
+		
+		return ciu;
+	}
+	
+	
+	@Override
 	public List<Vivienda> listarMisViviendas(Ciudadano ciudadano) {
 		List<Vivienda> viviendas = new ArrayList<Vivienda>();
 		try {
@@ -227,6 +277,40 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 		}
 		
 		return ciudadanos;
+	}
+
+	@Override
+	public void actualizar(Ciudadano ciudadano) throws SintaxisSQLException {
+	
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+				.prepareStatement("UPDATE ciudadanos SET nombre=?, apellido=?, dni=?, id_usuario=?, puntaje=?"
+						+ "WHERE id_ciudadano=?");
+			statement.setString(1, ciudadano.obtenerNombre());
+			statement.setString(2, ciudadano.obtenerApellido());
+			statement.setString(3, ciudadano.obtenerDni());
+			if(ciudadano.obtenerUsuario()!=null) {
+				statement.setString(4, ciudadano.obtenerNombreDeUsuario());
+			}
+			else {
+				statement.setNull(4, Types.NULL);
+			}
+			statement.setDouble(5, ciudadano.obtenerPuntaje());
+			statement.setInt(6, ciudadano.obtenerId());
+	
+	
+			int cantidad = statement.executeUpdate();
+			if (cantidad==1) {
+					System.out.println("El ciudadano se modificó correctamente.");
+			}
+	
+		}
+		catch (SQLException sq){
+			throw new SintaxisSQLException("Hubo un error con la base de datos");
+			
+		}
 	}
 
 	

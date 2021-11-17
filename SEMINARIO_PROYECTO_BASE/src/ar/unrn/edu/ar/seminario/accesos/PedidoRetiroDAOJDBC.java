@@ -179,7 +179,7 @@ public class PedidoRetiroDAOJDBC implements PedidoRetiroDao{
 
 	@Override
 	public List<PedidoRetiro> buscarPorUsuario(Integer idUsuario) {
-List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
+		List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 		
 		try {
 
@@ -281,7 +281,9 @@ List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
 						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
 				Ciudadano ciudadano = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), null);
+				ciudadano.editarId(rs.getInt("c.id_ciudadano"));
 				Vivienda vivienda=new Vivienda(ubicacion, ciudadano);
+				vivienda.editarId(rs.getInt("v.id_vivienda"));
 				pedido=  new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(), cargaPesada, rs.getString("p.observacion"), vivienda);
 				pedido.editarFechaCumplimiento(rs.getTimestamp("p.fecha_cumplimiento"));
 				pedido.editarId(idPedido);
@@ -297,6 +299,94 @@ List<PedidoRetiro> pedidos=new ArrayList<PedidoRetiro>();
 			ConnectionManager.disconnect();
 		}
 		return pedido;
+	}
+
+	@Override
+	public PedidoRetiro buscarPorOrden(Integer idOrden) {
+		PedidoRetiro pedido =null;
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM ordenes o join pedidos p on(p.id_pedido=o.id_pedido)"
+							+ " join viviendas v ON (v.id_vivienda=p.id_vivienda)"
+							+ "join ciudadanos c on (c.id_ciudadano=v.id_ciudadano) WHERE o.id_orden=?");
+		
+			statement.setInt(1, idOrden);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				
+				boolean cargaPesada=true;
+				if(rs.getString("p.carga_pesada").equals("NO")) {
+					cargaPesada=false;
+				}
+				
+				Ubicacion ubicacion = new Ubicacion(rs.getString("v.calle"), rs.getInt("v.numero"), rs.getString("v.barrio"),
+						rs.getDouble("v.latitud"), rs.getDouble("v.longitud"));
+				Ciudadano ciudadano = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), null);
+				ciudadano.editarId(rs.getInt("c.id_ciudadano"));
+				Vivienda vivienda=new Vivienda(ubicacion, ciudadano);
+				vivienda.editarId(rs.getInt("v.id_vivienda"));
+				pedido=  new PedidoRetiro(rs.getTimestamp("p.fecha_pedido").toLocalDateTime().toString(), cargaPesada, rs.getString("p.observacion"), vivienda);
+				pedido.editarFechaCumplimiento(rs.getTimestamp("p.fecha_cumplimiento"));
+				pedido.editarId(rs.getInt("p.id_pedido"));
+			}
+		}
+		catch (SQLException e) {
+			System.out.println("Error al procesar consulta");
+		// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al listar viviendas");
+		// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+		}
+		return pedido;
+	}
+
+	@Override
+	public void actualizar(PedidoRetiro pedido) {
+		try {
+
+			
+			Connection conn = ConnectionManager.getConnection();
+			
+			PreparedStatement statement = conn
+					.prepareStatement("UPDATE pedidos SET fecha_pedido=?, fecha_cumplimiento=?, carga_pesada=?, observacion=?, id_vivienda=?"
+							+ " WHERE id_pedido=?");
+			
+			String cargaPesada=null;
+			if(pedido.isCargaPesada()) {
+				cargaPesada="SI";
+			}
+			else {
+				cargaPesada="NO";
+			}
+			
+			statement.setTimestamp(1, Timestamp.valueOf(pedido.obtenerFechaEmision()));
+			statement.setTimestamp(2, Timestamp.valueOf(pedido.obtenerFechaCumplimiento()));
+			statement.setString(3, cargaPesada);
+			statement.setString(4, pedido.obtenerObservacion());
+			statement.setInt(5, pedido.obtenerVivienda().obtenerId());
+			statement.setInt(6, pedido.obtenerId());
+			
+			
+			
+			int cantidad = statement.executeUpdate();
+				if (cantidad==1) 
+					System.out.println("El pedido se modificó correctamente");
+			
+		}  catch (SQLException e) {
+			
+			System.out.println("Error al procesar la consulta");
+			
+		} catch (Exception e) {
+			System.out.println("Error en la base de datos");
+		} finally {
+			ConnectionManager.disconnect();
+		}
 	}
 }
 		

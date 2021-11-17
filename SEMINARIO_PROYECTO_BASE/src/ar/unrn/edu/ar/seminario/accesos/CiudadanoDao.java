@@ -12,10 +12,11 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public interface CiudadanoDao {
 	void crear(Ciudadano ciudadano) throws SintaxisSQLException;
-	
+	void actualizar(Ciudadano ciudadano) throws SintaxisSQLException;
 	Ciudadano buscar(String dni);
-	
+	Ciudadano buscarPorVivienda(Integer idVivienda);
 	Ciudadano buscar(Usuario usuario);
+	
 	List<Vivienda> listarMisViviendas(Ciudadano ciudadano);
 	List<Ciudadano> listarTodos();
 

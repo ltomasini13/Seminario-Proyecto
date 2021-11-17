@@ -160,4 +160,8 @@ public class OrdenDeRetiro {
 		else 
 			return false;
 	}
+	
+	public Vivienda obtenerViviendaDelPedido() {
+		return this.pedido.obtenerVivienda();
+	}
 }

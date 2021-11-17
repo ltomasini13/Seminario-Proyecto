@@ -6,11 +6,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager {
+//	private static String DRIVER = "com.mysql.jdbc.Driver";
+//	private static String URL_DB = "jdbc:mysql://blgsoft.com.ar:3306/";
+//	protected static String DB = "blgsoftc_seminario_proyecto";
+//	protected static String user = "blgsoftc_Katy";
+//	protected static String pass = "Katy2021";
+//	protected static Connection conn = null;
+	
 	private static String DRIVER = "com.mysql.jdbc.Driver";
-	private static String URL_DB = "jdbc:mysql://blgsoft.com.ar:3306/";
-	protected static String DB = "blgsoftc_seminario_proyecto";
-	protected static String user = "blgsoftc_Katy";
-	protected static String pass = "Katy2021";
+	private static String URL_DB = "jdbc:mysql://localhost:3306/";
+	protected static String DB = "seminario_proyecto";
+	protected static String user = "root";
+	protected static String pass = "";
 	protected static Connection conn = null;
 
 	public static void connect() {

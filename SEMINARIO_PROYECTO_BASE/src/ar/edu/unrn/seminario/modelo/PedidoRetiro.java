@@ -10,6 +10,7 @@ import javax.print.attribute.standard.DateTimeAtCompleted;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class PedidoRetiro {
@@ -22,9 +23,14 @@ public class PedidoRetiro {
 	private Vivienda vivienda;
 	private List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
 	
-	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda, List<ResiduoARetirar> residuosARetirar) throws NotNullException {
+	public PedidoRetiro(String fechaEmision, boolean cargaPesada, String observacion, Vivienda vivienda, List<ResiduoARetirar> residuosARetirar) throws NotNullException, EmptyListException {
 		if(fechaEmision == null || vivienda == null) {
 			throw new NotNullException("Alguno de los datos son nulos");
+		}
+		
+		
+		if(residuosARetirar.isEmpty()) {
+			throw new EmptyListException("Se debe agregar al menos un residuo para retirar");
 		}
 		
 		this.fechaEmision = LocalDateTime.parse(fechaEmision);

@@ -17,6 +17,7 @@ import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 
 import javax.swing.JLabel;
@@ -153,10 +154,15 @@ public class SeleccionResiduos extends JFrame{
 		btnContinuar.addActionListener((ActionEvent arg0) ->{
 			
 			try {
-				api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
-				JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
-				dispose();
-			} catch (NotNullException e) {
+				if(!residuosAgregados.isEmpty()) {
+					api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
+					JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
+					dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null,"No se eligió ningun residuo", "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
+				}
+			} catch (NotNullException | ZeroNegativeNumberException | EmptyListException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			};
 		
@@ -203,9 +209,14 @@ public class SeleccionResiduos extends JFrame{
 		
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener((ActionEvent arg0) ->{
-			Double peso=0.0;
+			
 			try {
-				peso=Double.parseDouble(formatoCantidad.getText());
+				
+				Double peso=Double.parseDouble(formatoCantidad.getText());
+				if(peso<=0) {
+					throw new ZeroNegativeNumberException("Ingrese un peso mayor a cero");
+				}
+				
 				if(!jListResiduos.isSelectionEmpty()) {
 					String tipoResiduo = (String)modelo.getElementAt(jListResiduos.getSelectedIndex());
 					ResiduoARetirarDTO residuoARetirarDTO = new ResiduoARetirarDTO(null, tipoResiduo, peso);
@@ -229,6 +240,8 @@ public class SeleccionResiduos extends JFrame{
 			}
 			catch(NumberFormatException e) {
 				JOptionPane.showMessageDialog(null, "Ingrese un peso correcto", "Error", JOptionPane.ERROR_MESSAGE); 
+			} catch (ZeroNegativeNumberException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			}
 			
 			

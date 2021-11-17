@@ -9,8 +9,10 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
@@ -21,6 +23,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
+import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 
@@ -33,6 +36,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	private IApi api;
 	private JButton botonCancelarOrden;
 	private JScrollPane scrollPane;
+	private JPopupMenu popupMenu;
 	
 	
 	public ListadoOrdenDeRetiro(IApi api) throws SintaxisSQLException {
@@ -57,6 +61,8 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		
 		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
+		
+		cargarMenuPopup();
 	}
 
 	
@@ -85,6 +91,8 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		
 		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
+		
+		cargarMenuPopup();
 	}	
 	
 	
@@ -118,7 +126,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 			
 		});
 
-		JButton botonCerrarButton = new JButton("Cerrar");
+		JButton botonCerrarButton = new JButton("CERRAR");
 		botonCerrarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
@@ -183,8 +191,74 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
 		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(arg0.getButton()==1) {
+					popupMenu.setVisible(false);
+				}
+				
+				if(table.getSelectedRow()!=-1) {
+						
+						if (arg0.getButton()==3) {
+							if(!popupMenu.isVisible()) {
+								popupMenu.setLocation(arg0.getLocationOnScreen());
+								popupMenu.setVisible(true);
+							}
+							
+							
+							
+						}
+				}
+			}
+		});
 		scrollPane.setViewportView(table);
 	}
+	
+	private void cargarMenuPopup() {
+		popupMenu= new JPopupMenu();
+		JMenuItem menuItemResiduosARetirar = new JMenuItem("Más info. del pedido");
+		menuItemResiduosARetirar.addActionListener((ActionEvent arg0) ->{
+			
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				popupMenu.setVisible(false);
+				Integer idOrden=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+				try {
+					ListadoPedidoRetiro listadoPedidoRetiro = new ListadoPedidoRetiro(api, idOrden);
+					listadoPedidoRetiro.setVisible(true);
+				} catch (EmptyListException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		popupMenu.add(menuItemResiduosARetirar);
+		
+		
+		JMenuItem menuItemVisitas = new JMenuItem("Ver las visitas");
+		menuItemVisitas.addActionListener((ActionEvent arg0) ->{
+			
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				popupMenu.setVisible(false);
+				Integer idOrden=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+				try {
+					ListadoVisitas listadoVisitas = new ListadoVisitas(api, idOrden);
+					listadoVisitas.setVisible(true);
+				} catch (EmptyListException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		popupMenu.add(menuItemVisitas);
+		
+	
+	}
+	
 	
 	private void cargarTabla() throws SintaxisSQLException {
 		

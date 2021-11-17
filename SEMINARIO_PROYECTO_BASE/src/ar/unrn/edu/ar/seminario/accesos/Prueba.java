@@ -89,10 +89,7 @@ public class Prueba {
 		
 		
 		List<ResiduoARetirar> listResARetirar = new ArrayList<>();
-		listResARetirar.add(new ResiduoARetirar(new TipoResiduo("PLASTICO", 150), 6));
-		listResARetirar.add(new ResiduoARetirar(new TipoResiduo("CARTON", 100), 7));
-		listResARetirar.add(new ResiduoARetirar(new TipoResiduo("METAL", 200), 6));
-		
+
 
 		for(ResiduoRetirado resRetirado : listResRetirados) {
 			if(!listResARetirar.contains(resRetirado)) {

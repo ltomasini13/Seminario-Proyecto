@@ -15,28 +15,22 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
-import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
-import java.awt.event.ActionListener;
+import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 
-public class ListadoResiduosARetirar extends JFrame {
+public class ListadoResiduosRetirados extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
-	private IApi api;
 	private JButton btnCerrar;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public ListadoResiduosARetirar(IApi api, Integer idPedido) {
-		this.api=api;
-
-		setTitle("LISTADO DE RESIDUOS A RETIRAR");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	public ListadoResiduosRetirados(IApi api, Integer idVisita) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -48,12 +42,12 @@ public class ListadoResiduosARetirar extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
-		String[] titulos = {"ID", "TIPO DE RESIDUO", "CANTIDAD A RETIRAR"};
+		String[] titulos = {"ID", "TIPO DE RESIDUO", "CANTIDAD RETIRADA"};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-		List<ResiduoARetirarDTO> residuosRetirarDTO= api.obtenerResiduosARetirar(idPedido);
-		for (ResiduoARetirarDTO r : residuosRetirarDTO) {
-			modelo.addRow(new Object[] { r.obetenerId(), r.obetenerTipoResiduo(), r.obetenerCantidad()});
+		List<ResiduoRetiradoDTO> residuosRetiradosDTO= api.obtenerResiduosRetirados(idVisita);
+		for (ResiduoRetiradoDTO r : residuosRetiradosDTO) {
+			modelo.addRow(new Object[] { r.obtenerId(), r.obtenerTipo(), r.obtenerCantidadKg()});
 		}
 		
 		table.setModel(modelo);

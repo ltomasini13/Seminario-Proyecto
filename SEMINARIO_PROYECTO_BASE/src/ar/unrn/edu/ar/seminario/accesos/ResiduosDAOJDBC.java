@@ -118,7 +118,7 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 
 		} catch (SQLException e) {
 			
-			System.out.println("Error al procesar consulta");
+			System.out.println("Error al proc consulta");
 			
 		} catch (Exception e) {
 			System.out.println("Error al buscar los residuos retirados en total");
@@ -164,6 +164,45 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 			
 		}
 		return residuosARetirar;
+	}
+
+	@Override
+	public List<ResiduoRetirado> buscarResiduosRetirados(Integer idVisita) {
+		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM residuos_retirados rr JOIN residuos r ON (rr.id_tipo_residuo=r.id_residuo)"
+							+ "JOIN visitas v ON (rr.id_visita=v.id_visita)"
+							+ "WHERE v.id_visita=?");
+			statement.setInt(1, idVisita);
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				TipoResiduo tipoResiduo  = new TipoResiduo(rs.getString("r.tipo"), rs.getInt("r.puntos"));
+				ResiduoRetirado residuoRetirado = new ResiduoRetirado(tipoResiduo, rs.getDouble("rr.cantidad_kg"));
+				Visita visita = new Visita(rs.getTimestamp("v.fecha_visita").toLocalDateTime().toString(), rs.getString("v.observacion"), new OrdenDeRetiro());
+				visita.editarId(rs.getInt("v.id_visita"));
+				residuoRetirado.editarVisita(visita);
+				residuoRetirado.editarId(rs.getInt("rr.id_residuo_retirado"));
+				residuosRetirados.add(residuoRetirado);
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			
+		} catch (Exception e) {
+			System.out.println("Error al buscar vivienda");
+		
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+		return residuosRetirados;
 	}
 	
 
