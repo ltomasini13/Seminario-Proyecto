@@ -2,16 +2,20 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.mysql.fabric.xmlrpc.base.Array;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
@@ -28,10 +32,12 @@ public class ListadoBeneficio extends JFrame{
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
+	private Integer idBeneficio, idCampaña;
+	private List<BeneficioDTO> beneficiosDTO=new ArrayList<BeneficioDTO>();
 	
 	public ListadoBeneficio(IApi api) throws AppException, DataEmptyException, NotNullException, NumbersException {
 		
-		setTitle("CATÁLOGO");
+		setTitle("LISTADO DE BENEFICIOS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -63,6 +69,7 @@ public class ListadoBeneficio extends JFrame{
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			dispose();
 		});
+		pnlBotonesOperaciones.add(botonCerrar);
 		
 		if(api.esUsuarioAdmin()){
 			JButton btnRegistrarNuevoBeneficio = new JButton("AGREGAR BENEFICIO");
@@ -72,8 +79,72 @@ public class ListadoBeneficio extends JFrame{
 				this.dispose();
 			});
 			pnlBotonesOperaciones.add(btnRegistrarNuevoBeneficio);
-			pnlBotonesOperaciones.add(botonCerrar);
+			
 		}
+	}
+		
+	public ListadoBeneficio(IApi api, Integer idCampaña) throws AppException, DataEmptyException, NotNullException, NumbersException {
+		
+		setTitle("LISTADO DE BENEFICIOS");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(5, 5, 424, 251);
+		contentPane.add(scrollPane);
+
+		table = new JTable();
+		String[] titulos = { "ID BENEFICIO", "NOMBRE BENEFICIO", "PUNTOS"};
+		modelo = new DefaultTableModel(new Object[][] {}, titulos);
+		
+		
+		List<BeneficioDTO> beneficios= api.obtenerBeneficios();
+		for (BeneficioDTO beneficio : beneficios) {
+			modelo.addRow(new Object[] { beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
+		}
+		table.setModel(modelo);
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
+
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(0);
+		scrollPane.setViewportView(table);
+		
+		JPanel pnlBotonesOperaciones = new JPanel();
+		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
+		
+		JButton botonCerrar = new JButton("CERRAR");
+		botonCerrar.addActionListener((ActionEvent e)-> {
+			dispose();
+		});
+		pnlBotonesOperaciones.add(botonCerrar);
+		
+		JButton elegirBeneficio = new JButton("ELEGIR");
+		elegirBeneficio.addActionListener((ActionEvent e)-> {
+			
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun beneficio", "", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				
+				this.idBeneficio=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
+				try {
+				
+					api.agregarBeneficio(idCampaña, idBeneficio);;
+					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
+					seleccion.setVisible(true);
+					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
+				} catch (AppException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		pnlBotonesOperaciones.add(elegirBeneficio);
 		
 	}
 	

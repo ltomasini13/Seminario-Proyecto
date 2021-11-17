@@ -261,12 +261,31 @@ public class VentanaPrincipal extends JFrame {
 			});
 			beneficioMenu.add(listadoBeneficiosMenuItem);
 
+			JMenu campañaMenu = new JMenu("Campañas");
+			menuBar.add(campañaMenu);
+			
+			JMenuItem registrarCampañaMenuItem = new JMenuItem("Registrar");
+			registrarCampañaMenuItem.addActionListener((ActionEvent e) -> {
+				RegistrarCampaña regCampaña = new RegistrarCampaña(api);
+				regCampaña.setVisible(true);
+			});
+			campañaMenu.add(registrarCampañaMenuItem);
+			
+			JMenuItem listadoCampañasMenuItem = new JMenuItem("Listado");
+			listadoCampañasMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoCampaña listaCampaña = new ListadoCampaña(api);
+				listaCampaña.setVisible(true);
+				this.dispose();
+			});
+			campañaMenu.add(listadoCampañasMenuItem);
+			
+			
 			JMenu canjeMenu = new JMenu("Canjes");
 			menuBar.add(canjeMenu);
 			
 			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
 			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
-				
+				//SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idBeneficio, idCampaña)
 			});
 			canjeMenu.add(elegirCanjeMenuItem);
 			

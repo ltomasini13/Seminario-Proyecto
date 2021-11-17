@@ -4,9 +4,11 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.modelo.Campaña;
 
 public interface BeneficioDao {
 
@@ -14,11 +16,13 @@ public interface BeneficioDao {
 	
 	List<Beneficio> listarTodos()throws AppException,  DataEmptyException, NotNullException, NumbersException;
 
-	Beneficio buscar(String benefificio);
+	Beneficio buscar(Integer id);
 	
 	void actualizar(Beneficio beneficio);
 
 	void eliminar(Integer id);
 
 	void eliminar(Beneficio beneficio);
+	
+	List<Beneficio> ListarCatalogo(Campaña camp) throws NotNullException, DataEmptyException, DateException, NumbersException, AppException;
 }

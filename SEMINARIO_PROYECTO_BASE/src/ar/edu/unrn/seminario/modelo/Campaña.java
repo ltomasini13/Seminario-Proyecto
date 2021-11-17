@@ -1,8 +1,11 @@
 package ar.edu.unrn.seminario.modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 
 public class Campaña {
@@ -12,22 +15,26 @@ public class Campaña {
 	private LocalDateTime fechaInicio;
 	private LocalDateTime fechaFin;
 	private String descripcion;
-	private Catalogo catalogo;
+	private List<Beneficio> catalogo = new ArrayList<Beneficio>();
 	
-	public Campaña (String nombre, String fechaInicio, String fechaFin, String desc, Catalogo catalogo) throws NotNullException, DataEmptyException {
+	public Campaña (String nombre, String fechaInicio, String fechaFin, String desc) throws NotNullException, DataEmptyException, DateException {
 		
 		this.nombreCampaña = nombre;
 		this.fechaInicio = LocalDateTime.parse(fechaInicio);
-		this.fechaFin = LocalDateTime.parse(fechaFin);
+		if(fechaFin != null)
+			this.fechaFin = LocalDateTime.parse(fechaFin);
 		this.descripcion = desc;
-		this.catalogo = catalogo;
 		
-		if(nombre == null || catalogo == null) {
+		if(nombre == null) {
 			throw new  NotNullException("Algunos de los datos son nulos");
 		}
-		if(nombre.isEmpty())
+		if(nombre.isEmpty()){
 			throw new DataEmptyException("Nombre de campaña incompleto y/o vacío");
-
+		}
+		if(this.fechaFin != null) {
+			if( this.fechaInicio.isAfter(this.fechaFin)) 
+				throw new DateException("La fecha de inicio no puede superar la fecha final");
+		}
 	}
 
 	public Integer obtenerId() {
@@ -70,11 +77,13 @@ public class Campaña {
 		this.descripcion = descripcion;
 	}
 
-	public Catalogo obtenerCatalogo() {
-		return catalogo;
+	public Beneficio obtenerUltimoBeneficioAgregado() {
+		return catalogo.get(catalogo.size()-1);
 	}
 
-	public void editarCatalogo(Catalogo catalogo) {
-		this.catalogo = catalogo;
+	public void agregarBeneficioCatalogo(Beneficio beneficio) {
+		this.catalogo.add(beneficio);
 	}
+
+	
 }
