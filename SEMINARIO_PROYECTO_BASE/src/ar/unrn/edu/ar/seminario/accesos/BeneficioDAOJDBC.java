@@ -178,4 +178,40 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		
 	}
 
+	@Override
+	public List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException {
+		List<Beneficio> catalogos = new ArrayList<Beneficio>();
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM catalogos c join campañas camp on (c.id_campaña = camp.id_campaña) " + 
+							"join beneficios b on (c.id_beneficio=b.id_beneficio) " + 
+							"where b.nombre_beneficio=?");
+			statement.setString(1, nombre);
+			ResultSet rs = statement.executeQuery();
+			
+			
+			while(rs.next()) {
+				
+				Beneficio beneficio = new Beneficio(rs.getString("b.nombre_beneficio"), rs.getInt("b.puntos"));
+				catalogos.add(beneficio);
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			throw new AppException("No se pudo buscar el beneficio por un error en la base de datos");
+		
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+
+		return catalogos;
+	}
+
+	
 }

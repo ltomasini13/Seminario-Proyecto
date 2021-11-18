@@ -39,7 +39,6 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Visita;
 
 
-
 public interface IApi {
 
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException, SintaxisSQLException;
@@ -102,7 +101,7 @@ public interface IApi {
 	List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException;
 	void generarOrden(Integer id_pedido)throws SintaxisSQLException, CreationValidationException ;
 	void cancelarOrden(Integer idOrden) throws StateException;
-	void concretarOrden(Integer idOrden) throws StateException;
+	void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException;
 	
 	void asignarRecolector(Integer idOrden, Integer idRecolector);
 	void cambiarDueño(Integer idVivienda, String dni);
@@ -118,19 +117,21 @@ public interface IApi {
 
 	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
 	
-	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException;
+	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException;
 	
-
+	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException, DateException;
+	
+	boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden);
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
-	List<CampañaDTO> obtenerCampañas()throws AppException, NotNullException, DateException, DataEmptyException;
-	
+
 	
 	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
 	
 	void actualizarPuntaje(double puntaje);
 	
 	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
-	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, CreationValidationException;
 	
 	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
+
 }

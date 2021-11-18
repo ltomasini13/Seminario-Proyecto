@@ -81,7 +81,17 @@ public class Ciudadano {
 	
 	public double puntaje() {
 		return this.puntaje();
-	}	
+	}
+	
+	
+	public double sumarPuntos(double puntos) {
+		return this.puntaje = this.puntaje+ puntos;
+	}
+	
+	public double restarPuntos(double puntos) {
+		return this.puntaje - puntos; 
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -101,13 +111,6 @@ public class Ciudadano {
 		this.puntaje = puntaje;
 	}
 	
-	public void sumarPuntos(double puntaje) {
-		this.puntaje= this.puntaje+puntaje;
-	}
-	
-	public void restarPuntos(double puntaje) {
-		this.puntaje= this.puntaje-puntaje;
-	}
 
 	@Override
 	public boolean equals(Object obj) {

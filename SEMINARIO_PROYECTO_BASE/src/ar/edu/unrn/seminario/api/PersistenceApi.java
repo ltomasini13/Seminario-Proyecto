@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.fabric.xmlrpc.base.Array;
 
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 
@@ -40,7 +41,9 @@ import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Campaña;
+
 import ar.edu.unrn.seminario.modelo.Canje;
+
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -638,10 +641,18 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void concretarOrden(Integer idOrden) throws StateException {
+	public void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		orden.finalizarOrden();
 		this.ordenDao.actualizar(orden);
+		
+		Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(orden.obtenerViviendaDelPedido().obtenerId());
+		ciudadano.sumarPuntos(calcularPuntaje(orden));
+		ciudadanoDao.actualizar(ciudadano);
+		System.out.println();
+		PedidoRetiro pedido = this.pedidoDao.buscarPedido(orden.obtenerPedido().obtenerId());
+		pedido.editarFechaCumplimiento(LocalDateTime.now());
+		pedidoDao.actualizar(pedido);
 		
 	}
 
@@ -771,6 +782,8 @@ public class PersistenceApi implements IApi {
 	}
 
 
+		
+	
 	
 	private double calcularPuntaje(OrdenDeRetiro orden) {
 		double puntaje=0;
@@ -910,12 +923,15 @@ public class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException {
+	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException {
 		
 		Campaña camp = new Campaña(nombre, LocalDateTime.now().toString(), LocalDateTime.now().plusMonths(2).toString(), descripcion);	
+		
+		if(this.obtenerCampañaVigente() != null) {
+				throw new CreationValidationException("No se puede crear campaña, ya hay una campaña vigente");
+		}
 		campañaDao.crear(camp);
 		campañaDao.buscar(camp.obtenerId());
-		System.out.println(camp.obtenerId());
 	}
 
 
@@ -955,7 +971,6 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
 		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
 		
@@ -964,7 +979,6 @@ public class PersistenceApi implements IApi {
 		}
 		return campañasDTO;
 	}
-
 
 	@Override
 	public void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException {
@@ -975,13 +989,16 @@ public class PersistenceApi implements IApi {
 		if(ciudadano.puntaje() < beneficio.obtenerPuntos() ) {
 			throw new NumbersException("No se puede realizar el canje, el ciudadano no tiene puntos suficientes");
 		}
+		
 		double puntos = Double.valueOf(beneficio.obtenerPuntos());
-		ciudadano.restarPuntos(puntos);
-		ciudadanoDao.actualizar(ciudadano);
 		Canje canje = new Canje(LocalDateTime.now().toString(), beneficio.obtenerPuntos(), beneficio, ciudadano);
 		canjeDao.crear(canje);
+		ciudadano.restarPuntos(puntos);
+		ciudadanoDao.actualizar(ciudadano);
+		
 	}
 
+	
 
 	@Override
 
@@ -991,15 +1008,6 @@ public class PersistenceApi implements IApi {
 				orden.obtenerRecolector().obtenerNombre()+" "+ orden.obtenerRecolector().obtenerApellido());
 		return (ordenDTO);
 	}
-
-	
-
-	@Override
-	public void actualizarPuntaje(double puntaje) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	@Override
 	public List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) {
@@ -1019,7 +1027,7 @@ public class PersistenceApi implements IApi {
 		List<ResiduoRestante> residuosRestantes = calcularResiduosRestantes(orden);
 		TipoResiduo tipo = this.residuoDao.buscar(residuoRetiradoDTO.obtenerTipo());
 		ResiduoRetirado residuoRetirado=null;
-		
+		System.out.println();
 		try {
 			residuoRetirado = new ResiduoRetirado(tipo, residuoRetiradoDTO.obtenerCantidadKg());
 		} catch (NotNullException e) {
@@ -1029,26 +1037,33 @@ public class PersistenceApi implements IApi {
 		
 		for(ResiduoRestante res : residuosRestantes) {
 			if(residuoRetirado.obtenerTipoResiduo().equals(res.obtenerTipoResiduo())) {
-				if(res.obtenerCantkg()-residuoRetirado.obtenerCantkg()>0) {
 					return res.obtenerCantkg()-residuoRetirado.obtenerCantkg();		
-				}
-						
+		
 			}
 		}
 			
-		
 		return 0;
+		
+	}	
+
+	public void actualizarPuntaje(double puntaje) {
+		// TODO Auto-generated method stu	
 
 	}
 
-
 	@Override
-	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, CreationValidationException  {
 		
 		Campaña campaña = campañaDao.buscar(idCampaña);			
 			
 		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
-	
+		
+		List<Beneficio> beneficios = beneficioDao.buscarNombreBeneficio(beneficio.obtenerNombreBeneficio());
+		
+		if(!beneficios.isEmpty()) {
+			throw new CreationValidationException("El catálogo ya contiene al beneficio");
+		}
+		
 		campaña.agregarBeneficioCatalogo(beneficio);
 		campañaDao.actualizarCatalogo(campaña);
 			
@@ -1063,7 +1078,6 @@ public class PersistenceApi implements IApi {
 		List<BeneficioDTO> catalogo = new ArrayList<BeneficioDTO>();
 		
 		for(Beneficio b : beneficioDao.ListarCatalogo(camp)) {	
-			
 			catalogo.add(new BeneficioDTO(b.obtenerId(), b.obtenerNombreBeneficio(), b.obtenerPuntos()));
 		}
 		return catalogo;
@@ -1080,6 +1094,19 @@ public class PersistenceApi implements IApi {
 			}
 		}
 		return campañaDTO;
+	}
+
+	public boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden) {
+		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
+		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
+		
+		TipoResiduo tipo = this.residuoDao.buscar(residuoRetiradoDto.obtenerTipo());
+		try {
+			residuosRetirados.add(new ResiduoRetirado(tipo, residuoRetiradoDto.obtenerCantidadKg()));
+		} catch (NotNullException e) {
+			//VERR
+		}
+		return this.estanTodosResiduosDeclarados(residuosRetirados, orden.obtenerPedido().obtenerId());
 	}
 	
 //	private validarfechaCanje() {

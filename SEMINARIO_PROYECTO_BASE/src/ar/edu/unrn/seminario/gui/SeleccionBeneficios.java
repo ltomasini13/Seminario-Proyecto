@@ -30,7 +30,7 @@ public class SeleccionBeneficios extends JFrame{
 	private DefaultTableModel modelo;
 	private JButton elegirBeneficioBoton, realizarCanjeBoton, cerrarBoton;
 	
-public SeleccionBeneficios (IApi api, Integer idCampaña) {
+	public SeleccionBeneficios (IApi api, Integer idCampaña) {
 		
 		setTitle("CATÁLOGO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -6,15 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
-import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
@@ -55,7 +51,7 @@ public class CanjeDAOJDBC implements CanjeDao{
 		    
 		} catch (SQLException e1) {
 			System.out.println("Error al procesar la consulta");
-			throw new AppException("No se pudo crear el beneficio por un error en la Base de Datos");
+			throw new AppException("No se pudo crear el canje por un error en la Base de Datos");
 		} finally {
 			ConnectionManager.disconnect();
 		}
