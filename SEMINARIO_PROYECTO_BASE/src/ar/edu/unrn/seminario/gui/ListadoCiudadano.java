@@ -23,8 +23,10 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.NotNullException;
+import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
 public class ListadoCiudadano extends JFrame {
@@ -36,7 +38,7 @@ public class ListadoCiudadano extends JFrame {
 	private JTable table;
 	private IApi api;
 	private JScrollPane scrollPane;
-	private JButton botonCerrar;
+	private JButton botonCerrar, botonElegir;
 	private JPopupMenu popupMenu;
 	
 	/**
@@ -51,8 +53,6 @@ public class ListadoCiudadano extends JFrame {
 		cargarPanelDeOperaciones();
 		cargarMenuPopop();
 	}
-
-	
 	
 	public ListadoCiudadano(IApi api, Integer idVivienda) {
 		this.api=api;
@@ -64,6 +64,15 @@ public class ListadoCiudadano extends JFrame {
 		cargarMenuPopop();
 	}
 	
+	public ListadoCiudadano(Integer idBeneficio, IApi api) {
+		this.api=api;
+		inicializarVentana();
+		cargarEstructuraDeLaTabla();
+		cargarDatosTabla();
+		visibilizarTabla();
+		cargarPanelDeOperacionesSeleccionarCiudadano(idBeneficio);
+		cargarMenuPopop();
+	}
 	private void cargarEstructuraDeLaTabla() {
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(5, 5, 424, 251);
@@ -132,6 +141,37 @@ public class ListadoCiudadano extends JFrame {
 		
 		botonCerrar = new JButton("CERRAR");
 		
+		botonCerrar.addActionListener((ActionEvent e)-> {
+			dispose();
+		});
+		pnlBotonesOperaciones.add(botonCerrar);
+	}
+	
+	private void  cargarPanelDeOperacionesSeleccionarCiudadano(Integer idBeneficio) {
+		pnlBotonesOperaciones = new JPanel();
+		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
+		
+		botonElegir = new JButton("ELEGIR");
+		botonElegir.addActionListener((ActionEvent e)-> {
+			if(table.getSelectedRow()==-1) {
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				popupMenu.setVisible(false);
+				try {
+					String dni=(String)modelo.getValueAt(table.getSelectedRow(), 3);
+					api.realizarCanje(idBeneficio, dni);
+					dispose();
+					
+				} catch (NumbersException | SintaxisSQLException | AppException | NotNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+				}			
+			}
+		});
+		pnlBotonesOperaciones.add(botonElegir);
+		
+		botonCerrar = new JButton("CERRAR");
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			dispose();
 		});

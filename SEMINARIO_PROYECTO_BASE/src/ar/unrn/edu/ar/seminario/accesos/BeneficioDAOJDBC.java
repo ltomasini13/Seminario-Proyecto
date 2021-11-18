@@ -40,33 +40,21 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			statement.setString(1, beneficio.obtenerNombreBeneficio());
 			statement.setInt(2, beneficio.obtenerPuntos());
 			
-			try {
-				int cantidad = statement.executeUpdate();
-				if (cantidad==1) 
-					System.out.println("El beneficio se creo correctamente.");
-			}
-			catch(MySQLIntegrityConstraintViolationException e){
-		    	throw new DuplicateUniqueKeyException("El beneficio de tipo: "+beneficio.obtenerNombreBeneficio()+" ya existe");
-		    }
+			int cantidad = statement.executeUpdate();
+			if (cantidad==1) 
+				System.out.println("El beneficio se creo correctamente.");
+			
 			
 			ResultSet miResult = statement.getGeneratedKeys();
 			miResult.next();
 
 		    miResult.close(); 
 		    
-		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error al procesar la consulta");
-				throw new AppException("No se pudo crear el beneficio por un error en la Base de Datos");
-			}
-			
-		
-		} catch (DuplicateUniqueKeyException e) {
-			System.out.println(e.getMessage());;
-			
-		} finally {
+		} catch (SQLException e1) {
+			System.out.println("Error al procesar la consulta");
+			throw new AppException("No se pudo crear el beneficio por un error en la Base de Datos");
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
@@ -190,4 +178,38 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		
 	}
 
+	@Override
+	public List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException {
+		List<Beneficio> catalogos = new ArrayList<Beneficio>();
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM catalogos c join campañas camp on (c.id_campaña = camp.id_campaña) " + 
+							"join beneficios b on (c.id_beneficio=b.id_beneficio) " + 
+							"where b.nombre_beneficio=?");
+			statement.setString(1, nombre);
+			ResultSet rs = statement.executeQuery();
+			
+			
+			while(rs.next()) {
+				
+				Beneficio beneficio = new Beneficio(rs.getString("b.nombre_beneficio"), rs.getInt("b.puntos"));
+				catalogos.add(beneficio);
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			throw new AppException("No se pudo buscar el beneficio por un error en la base de datos");
+		
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+
+		return catalogos;
+	}
 }

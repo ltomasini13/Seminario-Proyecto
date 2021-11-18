@@ -41,6 +41,7 @@ import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Campaña;
+import ar.edu.unrn.seminario.modelo.Canje;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -59,6 +60,8 @@ import ar.unrn.edu.ar.seminario.accesos.BeneficioDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.BeneficioDao;
 import ar.unrn.edu.ar.seminario.accesos.CampañaDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CampañaDao;
+import ar.unrn.edu.ar.seminario.accesos.CanjeDAOJDBC;
+import ar.unrn.edu.ar.seminario.accesos.CanjeDao;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.CiudadanoDao;
 import ar.unrn.edu.ar.seminario.accesos.OrdenDeRetiroDAOJDBC;
@@ -94,7 +97,7 @@ public abstract class PersistenceApi implements IApi {
 	private ResiduosDao residuosDao;   //dao para trabajar con los residuos a retirar y residuos retirados
 	private BeneficioDao beneficioDao;
 	private CampañaDao campañaDao;
-
+	private CanjeDao canjeDao;
 
 	public PersistenceApi() {
 		viviendaDao = new ViviendaDAOJDBC();
@@ -109,7 +112,7 @@ public abstract class PersistenceApi implements IApi {
 		residuosDao= new ResiduosDAOJDBC();//dao para trabajar con los residuos a retirar y residuos retirados
 		beneficioDao = new BeneficioDAOJDBC();
 		campañaDao = new CampañaDAOJDBC();
-
+		canjeDao = new CanjeDAOJDBC();
 	}
 
 
@@ -920,12 +923,15 @@ public abstract class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException {
+	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException {
 		
 		Campaña camp = new Campaña(nombre, LocalDateTime.now().toString(), LocalDateTime.now().plusMonths(2).toString(), descripcion);	
+		
+		if(this.obtenerCampañaVigente() != null) {
+				throw new CreationValidationException("No se puede crear campaña, ya hay una campaña vigente");
+		}
 		campañaDao.crear(camp);
 		campañaDao.buscar(camp.obtenerId());
-		System.out.println(camp.obtenerId());
 	}
 
 
@@ -962,10 +968,8 @@ public abstract class PersistenceApi implements IApi {
 		}
 		
 		return visitasDTO;
-		
 	}
 	
-
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
 		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
 		
@@ -976,23 +980,23 @@ public abstract class PersistenceApi implements IApi {
 	}
 
 
-
-
-
 	@Override
-
-	public void realizarCanje(Integer idBeneficio, String dni) {
+	public void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException {
 		
 		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
 		Ciudadano ciudadano = ciudadanoDao.buscar(dni);
 		
-		if(ciudadano.puntaje() >= beneficio.obtenerPuntos() ) {
-			
+		if(ciudadano.puntaje() < beneficio.obtenerPuntos() ) {
+			throw new NumbersException("No se puede realizar el canje, el ciudadano no tiene puntos suficientes");
 		}
 		
+		double puntos = Double.valueOf(beneficio.obtenerPuntos());
+		Canje canje = new Canje(LocalDateTime.now().toString(), beneficio.obtenerPuntos(), beneficio, ciudadano);
+		canjeDao.crear(canje);
+		ciudadano.restarPuntos(puntos);
+		ciudadanoDao.actualizar(ciudadano);
 
 	}
-
 
 	@Override
 
@@ -1002,9 +1006,6 @@ public abstract class PersistenceApi implements IApi {
 				orden.obtenerRecolector().obtenerNombre()+" "+ orden.obtenerRecolector().obtenerApellido());
 		return (ordenDTO);
 	}
-
-	
-
 
 	@Override
 	public List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) {
@@ -1041,33 +1042,26 @@ public abstract class PersistenceApi implements IApi {
 			
 		return 0;
 		
-	
-	}
-		
-
-
-		
+	}	
 
 	public void actualizarPuntaje(double puntaje) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stu	
 
 	}
 
-
-	
-
-
-
-
-
-	
 	@Override
-	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException  {
 		
 		Campaña campaña = campañaDao.buscar(idCampaña);			
 			
 		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+		
+		List<Beneficio> beneficios = beneficioDao.buscarNombreBeneficio(beneficio.obtenerNombreBeneficio());
+		
+		if(!beneficios.isEmpty()) {
+			throw new CreationValidationException("El catálogo ya contiene al beneficio");
+		}
+		
 		campaña.agregarBeneficioCatalogo(beneficio);
 		campañaDao.actualizarCatalogo(campaña);
 			
@@ -1082,14 +1076,24 @@ public abstract class PersistenceApi implements IApi {
 		List<BeneficioDTO> catalogo = new ArrayList<BeneficioDTO>();
 		
 		for(Beneficio b : beneficioDao.ListarCatalogo(camp)) {	
-			
+
 			catalogo.add(new BeneficioDTO(b.obtenerId(), b.obtenerNombreBeneficio(), b.obtenerPuntos()));
 		}
 		return catalogo;
 	}
 
-
 	@Override
+	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException {
+		List<Campaña> campañas = campañaDao.listarTodos();
+		CampañaDTO campañaDTO=null;
+		for(Campaña camp : campañas) {
+			if(camp.obtenerFechaFin().isAfter(LocalDateTime.now())){
+				campañaDTO = new CampañaDTO(camp.obtenerId(), camp.obtenerNombreCampaña(), camp.obtenerFechaInicio().toString(), camp.obtenerFechaFin().toString(), camp.obtenerDescripcion());
+			}
+		}
+		return campañaDTO;
+	}
+
 	public boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden) {
 		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
@@ -1103,6 +1107,7 @@ public abstract class PersistenceApi implements IApi {
 		return this.estanTodosResiduosDeclarados(residuosRetirados, orden.obtenerPedido().obtenerId());
 	}
 
+<<<<<<< HEAD
 
 	@Override
 	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException {
@@ -1112,6 +1117,8 @@ public abstract class PersistenceApi implements IApi {
 
 
 	
+=======
+>>>>>>> ae5b380f8fbc5485b394bf35c69166409ecea4d8
 	
 //	private validarfechaCanje() {
 //		

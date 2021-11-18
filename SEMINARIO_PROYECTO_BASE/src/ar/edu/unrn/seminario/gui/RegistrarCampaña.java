@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -48,8 +49,9 @@ public class RegistrarCampaña extends JFrame {
 			try {
 				api.registrarCampaña(nombreText.getText(), descripcionText.getText());
 				this.dispose();
-			} catch (AppException | DataEmptyException | NotNullException | DateException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+			} catch (AppException | DataEmptyException | NotNullException | DateException | CreationValidationException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+
 			}
 			this.dispose();
 		});

@@ -23,7 +23,6 @@ import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
-import ar.edu.unrn.seminario.exception.UnfinishedException;
 
 public class ListadoCampaña extends JFrame
 {

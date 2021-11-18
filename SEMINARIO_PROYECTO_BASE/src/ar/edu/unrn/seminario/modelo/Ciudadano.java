@@ -29,7 +29,6 @@ public class Ciudadano {
 		this.dni = dni;
 		this.usuario=usuario;
 		this.puntaje = 0;
-
 	} 	
  
 	public Ciudadano() {
@@ -89,10 +88,9 @@ public class Ciudadano {
 	}
 	
 	public double restarPuntos(double puntos) {
-		return this.puntaje - puntos; 
+		return this.puntaje= this.puntaje - puntos; 
 	}
-	
-	
+
 
 	@Override
 	public int hashCode() {

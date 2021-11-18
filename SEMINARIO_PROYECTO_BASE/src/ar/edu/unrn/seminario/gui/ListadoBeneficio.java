@@ -21,7 +21,9 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
@@ -120,7 +122,7 @@ public class ListadoBeneficio extends JFrame{
 		
 		JButton botonCerrar = new JButton("CERRAR");
 		botonCerrar.addActionListener((ActionEvent e)-> {
-			dispose();
+			this.dispose();
 		});
 		pnlBotonesOperaciones.add(botonCerrar);
 		
@@ -134,12 +136,11 @@ public class ListadoBeneficio extends JFrame{
 				
 				this.idBeneficio=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 				try {
-				
-					api.agregarBeneficio(idCampaña, idBeneficio);;
+					api.agregarBeneficio(idCampaña, idBeneficio);
 					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
 					seleccion.setVisible(true);
 					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
-				} catch (AppException e1) {
+				} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | CreationValidationException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 			}

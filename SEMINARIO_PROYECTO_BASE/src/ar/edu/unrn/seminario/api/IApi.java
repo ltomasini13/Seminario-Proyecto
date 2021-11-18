@@ -7,6 +7,7 @@ import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -37,7 +38,6 @@ import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Visita;
-
 
 public interface IApi {
 
@@ -117,15 +117,15 @@ public interface IApi {
 
 	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
 	
-	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException;
+	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException;
 	
-
 	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException, DateException;
 	
 	boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden);
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
 
 	
+<<<<<<< HEAD
 	
 	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
 	
@@ -137,5 +137,16 @@ public interface IApi {
 	
 	
 	
+=======
+	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
+	
+	void actualizarPuntaje(double puntaje);
+	
+	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, CreationValidationException;
+	
+	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
+
+>>>>>>> ae5b380f8fbc5485b394bf35c69166409ecea4d8
 
 }
