@@ -13,6 +13,7 @@ public class Canje {
 	private Beneficio beneficio;
 	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	public Canje (String fecha, double puntaje, Beneficio beneficio, Ciudadano ciudadano) throws NotNullException {
 		
 		this.fechaCanje = LocalDateTime.parse(fecha);
@@ -20,12 +21,17 @@ public class Canje {
 		this.beneficio = beneficio;
 		this.ciudadano = ciudadano;
 =======
+=======
+>>>>>>> Stashed changes
 	public Canje (String fecha, double puntaje, Ciudadano ciudadano, Beneficio beneficio) throws NotNullException {
 		
 		this.fechaCanje = LocalDateTime.parse(fecha);
 		this.puntaje = puntaje;
 		this.ciudadano = ciudadano;
 		this.beneficio = beneficio;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 		
 		if(ciudadano == null || beneficio == null) {

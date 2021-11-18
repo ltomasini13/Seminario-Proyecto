@@ -22,7 +22,10 @@ import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
@@ -33,6 +36,7 @@ public class SeleccionBeneficios extends JFrame{
 	private DefaultTableModel modelo;
 	private JButton elegirBeneficioBoton, realizarCanjeBoton, cerrarBoton;
 	
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 	public SeleccionBeneficios (IApi api, Integer idCampaña) {
 		
@@ -102,6 +106,8 @@ public class SeleccionBeneficios extends JFrame{
 
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 	public SeleccionBeneficios (IApi api, Integer idBeneficio, Integer idCampaña) {
 		
 		setTitle("CATÁLOGO");
@@ -142,6 +148,7 @@ public class SeleccionBeneficios extends JFrame{
 		realizarCanjeBoton = new JButton("REALIZAR CANJE");
 		realizarCanjeBoton.addActionListener((ActionEvent e) -> {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 			
 			if(table.getSelectedRow()==-1) {
 				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
@@ -152,6 +159,9 @@ public class SeleccionBeneficios extends JFrame{
 				listado.setVisible(true);
 				dispose();
 			}	
+=======
+				dispose();
+>>>>>>> Stashed changes
 =======
 				dispose();
 >>>>>>> Stashed changes

@@ -138,17 +138,23 @@ public class ListadoBeneficio extends JFrame{
 				try {
 				
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 					api.agregarBeneficio(idCampaña, idBeneficio);
 					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
 					seleccion.setVisible(true);
 					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
 				} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | CreationValidationException e1) {
 =======
+=======
+>>>>>>> Stashed changes
 					api.agregarBeneficio(idCampaña, idBeneficio);;
 					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
 					seleccion.setVisible(true);
 					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
 				} catch (AppException e1) {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 				}

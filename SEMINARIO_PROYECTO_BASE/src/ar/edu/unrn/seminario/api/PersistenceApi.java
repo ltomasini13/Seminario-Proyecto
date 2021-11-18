@@ -42,9 +42,12 @@ import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Campaña;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 import ar.edu.unrn.seminario.modelo.Canje;
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import ar.edu.unrn.seminario.modelo.Ciudadano;
@@ -927,6 +930,7 @@ public class PersistenceApi implements IApi {
 	
 	@Override
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException {
 		
 		Campaña camp = new Campaña(nombre, LocalDateTime.now().toString(), LocalDateTime.now().plusMonths(2).toString(), descripcion);	
@@ -937,17 +941,23 @@ public class PersistenceApi implements IApi {
 		campañaDao.crear(camp);
 		campañaDao.buscar(camp.obtenerId());
 =======
+=======
+>>>>>>> Stashed changes
 	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException {
 		
 		Campaña camp = new Campaña(nombre, LocalDateTime.now().toString(), LocalDateTime.now().plusMonths(2).toString(), descripcion);	
 		campañaDao.crear(camp);
 		campañaDao.buscar(camp.obtenerId());
 		System.out.println(camp.obtenerId());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 	}
 
 
 	@Override
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
 		List<Visita> visitas = this.visitaDao.listarTodas();
@@ -982,6 +992,8 @@ public class PersistenceApi implements IApi {
 		
 		return visitasDTO;
 =======
+=======
+>>>>>>> Stashed changes
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
 		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
 		
@@ -1001,6 +1013,9 @@ public class PersistenceApi implements IApi {
 		if(ciudadano.puntaje() >= beneficio.obtenerPuntos() ) {
 			
 		}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 		
 	}
@@ -1015,6 +1030,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 	public void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException {
 		
@@ -1089,6 +1105,11 @@ public class PersistenceApi implements IApi {
 	public void actualizarPuntaje(double puntaje) {
 		// TODO Auto-generated method stu	
 
+=======
+	public void actualizarPuntaje(double puntaje) {
+		// TODO Auto-generated method stub
+		
+>>>>>>> Stashed changes
 	}
 
 	@Override
@@ -1111,6 +1132,16 @@ public class PersistenceApi implements IApi {
 		
 =======
 	
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+	@Override
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
+		
+		Campaña campaña = campañaDao.buscar(idCampaña);			
+			
+		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+	
 >>>>>>> Stashed changes
 		campaña.agregarBeneficioCatalogo(beneficio);
 		campañaDao.actualizarCatalogo(campaña);
@@ -1127,6 +1158,10 @@ public class PersistenceApi implements IApi {
 		
 		for(Beneficio b : beneficioDao.ListarCatalogo(camp)) {	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+			
+>>>>>>> Stashed changes
 =======
 			
 >>>>>>> Stashed changes
@@ -1134,6 +1169,7 @@ public class PersistenceApi implements IApi {
 		}
 		return catalogo;
 	}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
 
@@ -1161,6 +1197,8 @@ public class PersistenceApi implements IApi {
 		}
 		return this.estanTodosResiduosDeclarados(residuosRetirados, orden.obtenerPedido().obtenerId());
 	}
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 	

@@ -8,7 +8,10 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exception.AppException;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import ar.edu.unrn.seminario.exception.CreationValidationException;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import ar.edu.unrn.seminario.exception.DataEmptyException;
@@ -53,8 +56,13 @@ public class RegistrarCampaña extends JFrame {
 				api.registrarCampaña(nombreText.getText(), descripcionText.getText());
 				this.dispose();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 			} catch (AppException | DataEmptyException | NotNullException | DateException | CreationValidationException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+=======
+			} catch (AppException | DataEmptyException | NotNullException | DateException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+>>>>>>> Stashed changes
 =======
 			} catch (AppException | DataEmptyException | NotNullException | DateException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
