@@ -25,12 +25,6 @@ public interface BeneficioDao {
 	void eliminar(Beneficio beneficio);
 	
 	List<Beneficio> ListarCatalogo(Campaña camp) throws NotNullException, DataEmptyException, DateException, NumbersException, AppException;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
 	List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException;
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }

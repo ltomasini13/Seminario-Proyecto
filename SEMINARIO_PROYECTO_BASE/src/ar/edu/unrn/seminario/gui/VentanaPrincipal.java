@@ -286,23 +286,14 @@ public class VentanaPrincipal extends JFrame {
 			
 			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
 			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 				Integer idCampaña;
 				try {
 					idCampaña = api.obtenerCampañaVigente().obtenerId();
 					SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idCampaña);
 					selBeneficio.setVisible(true);
 				} catch (AppException | DateException | NotNullException | DataEmptyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}
-=======
-				//SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idBeneficio, idCampaña)
->>>>>>> Stashed changes
-=======
-				//SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idBeneficio, idCampaña)
->>>>>>> Stashed changes
 			});
 			canjeMenu.add(elegirCanjeMenuItem);
 			

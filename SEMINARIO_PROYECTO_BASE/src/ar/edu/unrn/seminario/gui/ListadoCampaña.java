@@ -23,14 +23,6 @@ import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-import ar.edu.unrn.seminario.exception.UnfinishedException;
->>>>>>> Stashed changes
-=======
-import ar.edu.unrn.seminario.exception.UnfinishedException;
->>>>>>> Stashed changes
 
 public class ListadoCampaña extends JFrame
 {
