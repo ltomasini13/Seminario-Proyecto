@@ -130,6 +130,10 @@ public interface IApi {
 	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
 	
 	void actualizarPuntaje(double puntaje);
+	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña)
+			throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
+	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
 	
 	
 	

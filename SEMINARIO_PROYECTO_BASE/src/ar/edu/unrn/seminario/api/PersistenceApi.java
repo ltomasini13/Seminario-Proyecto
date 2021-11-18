@@ -80,7 +80,7 @@ import ar.unrn.edu.ar.seminario.accesos.VisitaDao;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDao;
 
-public class PersistenceApi implements IApi {
+public abstract class PersistenceApi implements IApi {
 	private ViviendaDao viviendaDao;
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
@@ -1055,6 +1055,38 @@ public class PersistenceApi implements IApi {
 	}
 
 
+	
+
+
+
+
+
+	
+	@Override
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
+		
+		Campaña campaña = campañaDao.buscar(idCampaña);			
+			
+		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+		campaña.agregarBeneficioCatalogo(beneficio);
+		campañaDao.actualizarCatalogo(campaña);
+			
+	}
+
+
+	@Override
+	public List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException {
+		
+		Campaña camp = campañaDao.buscar(idCampaña);
+		
+		List<BeneficioDTO> catalogo = new ArrayList<BeneficioDTO>();
+		
+		for(Beneficio b : beneficioDao.ListarCatalogo(camp)) {	
+			
+			catalogo.add(new BeneficioDTO(b.obtenerId(), b.obtenerNombreBeneficio(), b.obtenerPuntos()));
+		}
+		return catalogo;
+	}
 
 
 	@Override
@@ -1072,7 +1104,11 @@ public class PersistenceApi implements IApi {
 	}
 
 
-
+	@Override
+	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 	
