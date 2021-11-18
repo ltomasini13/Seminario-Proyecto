@@ -137,11 +137,19 @@ public class ListadoBeneficio extends JFrame{
 				this.idBeneficio=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 				try {
 				
+<<<<<<< Updated upstream
 					api.agregarBeneficio(idCampaña, idBeneficio);
 					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
 					seleccion.setVisible(true);
 					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
 				} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | CreationValidationException e1) {
+=======
+					api.agregarBeneficio(idCampaña, idBeneficio);;
+					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
+					seleccion.setVisible(true);
+					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
+				} catch (AppException e1) {
+>>>>>>> Stashed changes
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 			}

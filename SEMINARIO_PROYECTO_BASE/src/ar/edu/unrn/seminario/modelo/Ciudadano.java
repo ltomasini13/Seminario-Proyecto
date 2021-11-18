@@ -29,7 +29,10 @@ public class Ciudadano {
 		this.dni = dni;
 		this.usuario=usuario;
 		this.puntaje = 0;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 	} 	
  
 	public Ciudadano() {
@@ -85,7 +88,11 @@ public class Ciudadano {
 	
 	
 	public double sumarPuntos(double puntos) {
+<<<<<<< Updated upstream
 		return this.puntaje = this.puntaje+ puntos;
+=======
+		return this.puntaje + puntos;
+>>>>>>> Stashed changes
 	}
 	
 	public double restarPuntos(double puntos) {

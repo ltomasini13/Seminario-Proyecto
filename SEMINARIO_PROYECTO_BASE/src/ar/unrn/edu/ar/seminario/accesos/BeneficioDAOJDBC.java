@@ -178,6 +178,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		
 	}
 
+<<<<<<< Updated upstream
 	@Override
 	public List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException {
 		List<Beneficio> catalogos = new ArrayList<Beneficio>();
@@ -214,4 +215,6 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	
+=======
+>>>>>>> Stashed changes
 }

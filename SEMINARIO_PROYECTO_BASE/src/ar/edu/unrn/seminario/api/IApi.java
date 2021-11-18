@@ -7,6 +7,7 @@ import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
@@ -29,6 +30,7 @@ import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+<<<<<<< Updated upstream
 import ar.edu.unrn.seminario.exception.WasteException;
 import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
@@ -38,6 +40,9 @@ import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Visita;
 
+=======
+import ar.edu.unrn.seminario.exception.UnfinishedException;
+>>>>>>> Stashed changes
 
 public interface IApi {
 
@@ -117,6 +122,7 @@ public interface IApi {
 
 	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
 	
+<<<<<<< Updated upstream
 	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException;
 	
 	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException, DateException;
@@ -134,4 +140,17 @@ public interface IApi {
 	
 	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
 
+=======
+	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException;
+	
+	List<CampañaDTO> obtenerCampañas()throws AppException, NotNullException, DateException, DataEmptyException;
+	
+	
+	void realizarCanje(Integer idBeneficio, String dni);
+	
+	void actualizarPuntaje(double puntaje);
+	
+	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
+>>>>>>> Stashed changes
 }
