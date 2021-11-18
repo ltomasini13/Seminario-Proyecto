@@ -14,6 +14,8 @@ public class CampañaDTO {
 	private String descripcion;
 	private List<BeneficioDTO> listaBeneficios = new ArrayList<BeneficioDTO>();
 	
+	
+	
 	public CampañaDTO (Integer id, String nombre, String fechaInicio, String fechaFin, String desc) {
 		
 		this.id = id;

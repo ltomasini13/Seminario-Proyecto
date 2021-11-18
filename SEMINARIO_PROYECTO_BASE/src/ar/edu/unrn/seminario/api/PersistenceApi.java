@@ -651,6 +651,8 @@ public class PersistenceApi implements IApi {
 		
 	}
 
+	
+	
 	@Override
 	public List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException {
 		List<OrdenDeRetiroDTO> listaOrdenes = new ArrayList<OrdenDeRetiroDTO>();
@@ -1053,38 +1055,6 @@ public class PersistenceApi implements IApi {
 	}
 
 
-	
-
-
-
-
-
-	
-	@Override
-	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException  {
-		
-		Campaña campaña = campañaDao.buscar(idCampaña);			
-			
-		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
-		campaña.agregarBeneficioCatalogo(beneficio);
-		campañaDao.actualizarCatalogo(campaña);
-			
-	}
-
-
-	@Override
-	public List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException {
-		
-		Campaña camp = campañaDao.buscar(idCampaña);
-		
-		List<BeneficioDTO> catalogo = new ArrayList<BeneficioDTO>();
-		
-		for(Beneficio b : beneficioDao.ListarCatalogo(camp)) {	
-			
-			catalogo.add(new BeneficioDTO(b.obtenerId(), b.obtenerNombreBeneficio(), b.obtenerPuntos()));
-		}
-		return catalogo;
-	}
 
 
 	@Override
@@ -1100,6 +1070,9 @@ public class PersistenceApi implements IApi {
 		}
 		return this.estanTodosResiduosDeclarados(residuosRetirados, orden.obtenerPedido().obtenerId());
 	}
+
+
+
 
 
 	

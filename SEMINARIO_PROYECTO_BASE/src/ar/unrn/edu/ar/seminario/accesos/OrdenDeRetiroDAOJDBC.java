@@ -24,7 +24,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 
 	@Override
 	public void crear(OrdenDeRetiro orden) throws SintaxisSQLException {
-try {
+		try {
 
 			
 			Connection conn = ConnectionManager.getConnection();
