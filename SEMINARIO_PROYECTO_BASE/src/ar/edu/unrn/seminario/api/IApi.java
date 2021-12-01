@@ -125,6 +125,7 @@ public interface IApi {
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
 
 	
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 	
 	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
@@ -139,6 +140,9 @@ public interface IApi {
 	
 =======
 	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
+=======
+	void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException;
+>>>>>>> Stashed changes
 	
 	void actualizarPuntaje(double puntaje);
 	

@@ -94,7 +94,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public Beneficio buscar(Integer id) {
+	public Beneficio buscar(Integer id) throws AppException, DataEmptyException, NotNullException, NumbersException {
 		Beneficio beneficio = null;
 		try {
 
@@ -115,10 +115,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		} catch (SQLException e) {
 			
 			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al buscar el beneficio");
-			// TODO: disparar Exception propia
+			throw new AppException("No se puede buscar el beneficio por un error en la base de datos");
 		} finally {
 			ConnectionManager.disconnect();
 			
@@ -212,4 +209,39 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 
 		return catalogos;
 	}
+	
+	@Override
+	public Beneficio buscarBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException {
+		Beneficio beneficio = null;
+		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM catalogos c join campañas camp on (c.id_campaña = camp.id_campaña) " + 
+							"join beneficios b on (c.id_beneficio=b.id_beneficio) " + 
+							"where b.nombre_beneficio=?");
+			statement.setString(1, nombre);
+			ResultSet rs = statement.executeQuery();
+			
+			
+			while(rs.next()) {
+				
+				beneficio = new Beneficio(rs.getString("b.nombre_beneficio"), rs.getInt("b.puntos"));
+			}
+		
+
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			throw new AppException("No se pudo buscar el beneficio por un error en la base de datos");
+		
+		} finally {
+			ConnectionManager.disconnect();
+			
+		}
+
+		return beneficio;
+	}
+
 }

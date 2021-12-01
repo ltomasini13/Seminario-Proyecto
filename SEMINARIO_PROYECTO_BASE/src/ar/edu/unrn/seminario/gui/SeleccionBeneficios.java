@@ -75,8 +75,8 @@ public class SeleccionBeneficios extends JFrame{
 				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
-				Integer id=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
-				ListadoCiudadano listado = new ListadoCiudadano(id, api);
+				String nombre =(String)modelo.getValueAt(table.getSelectedRow(), 1);
+				ListadoCiudadano listado = new ListadoCiudadano(nombre, api);
 				listado.setVisible(true);
 				dispose();
 			}	
@@ -132,25 +132,10 @@ public class SeleccionBeneficios extends JFrame{
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
 		scrollPane.setViewportView(table);
-
-		realizarCanjeBoton = new JButton("REALIZAR CANJE");
-		realizarCanjeBoton.addActionListener((ActionEvent e) -> {
-			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
-			}
-			else {
-				Integer id=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
-				ListadoCiudadano listado = new ListadoCiudadano(id, api);
-				listado.setVisible(true);
-				dispose();
-			}	
-		});
 		
 		panelBotones = new JPanel();
 		panelBotones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
-		
-		panelBotones.add(realizarCanjeBoton);
 		
 		cerrarBoton = new JButton("CERRAR");
 		cerrarBoton.addActionListener((ActionEvent e) -> {
