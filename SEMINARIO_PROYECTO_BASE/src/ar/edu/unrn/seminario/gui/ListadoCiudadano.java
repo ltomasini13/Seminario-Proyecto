@@ -64,13 +64,13 @@ public class ListadoCiudadano extends JFrame {
 		cargarMenuPopop();
 	}
 	
-	public ListadoCiudadano(Integer idBeneficio, IApi api) {
+	public ListadoCiudadano(String nombreBeneficio, IApi api) {
 		this.api=api;
 		inicializarVentana();
 		cargarEstructuraDeLaTabla();
 		cargarDatosTabla();
 		visibilizarTabla();
-		cargarPanelDeOperacionesSeleccionarCiudadano(idBeneficio);
+		cargarPanelDeOperacionesSeleccionarCiudadano(nombreBeneficio);
 		cargarMenuPopop();
 	}
 	private void cargarEstructuraDeLaTabla() {
@@ -148,7 +148,7 @@ public class ListadoCiudadano extends JFrame {
 		pnlBotonesOperaciones.add(botonCerrar);
 	}
 	
-	private void  cargarPanelDeOperacionesSeleccionarCiudadano(Integer idBeneficio) {
+	private void  cargarPanelDeOperacionesSeleccionarCiudadano(String nombreBeneficio) {
 		pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
@@ -162,10 +162,10 @@ public class ListadoCiudadano extends JFrame {
 				popupMenu.setVisible(false);
 				try {
 					String dni=(String)modelo.getValueAt(table.getSelectedRow(), 3);
-					api.realizarCanje(idBeneficio, dni);
+					api.realizarCanje(nombreBeneficio, dni);
 					dispose();
 					
-				} catch (NumbersException | SintaxisSQLException | AppException | NotNullException e1) {
+				} catch (NumbersException | SintaxisSQLException | AppException | NotNullException | DataEmptyException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}			
 			}

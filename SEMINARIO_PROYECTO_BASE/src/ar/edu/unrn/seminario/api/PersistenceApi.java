@@ -971,9 +971,10 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException {
+	public void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException {
 		
-		Beneficio beneficio = beneficioDao.buscar(idBeneficio);
+		//obtener los beneficios dentro del dao
+		Beneficio beneficio = beneficioDao.buscarBeneficio(nombre);
 		Ciudadano ciudadano = ciudadanoDao.buscar(dni);
 		
 		if(ciudadano.puntaje() < beneficio.obtenerPuntos() ) {
@@ -1100,8 +1101,11 @@ public  class PersistenceApi implements IApi {
 
 
 	
+<<<<<<< HEAD
 
 //	private validarfechaCanje() {
 //		
 //	}
+=======
+>>>>>>> 8859f5793cf8a8974acfc09eb59e9386c4c81cb2
 }

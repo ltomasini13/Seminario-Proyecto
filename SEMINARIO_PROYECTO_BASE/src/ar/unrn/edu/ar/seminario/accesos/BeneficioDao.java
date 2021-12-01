@@ -27,4 +27,8 @@ public interface BeneficioDao {
 	List<Beneficio> ListarCatalogo(Campaña camp) throws NotNullException, DataEmptyException, DateException, NumbersException, AppException;
 
 	List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException;
+
+	Beneficio buscarBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException;
+
+	
 }
