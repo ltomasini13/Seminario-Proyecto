@@ -105,6 +105,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 				
 				Integer idOrden= (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 				if(idOrden!=-1) {
+					dispose();
 					SeleccionRecolector seleccionRecolector = new SeleccionRecolector(api, idOrden);
 					seleccionRecolector.setVisible(true);
 				}
@@ -120,6 +121,8 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		
 		botonRealizarVisita = new JButton("REALIZAR VISITA");
 		botonRealizarVisita.addActionListener((ActionEvent e) -> {
+				popupMenu.setVisible(false);
+				dispose();
 				Integer idOrden = (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 				SeleccionResiduosRetirados seleccionResiduosRetirados = new SeleccionResiduosRetirados(api, idOrden);
 				seleccionResiduosRetirados.setVisible(true);
@@ -128,6 +131,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 
 		JButton botonCerrarButton = new JButton("CERRAR");
 		botonCerrarButton.addActionListener((ActionEvent e) -> {
+				popupMenu.setVisible(false);
 				dispose();
 		});
 

@@ -41,7 +41,7 @@ public class ListadoVisitas extends JFrame {
 	 * @throws EmptyListException 
 	 */
 	public ListadoVisitas(IApi api) throws EmptyListException {
-		setTitle("LISTADO ORDENES");
+		setTitle("LISTADO VISITAS");
 		this.api = api;
 
 		inicializarVentana();
@@ -54,7 +54,7 @@ public class ListadoVisitas extends JFrame {
 	}
 
 	public ListadoVisitas(IApi api, Integer idOrden) throws EmptyListException {
-		setTitle("LISTADO ORDENES");
+		setTitle("LISTADO VISITAS");
 		this.api = api;
 
 		inicializarVentana();
@@ -71,6 +71,7 @@ public class ListadoVisitas extends JFrame {
 	private void cargarPanelDeOperaciones() {
 		cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
+				popupMenu.setVisible(false);
 				dispose();
 		});
 		

@@ -156,6 +156,7 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 					 usu.editarId(rs.getInt("u.id_usuario"));
 				}
 				ciu=new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), usu);
+				ciu.editarPuntaje(rs.getDouble("c.puntaje"));
 				ciu.editarId(rs.getInt("c.id_ciudadano"));
 			}
 		
@@ -260,8 +261,7 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 				
 				Ciudadano ciu= new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"),rs.getString("c.dni"),  usuario);
 				ciu.editarId(rs.getInt("c.id_ciudadano"));
-				
-				
+				ciu.editarPuntaje(rs.getDouble("c.puntaje"));
 				ciudadanos.add(ciu);
 			}
 	 

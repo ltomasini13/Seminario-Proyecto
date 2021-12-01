@@ -48,6 +48,7 @@ public class RegistrarCampaña extends JFrame {
 		aceptarBoton.addActionListener((ActionEvent e) -> {
 			try {
 				api.registrarCampaña(nombreText.getText(), descripcionText.getText());
+				JOptionPane.showMessageDialog(null,"¡Campaña agregada con éxito!", "Info", JOptionPane.INFORMATION_MESSAGE);
 				this.dispose();
 			} catch (AppException | DataEmptyException | NotNullException | DateException | CreationValidationException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);

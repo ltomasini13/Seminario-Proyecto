@@ -260,6 +260,7 @@ public class ListadoVivienda extends JFrame {
 	private void cargarPanelDeOperaciones() {
 		JButton cerrarButton = new JButton("CERRAR");
 		cerrarButton.addActionListener((ActionEvent e) -> {
+				popupMenu.setVisible(false);
 				dispose();
 		});
 		

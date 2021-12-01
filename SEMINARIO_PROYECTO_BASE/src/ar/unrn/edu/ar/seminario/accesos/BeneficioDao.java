@@ -16,7 +16,7 @@ public interface BeneficioDao {
 	
 	List<Beneficio> listarTodos()throws AppException,  DataEmptyException, NotNullException, NumbersException;
 
-	Beneficio buscar(Integer id);
+	Beneficio buscar(Integer id) throws AppException, DataEmptyException, NotNullException, NumbersException;
 	
 	void actualizar(Beneficio beneficio);
 

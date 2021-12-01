@@ -78,14 +78,9 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			}
 			
 		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
+			 
 				System.out.println("Error al procesar la consulta");
 				throw new AppException("No se pudo listar los beneficios por un error en la Base de Datos");
-			}
-			System.out.println("Error al procesar la consulta");
-			
 		}
 		finally {
 			ConnectionManager.disconnect();
@@ -94,7 +89,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public Beneficio buscar(Integer id) {
+	public Beneficio buscar(Integer id) throws AppException, DataEmptyException, NotNullException, NumbersException {
 		Beneficio beneficio = null;
 		try {
 
@@ -115,11 +110,11 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		} catch (SQLException e) {
 			
 			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al buscar el beneficio");
-			// TODO: disparar Exception propia
-		} finally {
+			throw new AppException("No se pudo buscar el beneficio por un error en la Base de Datos");
+		}
+		
+		
+		finally {
 			ConnectionManager.disconnect();
 			
 		}

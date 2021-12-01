@@ -125,28 +125,15 @@ public interface IApi {
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
 
 	
-<<<<<<< HEAD
-	
-	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
-	
-	void actualizarPuntaje(double puntaje);
-	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña)
-			throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
-	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
-	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
-	
-	
-	
-=======
-	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
-	
-	void actualizarPuntaje(double puntaje);
-	
-	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
-	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, CreationValidationException;
-	
-	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
 
->>>>>>> ae5b380f8fbc5485b394bf35c69166409ecea4d8
+	
+	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
+	
+	void actualizarPuntaje(double puntaje);
+	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
+	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException;
+	
+
 
 }

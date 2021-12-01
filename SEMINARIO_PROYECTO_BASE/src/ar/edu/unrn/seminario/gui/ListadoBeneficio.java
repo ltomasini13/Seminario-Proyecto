@@ -140,7 +140,7 @@ public class ListadoBeneficio extends JFrame{
 					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
 					seleccion.setVisible(true);
 					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
-				} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | CreationValidationException e1) {
+				} catch (AppException | NotNullException | DataEmptyException | NumbersException | CreationValidationException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 			}

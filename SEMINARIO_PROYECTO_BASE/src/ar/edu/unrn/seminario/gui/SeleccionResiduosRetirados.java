@@ -96,6 +96,7 @@ public class SeleccionResiduosRetirados extends JFrame{
 		
 		JButton cancelarBoton = new JButton("CANCELAR");
 		cancelarBoton.addActionListener((ActionEvent arg0) ->{
+			popupMenu.setVisible(false);
 			dispose();
 		});
 		cancelarBoton.setBounds(284, 227, 89, 23);

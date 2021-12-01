@@ -10,15 +10,31 @@ public class CiudadanoDTO {
 	private String apellido;
 	private String dni;
 	private String nombreDeUsuario;
+	private double puntosObtenidos;
 	
 	
-	public CiudadanoDTO (Integer id, String nombre, String apellido, String dni) {
+	public CiudadanoDTO (Integer id, String nombre, String apellido, String dni , double puntosObtenidos) {
 		this.id=id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
+		this.puntosObtenidos=puntosObtenidos;
 	} 	
+	
+	
  
+	public double obtenerPuntosObtenidos() {
+		return puntosObtenidos;
+	}
+
+
+
+	public void editarPuntosObtenidos(double puntosObtenidos) {
+		this.puntosObtenidos = puntosObtenidos;
+	}
+
+
+
 	public String obtenerNombreDeUsuario() {
 		return nombreDeUsuario;
 	}

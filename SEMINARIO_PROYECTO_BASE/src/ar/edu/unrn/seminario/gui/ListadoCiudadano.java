@@ -33,7 +33,7 @@ public class ListadoCiudadano extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel pnlBotonesOperaciones;
-	private String[] titulos= {"ID", "NOMBRE", "APELLIDO", "DNI", "NOMBRE DE USUARIO"};
+	private String[] titulos= {"ID", "NOMBRE", "APELLIDO", "DNI", "NOMBRE DE USUARIO", "PUNTOS OBTENIDOS"};
 	private DefaultTableModel modelo;
 	private JTable table;
 	private IApi api;
@@ -93,13 +93,13 @@ public class ListadoCiudadano extends JFrame {
 		List<CiudadanoDTO> ciudadanosDTO= api.obtenerCiudadanos();
 		for (CiudadanoDTO c : ciudadanosDTO) {
 		
-			modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario()});
+			modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
 		}
 	}
 	
 	private void cargarDatosTabla(Integer idVivienda) {
 			CiudadanoDTO c= api.obtenerCiudadanoDeLaVivienda(idVivienda);
-			modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario()});
+			modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
 			
 	}
 		
@@ -142,6 +142,7 @@ public class ListadoCiudadano extends JFrame {
 		botonCerrar = new JButton("CERRAR");
 		
 		botonCerrar.addActionListener((ActionEvent e)-> {
+			popupMenu.setVisible(false);
 			dispose();
 		});
 		pnlBotonesOperaciones.add(botonCerrar);
