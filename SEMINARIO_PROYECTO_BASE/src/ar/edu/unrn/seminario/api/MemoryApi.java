@@ -8,17 +8,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
+import ar.edu.unrn.seminario.dto.ResiduoRestanteDTO;
+import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.VisitaDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
+import ar.edu.unrn.seminario.exception.CollectorException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.DateException;
+import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.exception.WasteException;
+import ar.edu.unrn.seminario.exception.ZeroNegativeNumberException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.RegistroVivienda;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -150,17 +167,17 @@ public class MemoryApi implements IApi {
 		}
 	}
 
-	@Override
-	public List<ViviendaDTO> obtenerViviendas() {
-		List<ViviendaDTO> viviendasDTO=new ArrayList<ViviendaDTO>();
-		for(RegistroVivienda viv : this.viviendas) {
-			ViviendaDTO vivienda = new ViviendaDTO(viv.obtenerCalleVivienda(), viv.obtenerNroVivienda(), viv.obtenerBarrioVivienda(),
-					viv.obtenerLatitudVivienda(), viv.obtenerLongitudVivienda(),viv.obtenerNombreApellidoCiudadano(), viv.obtenerFechaYhora());
-			
-			viviendasDTO.add(vivienda);
-		}
-		return viviendasDTO;
-	}
+//	@Override
+//	public List<ViviendaDTO> obtenerViviendas() {
+//		List<ViviendaDTO> viviendasDTO=new ArrayList<ViviendaDTO>();
+//		for(RegistroVivienda viv : this.viviendas) {
+//			ViviendaDTO vivienda = new ViviendaDTO(viv.obtenerCalleVivienda(), viv.obtenerNroVivienda(), viv.obtenerBarrioVivienda(),
+//					viv.obtenerLatitudVivienda(), viv.obtenerLongitudVivienda(),viv.obtenerNombreApellidoCiudadano(), viv.obtenerFechaYhora());
+//			
+//			viviendasDTO.add(vivienda);
+//		}
+//		return viviendasDTO;
+//	}
 
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
@@ -179,17 +196,17 @@ public class MemoryApi implements IApi {
 		
 	}
 
-	@Override
-	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ViviendaDTO> obtenerViviendas(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public UsuarioDTO loguearUsuario(String username, String contrasena) throws SintaxisSQLException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<ViviendaDTO> obtenerViviendas(Usuario usuario) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
 	public void registrarCiudadano(String username, String password, String email, String nombre, Integer rol,
@@ -205,27 +222,287 @@ public class MemoryApi implements IApi {
 		
 	}
 
-	@Override
-	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void registrarPedidoRetiro(String fechaEmision, String cargaPesada, String observacion) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public List<PedidoRetiroDTO> obtenerPedidos() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+//
+//	@Override
+//	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<ResiduoDTO> obtenerResiduos()
+//			throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
-	public List<PedidoRetiroDTO> obtenerPedidos(Usuario usuario) {
+	public void loguearUsuario(String username, String contrasena)
+			throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean esUsuarioAdmin() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean esUsuarioReciclador() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ViviendaDTO obtenerVivienda(Integer idVivienda) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ResiduoDTO> obtenerResiduos()
-			throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
+	public ViviendaDTO obtenerViviendaDelPedido(Integer idPedido) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PedidoRetiroDTO obtenerPedidoDeLaOrden(Integer idOrden) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void cerrarSesion() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion,
+			List<ResiduoARetirarDTO> residuosARetirar)
+			throws NotNullException, ZeroNegativeNumberException, EmptyListException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud)
+			throws DataEmptyException, NumbersException, NotNullException, AuthenticationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pedidoPendiente(Integer id_vivienda) throws CreationValidationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registrarRecolector(String nombre, String apellido, String dni, String email) throws NotNullException,
+			DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ResiduoRetiradoDTO> obtenerResiduosRetirados(Integer idVisita) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void generarOrden(Integer id_pedido) throws SintaxisSQLException, CreationValidationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancelarOrden(Integer idOrden) throws StateException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void asignarRecolector(Integer idOrden, Integer idRecolector) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cambiarDueño(Integer idVivienda, String dni) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano)
+			throws NotNullException, DataEmptyException, NumbersException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CiudadanoDTO> obtenerCiudadanos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO)
+			throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException,
+			SintaxisSQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<VisitaDTO> obtenerVisitasDeLaOrden(Integer idOrden) throws EmptyListException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registrarBeneficio(String nombre, String puntos)
+			throws DataEmptyException, NotNullException, NumbersException, AppException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<BeneficioDTO> obtenerBeneficios()
+			throws AppException, DataEmptyException, NotNullException, NumbersException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registrarCampaña(String nombre, String descripcion)
+			throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CampañaDTO> obtenerCampañas() throws AppException, DataEmptyException, NotNullException, DateException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void realizarCanje(Integer idBeneficio, String dni)
+			throws NumbersException, SintaxisSQLException, NotNullException, AppException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actualizarPuntaje(double puntaje) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<BeneficioDTO> obtenerCatalogo(Integer idCampaña)
+			throws AppException, NotNullException, DataEmptyException, DateException, NumbersException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio)
+			throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ViviendaDTO> obtenerViviendas() throws EmptyListException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ResiduoDTO> obtenerResiduos() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -125,6 +125,9 @@ public interface IApi {
 	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
 
 	
+<<<<<<< HEAD
+
+=======
 <<<<<<< Updated upstream
 <<<<<<< HEAD
 	
@@ -137,20 +140,18 @@ public interface IApi {
 	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
 	
 	
+>>>>>>> 8859f5793cf8a8974acfc09eb59e9386c4c81cb2
 	
-=======
 	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
 =======
 	void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException;
 >>>>>>> Stashed changes
 	
 	void actualizarPuntaje(double puntaje);
-	
 	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
-	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, CreationValidationException;
-	
 	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException;
+	
 
->>>>>>> ae5b380f8fbc5485b394bf35c69166409ecea4d8
 
 }

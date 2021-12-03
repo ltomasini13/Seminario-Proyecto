@@ -75,7 +75,7 @@ public class RegistrarRecolector extends JFrame {
 		aceptarButton.addActionListener((ActionEvent e) -> {
 			try {
 				api.registrarRecolector(nombreText.getText(), apellidoText.getText(), dniText.getText(), emailText.getText());
-				JOptionPane.showMessageDialog(null, "Se creo exitosamente al recolector.", "Confirmación", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "El recolector se creo exitosamente", "CONFIRMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				this.dispose();
 			} catch (NotNullException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

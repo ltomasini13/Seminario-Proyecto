@@ -115,6 +115,7 @@ public class SeleccionCiudadano extends JFrame {
 		btnCerrar = new JButton("Cerrar");
 		btnCerrar.addActionListener((ActionEvent arg0)-> {
 			try {
+				
 				dispose();
 				ListadoVivienda listadoVivienda = new ListadoVivienda(api);
 				listadoVivienda.setVisible(true);

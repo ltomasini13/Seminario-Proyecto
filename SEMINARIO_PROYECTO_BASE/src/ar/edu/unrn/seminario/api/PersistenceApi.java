@@ -83,7 +83,7 @@ import ar.unrn.edu.ar.seminario.accesos.VisitaDao;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDAOJDBC;
 import ar.unrn.edu.ar.seminario.accesos.ViviendaDao;
 
-public abstract class PersistenceApi implements IApi {
+public  class PersistenceApi implements IApi {
 	private ViviendaDao viviendaDao;
 	private RolDao rolDao;
 	private UsuarioDao usuarioDao;
@@ -647,7 +647,7 @@ public abstract class PersistenceApi implements IApi {
 		Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(orden.obtenerViviendaDelPedido().obtenerId());
 		ciudadano.sumarPuntos(calcularPuntaje(orden));
 		ciudadanoDao.actualizar(ciudadano);
-		System.out.println();
+	
 		PedidoRetiro pedido = this.pedidoDao.buscarPedido(orden.obtenerPedido().obtenerId());
 		pedido.editarFechaCumplimiento(LocalDateTime.now());
 		pedidoDao.actualizar(pedido);
@@ -711,7 +711,7 @@ public abstract class PersistenceApi implements IApi {
 		List<CiudadanoDTO> ciudadanosDTO = new ArrayList<CiudadanoDTO>();
 		
 		for (Ciudadano ciu  :  this.ciudadanoDao.listarTodos()) {
-			ciudadanosDTO.add(new CiudadanoDTO(ciu.obtenerId(),ciu.obtenerNombre(), ciu.obtenerApellido(), ciu.obtenerDni()));
+			ciudadanosDTO.add(new CiudadanoDTO(ciu.obtenerId(),ciu.obtenerNombre(), ciu.obtenerApellido(), ciu.obtenerDni(), ciu.obtenerPuntaje()));
 		}
 		
 		return ciudadanosDTO;
@@ -721,7 +721,7 @@ public abstract class PersistenceApi implements IApi {
 	@Override
 	public CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda) {
 		Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(idVivienda);
-		CiudadanoDTO ciudadanoDTO= new CiudadanoDTO(ciudadano.obtenerId(), ciudadano.obtenerNombre(), ciudadano.obtenerApellido(),ciudadano.obtenerDni());
+		CiudadanoDTO ciudadanoDTO= new CiudadanoDTO(ciudadano.obtenerId(), ciudadano.obtenerNombre(), ciudadano.obtenerApellido(),ciudadano.obtenerDni(), ciudadano.obtenerPuntaje());
 		if(ciudadano.obtenerUsuario()!=null) {
 			ciudadanoDTO.editarNombreDeUsuario(ciudadano.obtenerNombreDeUsuario());
 		}
@@ -732,7 +732,6 @@ public abstract class PersistenceApi implements IApi {
 	@Override
 	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, StateException, WasteException, CollectorException, SintaxisSQLException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
-		System.out.println();
 		if(!orden.tieneRecolector()) {    //Valida que la orden tenga un recolector asignado
 			throw new CollectorException("La orden no tiene ningún recolector asignado");
 		}
@@ -768,22 +767,13 @@ public abstract class PersistenceApi implements IApi {
 		
 		visitaDao.crear(visita);
 		if(!quedanResiduosRestantes(nuevosResiduosRestantes)) {    //si no quedan residuos restantes para poder completar el pedido
-			   //la orden se cambia de estado
-				orden.finalizarOrden();	
-				Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(orden.obtenerViviendaDelPedido().obtenerId());
-				ciudadano.sumarPuntos(calcularPuntaje(orden));
-				ciudadanoDao.actualizar(ciudadano);
-				
-				PedidoRetiro pedido = this.pedidoDao.buscarPedido(orden.obtenerPedido().obtenerId());
-				pedido.editarFechaCumplimiento(LocalDateTime.now());
-				pedidoDao.actualizar(pedido);
+			   concretarOrden(idOrden);
 		}
 	
 	}
 
 
 		
-	
 	
 	private double calcularPuntaje(OrdenDeRetiro orden) {
 		double puntaje=0;
@@ -1108,17 +1098,14 @@ public abstract class PersistenceApi implements IApi {
 		return this.estanTodosResiduosDeclarados(residuosRetirados, orden.obtenerPedido().obtenerId());
 	}
 
+
+
+	
 <<<<<<< HEAD
 
-	@Override
-	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	
+//	private validarfechaCanje() {
+//		
+//	}
 =======
->>>>>>> ae5b380f8fbc5485b394bf35c69166409ecea4d8
-	
+>>>>>>> 8859f5793cf8a8974acfc09eb59e9386c4c81cb2
 }

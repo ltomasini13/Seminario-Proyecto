@@ -76,6 +76,7 @@ public class SeleccionRecolector extends JFrame {
 			api.asignarRecolector(idOrden, idRecolector);
 			JOptionPane.showMessageDialog(null, "Se asigno el recolecor correctamente", "INFO", JOptionPane.INFORMATION_MESSAGE);
 			try {
+				dispose();
 				ListadoOrdenDeRetiro listadoOrdenes = new ListadoOrdenDeRetiro(api);
 				listadoOrdenes.setVisible(true);
 			} catch (SintaxisSQLException e1) {
