@@ -32,6 +32,7 @@ import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -118,7 +119,7 @@ public  class PersistenceApi implements IApi {
 
 	@Override
 	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
-			throws DataEmptyException, NotNullException, SintaxisSQLException {
+			throws DataEmptyException, NotNullException, SintaxisSQLException, AppException, InstanceException {
 		
 		
 		Rol role = this.rolDao.obtenerRol(rol);
@@ -130,7 +131,7 @@ public  class PersistenceApi implements IApi {
 
 	@Override
 	public void registrarCiudadano(String username, String password, String email, String nombre, Integer rol,
-			String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException, NumbersException, AuthenticationException {
+			String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException, NumbersException, AuthenticationException, AppException, InstanceException {
 		
 		if(this.usuarioDao.buscar(username)!=null) {
 			throw new AuthenticationException("El nombre de usuario '"+ username + "' ya esta en uso");
@@ -151,7 +152,7 @@ public  class PersistenceApi implements IApi {
 	@Override
 	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud,
 			String nombreCiudadano, String apeCiudadano, String dniCiudadano)
-			throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, AuthenticationException {
+			throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, AuthenticationException, AppException, InstanceException {
 		
 		if(latitud.isEmpty() || longitud.isEmpty() || numero.isEmpty()) {
 			throw new DataEmptyException("Faltan completar campos");
@@ -193,7 +194,7 @@ public  class PersistenceApi implements IApi {
 	
 	
 	@Override
-	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException {
+	public void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException, AppException, InstanceException {
 		if(latitud.isEmpty() || longitud.isEmpty() || numero.isEmpty()) {
 			throw new DataEmptyException("Faltan completar campos");
 		}
@@ -227,7 +228,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException, NotNullException, DataEmptyException {
+	public UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException, NotNullException, DataEmptyException, AppException, InstanceException {
 		Usuario usuario = this.usuarioDao.buscar(username);
 		UsuarioDTO usuarioDTO = null;
 		
@@ -250,7 +251,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<RolDTO> obtenerRoles() throws SintaxisSQLException {
+	public List<RolDTO> obtenerRoles() throws SintaxisSQLException, AppException, InstanceException {
 		List<RolDTO> rolesDto=new ArrayList<RolDTO>();
 		
 		for(Rol r : rolDao.listarTodos()) {
@@ -307,7 +308,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<UsuarioDTO> obtenerUsuarios() {
+	public List<UsuarioDTO> obtenerUsuarios() throws AppException, InstanceException {
 		List<Usuario> usuarios = this.usuarioDao.listarTodos();
 		
 		List<UsuarioDTO> usuariosDTO = new ArrayList<UsuarioDTO>();
@@ -336,7 +337,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<ViviendaDTO> obtenerViviendas() throws EmptyListException  {
+	public List<ViviendaDTO> obtenerViviendas() throws EmptyListException, AppException, InstanceException  {
 		List<ViviendaDTO> viviendasDTO=new ArrayList<ViviendaDTO>();
 		List<Vivienda> viviendas;
 		if(this.esUsuarioAdmin()) {
@@ -369,7 +370,7 @@ public  class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public ViviendaDTO obtenerVivienda(Integer idVivienda) {
+	public ViviendaDTO obtenerVivienda(Integer idVivienda) throws AppException, InstanceException {
 		Vivienda viv = this.viviendaDao.buscar(idVivienda);
 		return (new ViviendaDTO(viv.obtenerId(), viv.obtenerUbicacionCalle(), viv.obtenerUbicacionNro(), viv.obtenerUbicacionBarrio(),
 				viv.obtenerUbicacionLatitud(), viv.obtenerUbicacionLongitud(), viv.obtenerNombreCiudadano()+" "+viv.obtenerApellidoCiudadano()));
@@ -377,7 +378,7 @@ public  class PersistenceApi implements IApi {
 	
 	
 	@Override
-	public ViviendaDTO obtenerViviendaDelPedido(Integer idPedido) {
+	public ViviendaDTO obtenerViviendaDelPedido(Integer idPedido) throws AppException, InstanceException {
 		Vivienda vivienda = this.viviendaDao.buscarPorPedido(idPedido);
 		ViviendaDTO viviendaDTO = new ViviendaDTO(vivienda.obtenerId(), vivienda.obtenerUbicacionCalle(), vivienda.obtenerUbicacionNro(), 
 				vivienda.obtenerUbicacionBarrio(), vivienda.obtenerUbicacionLatitud(), vivienda.obtenerUbicacionLongitud(), 
@@ -387,7 +388,7 @@ public  class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
+	public void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException, AppException, InstanceException {
 		if(username==null || contrasena==null) {
 			throw new NotNullException("Los campos de usuario o contraseña son nulos");
 		}
@@ -452,7 +453,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException {
+	public List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException, AppException, InstanceException {
 		List<PedidoRetiroDTO> pedidosDTO=new ArrayList<PedidoRetiroDTO>();
 		List<PedidoRetiro> pedidos = new ArrayList<PedidoRetiro>();
 		if(this.esUsuarioAdmin()) {
@@ -494,7 +495,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public PedidoRetiroDTO obtenerPedidoDeLaOrden(Integer idOrden) {
+	public PedidoRetiroDTO obtenerPedidoDeLaOrden(Integer idOrden) throws AppException, InstanceException {
 		PedidoRetiro pedido = this.pedidoDao.buscarPorOrden(idOrden);
 		PedidoRetiroDTO pedidoDTO=null;
 		
@@ -509,10 +510,10 @@ public  class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<ResiduoDTO> obtenerResiduos()  {
+	public List<ResiduoDTO> obtenerResiduos() throws AppException, InstanceException  {
 		List<ResiduoDTO> residuosDTO=new ArrayList<ResiduoDTO>();
 		
-		try {
+		
 			for(TipoResiduo residuo : residuoDao.listarTodos()) {
 				try {
 					residuosDTO.add(new ResiduoDTO(residuo.obtenerId(),residuo.obtenerTipo(), residuo.obtenerPunto()));
@@ -520,16 +521,13 @@ public  class PersistenceApi implements IApi {
 					
 				}
 			}
-		} catch (SintaxisSQLException e) {
-			
-		}
 		
 		return residuosDTO;
 	}
 
 	
 	@Override
-	public List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido) {
+	public List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido) throws AppException, InstanceException {
 		List<ResiduoARetirarDTO> residuosARetirarDTO=new ArrayList<ResiduoARetirarDTO>();
 		
 		for(ResiduoARetirar res : this.pedidoDao.buscarResiduosARetirar(idPedido)) {
@@ -541,7 +539,7 @@ public  class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public List<ResiduoRetiradoDTO> obtenerResiduosRetirados(Integer idVisita){
+	public List<ResiduoRetiradoDTO> obtenerResiduosRetirados(Integer idVisita) throws AppException, InstanceException{
 		List<ResiduoRetiradoDTO> residuosRetiradosDTO = new ArrayList<ResiduoRetiradoDTO>();
 		
 		for(ResiduoRetirado res : this.residuosDao.buscarResiduosRetirados(idVisita)) {
@@ -558,7 +556,7 @@ public  class PersistenceApi implements IApi {
 
 	@Override
 	public void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion,
-			List<ResiduoARetirarDTO> residuosARetirarDTO) throws NotNullException, ZeroNegativeNumberException, EmptyListException {
+			List<ResiduoARetirarDTO> residuosARetirarDTO) throws NotNullException, ZeroNegativeNumberException, EmptyListException, AppException, InstanceException {
 		
 		
 		List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
@@ -578,7 +576,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void pedidoPendiente(Integer id_vivienda) throws CreationValidationException {
+	public void pedidoPendiente(Integer id_vivienda) throws CreationValidationException, AppException, InstanceException {
 		
 		List<PedidoRetiro> pedidos = pedidoDao.buscar(id_vivienda);
 		if(!pedidos.isEmpty()) {
@@ -593,7 +591,7 @@ public  class PersistenceApi implements IApi {
 	}
 
 	public void registrarRecolector(String nombre, String apellido, String dni, String email)
-			throws NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException {
+			throws NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException, AppException, InstanceException {
 		
 		Recolector recolector = new Recolector(nombre, apellido, dni, email);
 		
@@ -602,7 +600,7 @@ public  class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException {
+	public List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException, AppException, InstanceException {
 		List<RecolectorDTO> recolectoresDTO=new ArrayList<RecolectorDTO>();
 		
 		for(Recolector r: recolectorDao.listarTodos()) {
@@ -613,7 +611,7 @@ public  class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public void generarOrden(Integer idPedido) throws SintaxisSQLException, CreationValidationException {
+	public void generarOrden(Integer idPedido) throws SintaxisSQLException, CreationValidationException, AppException, InstanceException {
 		
 		List<OrdenDeRetiro> ordenes = ordenDao.buscarPedido(idPedido);
 		if(!ordenes.isEmpty()) {
@@ -630,7 +628,7 @@ public  class PersistenceApi implements IApi {
 	
 	
 	@Override
-	public void cancelarOrden(Integer idOrden) throws StateException {
+	public void cancelarOrden(Integer idOrden) throws StateException, AppException, InstanceException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		orden.cancelarOrden();
 		this.ordenDao.actualizar(orden);
@@ -639,7 +637,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException {
+	public void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException, AppException, InstanceException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		orden.finalizarOrden();
 		this.ordenDao.actualizar(orden);
@@ -657,7 +655,7 @@ public  class PersistenceApi implements IApi {
 	
 	
 	@Override
-	public List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException {
+	public List<OrdenDeRetiroDTO> obtenerOrdenes()throws AppException, InstanceException {
 		List<OrdenDeRetiroDTO> listaOrdenes = new ArrayList<OrdenDeRetiroDTO>();
 		
 		for(OrdenDeRetiro o : this.ordenDao.listarTodos()) {
@@ -676,7 +674,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void asignarRecolector(Integer idOrden, Integer idRecolector) {
+	public void asignarRecolector(Integer idOrden, Integer idRecolector) throws AppException, InstanceException {
 		
 		Recolector recolector  = this.recolectorDao.buscar(idRecolector);
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
@@ -687,7 +685,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException {
+	public void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException, AppException, InstanceException {
 		Ciudadano ciudadano = new Ciudadano(nombreCiudadano, apeCiudadano, dniCiudadano, null);
 		Vivienda vivienda = this.viviendaDao.buscar(idVivienda);
 		
@@ -698,7 +696,7 @@ public  class PersistenceApi implements IApi {
 
 	
 	@Override
-	public void cambiarDueño(Integer idVivienda, String dni) {
+	public void cambiarDueño(Integer idVivienda, String dni) throws AppException, InstanceException {
 		Ciudadano ciudadano = this.ciudadanoDao.buscar(dni);
 		Vivienda vivienda = this.viviendaDao.buscar(idVivienda);
 		
@@ -707,7 +705,7 @@ public  class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<CiudadanoDTO> obtenerCiudadanos() {
+	public List<CiudadanoDTO> obtenerCiudadanos() throws AppException, InstanceException {
 		List<CiudadanoDTO> ciudadanosDTO = new ArrayList<CiudadanoDTO>();
 		
 		for (Ciudadano ciu  :  this.ciudadanoDao.listarTodos()) {
@@ -719,7 +717,7 @@ public  class PersistenceApi implements IApi {
 
 	
 	@Override
-	public CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda) {
+	public CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda) throws AppException, InstanceException {
 		Ciudadano ciudadano = this.ciudadanoDao.buscarPorVivienda(idVivienda);
 		CiudadanoDTO ciudadanoDTO= new CiudadanoDTO(ciudadano.obtenerId(), ciudadano.obtenerNombre(), ciudadano.obtenerApellido(),ciudadano.obtenerDni(), ciudadano.obtenerPuntaje());
 		if(ciudadano.obtenerUsuario()!=null) {
@@ -730,7 +728,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, StateException, WasteException, CollectorException, SintaxisSQLException {
+	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, StateException, WasteException, CollectorException, SintaxisSQLException, AppException, InstanceException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		if(!orden.tieneRecolector()) {    //Valida que la orden tenga un recolector asignado
 			throw new CollectorException("La orden no tiene ningún recolector asignado");
@@ -775,7 +773,7 @@ public  class PersistenceApi implements IApi {
 
 		
 	
-	private double calcularPuntaje(OrdenDeRetiro orden) {
+	private double calcularPuntaje(OrdenDeRetiro orden) throws AppException, InstanceException {
 		double puntaje=0;
 		List<ResiduoRetirado>  residuosRetiradosEnTotal = this.residuosDao.buscarResiduosRetiradosEnTotal(orden.obtenerId());
 		
@@ -795,7 +793,7 @@ public  class PersistenceApi implements IApi {
 		return false;
 	}
 	
-	private boolean estanTodosResiduosDeclarados(List<ResiduoRetirado> residuosRetirados, Integer idPedido) { //se fija que esten declarados esos residuos pasados por parametro para el pedido idPedido
+	private boolean estanTodosResiduosDeclarados(List<ResiduoRetirado> residuosRetirados, Integer idPedido) throws AppException, InstanceException { //se fija que esten declarados esos residuos pasados por parametro para el pedido idPedido
 		List<ResiduoARetirar> residuosARetirar = this.residuosDao.buscarResiduosARetirar(idPedido);
 		
 		for(ResiduoRetirado resRetirado : residuosRetirados) {
@@ -847,7 +845,7 @@ public  class PersistenceApi implements IApi {
 	
 	
 	
-	private List<ResiduoRestante> calcularResiduosRestantes(OrdenDeRetiro orden){ 	//devuelve los residuos restantes de cada tipo
+	private List<ResiduoRestante> calcularResiduosRestantes(OrdenDeRetiro orden) throws AppException, InstanceException{ 	//devuelve los residuos restantes de cada tipo
 		System.out.println();
 		List<ResiduoRetirado>  residuosRetiradosEnTotal = this.residuosDao.buscarResiduosRetiradosEnTotal(orden.obtenerId());
 		List<ResiduoARetirar>residuosARetirar=this.residuosDao.buscarResiduosARetirar(orden.obtenerPedido().obtenerId());
@@ -888,7 +886,7 @@ public  class PersistenceApi implements IApi {
 	}
 	
 	
-	public void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException {
+	public void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException, InstanceException {
 		
 		if(!puntos.matches("[0-9]+")) {
 			throw new NumbersException("El valor ingresado para el campo 'Puntos' no es numérico");
@@ -902,7 +900,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<BeneficioDTO> obtenerBeneficios() throws AppException, DataEmptyException, NotNullException, NumbersException {
+	public List<BeneficioDTO> obtenerBeneficios() throws AppException, DataEmptyException, NotNullException, NumbersException, InstanceException {
 		List<BeneficioDTO> beneficiosDTO=new ArrayList<BeneficioDTO>();
 		
 		for(Beneficio b : beneficioDao.listarTodos()) {	
@@ -913,7 +911,7 @@ public  class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException {
+	public void registrarCampaña(String nombre, String descripcion)	throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException, InstanceException {
 		
 		Campaña camp = new Campaña(nombre, LocalDateTime.now().toString(), LocalDateTime.now().plusMonths(2).toString(), descripcion);	
 		
@@ -926,7 +924,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<VisitaDTO> obtenerVisitas() throws EmptyListException {
+	public List<VisitaDTO> obtenerVisitas() throws EmptyListException, AppException, InstanceException {
 		List<Visita> visitas = this.visitaDao.listarTodas();
 		List<VisitaDTO> visitasDTO = new ArrayList<>();
 
@@ -944,7 +942,7 @@ public  class PersistenceApi implements IApi {
 	
 	
 	@Override
-	public List<VisitaDTO> obtenerVisitasDeLaOrden(Integer idOrden) throws EmptyListException{
+	public List<VisitaDTO> obtenerVisitasDeLaOrden(Integer idOrden) throws EmptyListException, AppException, InstanceException{
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		List<Visita> visitas = this.visitaDao.listarTodas(orden);
 		List<VisitaDTO> visitasDTO = new ArrayList<>();
@@ -960,7 +958,7 @@ public  class PersistenceApi implements IApi {
 		return visitasDTO;
 	}
 	
-	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException {
+	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DateException, DataEmptyException, InstanceException {
 		List<CampañaDTO> campañasDTO = new ArrayList<CampañaDTO>();
 		
 		for(Campaña camp : campañaDao.listarTodos()) {
@@ -971,7 +969,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException {
+	public void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException, InstanceException {
 		
 		//obtener los beneficios dentro del dao
 		Beneficio beneficio = beneficioDao.buscarBeneficio(nombre);
@@ -991,7 +989,7 @@ public  class PersistenceApi implements IApi {
 
 	@Override
 
-	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) {
+	public OrdenDeRetiroDTO obtenerOrden(Integer idVisita) throws AppException, InstanceException {
 		OrdenDeRetiro orden = this.ordenDao.buscarPorVisita(idVisita);
 		OrdenDeRetiroDTO ordenDTO = new OrdenDeRetiroDTO(orden.obtenerId(), orden.obtenerFecha().toString(), orden.obtenerEstado(), orden.obtenerPedido().obtenerFechaEmision().toString(),
 				orden.obtenerRecolector().obtenerNombre()+" "+ orden.obtenerRecolector().obtenerApellido());
@@ -999,7 +997,7 @@ public  class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) {
+	public List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) throws AppException, InstanceException {
 		List<ResiduoRestanteDTO> residuosRestantesDTO=new ArrayList<ResiduoRestanteDTO>();
 		PedidoRetiro pedido = this.pedidoDao.buscarPedido(idPedido);
 		OrdenDeRetiro orden = this.ordenDao.buscarOrdenPorPedido(pedido);
@@ -1011,7 +1009,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden) {
+	public double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden) throws AppException, InstanceException {
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		List<ResiduoRestante> residuosRestantes = calcularResiduosRestantes(orden);
 		TipoResiduo tipo = this.residuoDao.buscar(residuoRetiradoDTO.obtenerTipo());
@@ -1041,7 +1039,7 @@ public  class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException  {
+	public void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException, InstanceException  {
 		
 		Campaña campaña = campañaDao.buscar(idCampaña);			
 			
@@ -1060,7 +1058,7 @@ public  class PersistenceApi implements IApi {
 
 
 	@Override
-	public List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException {
+	public List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, InstanceException {
 		
 		Campaña camp = campañaDao.buscar(idCampaña);
 		
@@ -1074,7 +1072,7 @@ public  class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException {
+	public CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException, InstanceException {
 		List<Campaña> campañas = campañaDao.listarTodos();
 		CampañaDTO campañaDTO=null;
 		for(Campaña camp : campañas) {
@@ -1085,7 +1083,7 @@ public  class PersistenceApi implements IApi {
 		return campañaDTO;
 	}
 
-	public boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden) {
+	public boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden) throws AppException, InstanceException {
 		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
 		OrdenDeRetiro orden = this.ordenDao.buscar(idOrden);
 		

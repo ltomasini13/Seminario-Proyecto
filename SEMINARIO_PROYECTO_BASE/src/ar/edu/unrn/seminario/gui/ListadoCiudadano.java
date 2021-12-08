@@ -25,6 +25,7 @@ import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -90,16 +91,29 @@ public class ListadoCiudadano extends JFrame {
 	}
 	
 	private void cargarDatosTabla() {
-		List<CiudadanoDTO> ciudadanosDTO= api.obtenerCiudadanos();
-		for (CiudadanoDTO c : ciudadanosDTO) {
-		
-			modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
+		List<CiudadanoDTO> ciudadanosDTO;
+		try {
+			ciudadanosDTO = api.obtenerCiudadanos();
+			for (CiudadanoDTO c : ciudadanosDTO) {
+				
+				modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 		}
+		
 	}
 	
 	private void cargarDatosTabla(Integer idVivienda) {
-			CiudadanoDTO c= api.obtenerCiudadanoDeLaVivienda(idVivienda);
-			modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
+			
+			try {
+				CiudadanoDTO c;
+				c = api.obtenerCiudadanoDeLaVivienda(idVivienda);
+				modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
+				
+			} catch (AppException | InstanceException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+			}
 			
 	}
 		
@@ -165,7 +179,7 @@ public class ListadoCiudadano extends JFrame {
 					api.realizarCanje(nombreBeneficio, dni);
 					dispose();
 					
-				} catch (NumbersException | SintaxisSQLException | AppException | NotNullException | DataEmptyException e1) {
+				} catch (NumbersException | SintaxisSQLException | AppException | NotNullException | DataEmptyException | InstanceException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}			
 			}

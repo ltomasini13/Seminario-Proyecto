@@ -24,6 +24,7 @@ import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
@@ -56,10 +57,17 @@ public class ListadoBeneficio extends JFrame{
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
-		List<BeneficioDTO> beneficios= api.obtenerBeneficios();
-		for (BeneficioDTO beneficio : beneficios) {
-			modelo.addRow(new Object[] { beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
+		List<BeneficioDTO> beneficios;
+		try {
+			beneficios = api.obtenerBeneficios();
+			
+			for (BeneficioDTO beneficio : beneficios) {
+				modelo.addRow(new Object[] { beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
+			}
+		} catch (InstanceException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "INFROMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 		}
+		
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
 		
@@ -104,10 +112,16 @@ public class ListadoBeneficio extends JFrame{
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
-		List<BeneficioDTO> beneficios= api.obtenerBeneficios();
-		for (BeneficioDTO beneficio : beneficios) {
-			modelo.addRow(new Object[] { beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
+		List<BeneficioDTO> beneficios;
+		try {
+			beneficios = api.obtenerBeneficios();
+			for (BeneficioDTO beneficio : beneficios) {
+				modelo.addRow(new Object[] { beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
+			}
+		} catch (InstanceException e2) {
+			JOptionPane.showMessageDialog(null, e2.getMessage(), "INFROMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 		}
+		
 		table.setModel(modelo);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 
@@ -140,7 +154,7 @@ public class ListadoBeneficio extends JFrame{
 					SeleccionBeneficios seleccion = new SeleccionBeneficios(api, idBeneficio, idCampaña);
 					seleccion.setVisible(true);
 					JOptionPane.showMessageDialog(null, "El beneficio se agregó correctamente al catálogo", "Confirmar", JOptionPane.INFORMATION_MESSAGE);
-				} catch (AppException | NotNullException | DataEmptyException | NumbersException | CreationValidationException e1) {
+				} catch (AppException | NotNullException | DataEmptyException | NumbersException | CreationValidationException | InstanceException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 			}

@@ -18,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
 public class ListadoRecolector extends JFrame {
@@ -47,17 +49,24 @@ public class ListadoRecolector extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		
-		List<RecolectorDTO> recolectores = api.obtenerRecolectores();
-		// Agrega los usuarios en el model
-		for (RecolectorDTO r : recolectores) {
-			modelo.addRow(new Object[] { r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail() });
-			
+		
+		try {
+			List<RecolectorDTO> recolectores;
+			recolectores = api.obtenerRecolectores();
+			// Agrega los usuarios en el model
+			for (RecolectorDTO r : recolectores) {
+				modelo.addRow(new Object[] { r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail() });
+				
+			}
+
+			table.setModel(modelo);
+
+			scrollPane.setViewportView(table);
+
+		} catch (AppException | InstanceException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
-
-		table.setModel(modelo);
-
-		scrollPane.setViewportView(table);
-
+		
 	
 
 		JButton cerrarButton = new JButton("Cerrar");

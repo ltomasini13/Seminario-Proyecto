@@ -12,8 +12,10 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -163,7 +165,7 @@ public class SeleccionResiduos extends JFrame{
 				else {
 					JOptionPane.showMessageDialog(null,"No se eligió ningun residuo", "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
 				}
-			} catch (NotNullException | ZeroNegativeNumberException | EmptyListException e) {
+			} catch (NotNullException | ZeroNegativeNumberException | EmptyListException | AppException | InstanceException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			};
 		
@@ -175,19 +177,21 @@ public class SeleccionResiduos extends JFrame{
 		contentPane.add(scrollPane);
 		
 		
-		
-		residuos = api.obtenerResiduos();
-		
 		jListResiduos = new JList();
 		jListResiduos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
 		DefaultListModel modelo = new DefaultListModel();
-	
-			for(ResiduoDTO r : residuos) {
-				modelo.addElement(r.obtenerTipo());
-			}
-	
-		jListResiduos.setModel(modelo);
-		scrollPane.setViewportView(jListResiduos);
+		try {
+			residuos = api.obtenerResiduos();
+				for(ResiduoDTO r : residuos) {
+					modelo.addElement(r.obtenerTipo());
+				}
+		
+			jListResiduos.setModel(modelo);
+			scrollPane.setViewportView(jListResiduos);
+		} catch (AppException | InstanceException e1) {
+			JOptionPane.showMessageDialog(null,e1.getMessage(), "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
+		}
+		
 		
 		
 		JLabel lblSeleccioneUnResiduo = new JLabel("Seleccione un residuo:");
@@ -330,16 +334,6 @@ public class SeleccionResiduos extends JFrame{
 		return existe;
 	}
 
-	private void cargarResiduos() throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
-		List<ResiduoDTO> residuos = api.obtenerResiduos();
-
-		
-		
-		
-	
-		
-//		}
-		}
 	
 	
 	private static void addPopup(Component component, final JPopupMenu popup) {

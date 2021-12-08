@@ -23,6 +23,8 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
@@ -214,36 +216,56 @@ public class ListadoVivienda extends JFrame {
 	
 	
 	private void cargarDatosTablaAdmin() throws EmptyListException {
-		viviendas=api.obtenerViviendas();
-		for (ViviendaDTO viv : viviendas) {
-			modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
-					viv.obtenerLatitud(), viv.obtenerLongitud(), viv.obtenerNomApeDueño()});
-		}
-	}
-	
-	
-	private void cargarDatosTablaAdmin(Integer idPedido) {
-		viv=api.obtenerViviendaDelPedido(idPedido);
-		modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
-					viv.obtenerLatitud(), viv.obtenerLongitud(), viv.obtenerNomApeDueño()});
-	}
-	
-	
-	private void cargarDatosTablaReciclador() throws EmptyListException {
-		viviendas=api.obtenerViviendas();
-		for (ViviendaDTO viv : viviendas) {
-			modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
-					viv.obtenerLatitud(), viv.obtenerLongitud()});
-			
+		try {
+			viviendas=api.obtenerViviendas();
+			for (ViviendaDTO viv : viviendas) {
+				modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+						viv.obtenerLatitud(), viv.obtenerLongitud(), viv.obtenerNomApeDueño()});
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
 	
 	
+	private void cargarDatosTablaAdmin(Integer idPedido) {
+		try {
+			viv=api.obtenerViviendaDelPedido(idPedido);
+			modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+					viv.obtenerLatitud(), viv.obtenerLongitud(), viv.obtenerNomApeDueño()});
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+	
+	
+	private void cargarDatosTablaReciclador() throws EmptyListException {
+		try {
+			viviendas=api.obtenerViviendas();
+			for (ViviendaDTO viv : viviendas) {
+				modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+						viv.obtenerLatitud(), viv.obtenerLongitud()});
+				
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		
+	}
+	
+	
 	private void cargarDatosTablaReciclador(Integer idPedido) throws EmptyListException {
-		viv=api.obtenerViviendaDelPedido(idPedido);
-		modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
+		try {
+			viv=api.obtenerViviendaDelPedido(idPedido);
+			modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
 					viv.obtenerLatitud(), viv.obtenerLongitud()});
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 	
 	private void visibilizarTabla() {
@@ -277,7 +299,7 @@ public class ListadoVivienda extends JFrame {
 					SeleccionResiduos sr = new SeleccionResiduos(api, id_vivienda);
 					sr.setVisible(true);
 					dispose();
-				} catch (CreationValidationException e1) {
+				} catch (CreationValidationException | AppException | InstanceException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			

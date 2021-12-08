@@ -16,7 +16,9 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import javax.swing.JPasswordField;
@@ -40,9 +42,12 @@ public class AltaUsuario extends JFrame {
 		// Obtengo los roles
 		try {
 			this.roles = api.obtenerRoles();
-		} catch (SintaxisSQLException e3) {
-			JOptionPane.showMessageDialog(null, "Hubo un error en la conexion con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (AppException | SintaxisSQLException | InstanceException e2) {
+			JOptionPane.showMessageDialog(null,e2.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+			
 		}
+			
+		
 
 
 		setTitle("ALTA USUARIO");
@@ -72,18 +77,19 @@ public class AltaUsuario extends JFrame {
 
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 				
-					try {
-						api.registrarUsuario(usuarioTextField.getText(), contrasenaField.getText(),
-								nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
+					
+						try {
+							api.registrarUsuario(usuarioTextField.getText(), contrasenaField.getText(),
+									nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
+							JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} catch (AppException | DataEmptyException | NotNullException | SintaxisSQLException
+								| InstanceException e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+						}
 						
-						JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
-						dispose();
-					}catch (DataEmptyException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}catch (NotNullException e1){
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (SintaxisSQLException e1){
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);					}
+						
+				
 		});
 		aceptarButton.setBounds(218, 215, 97, 25);
 		contentPane.add(aceptarButton);

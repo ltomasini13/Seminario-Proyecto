@@ -12,10 +12,12 @@ import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.CollectorException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -42,6 +44,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -114,13 +117,11 @@ public class SeleccionResiduosRetirados extends JFrame{
 		
 		JButton botonVolver = new JButton("VOLVER");
 		botonVolver.addActionListener((ActionEvent arg0) ->{
-			try {
+			
 				ListadoOrdenDeRetiro listado = new ListadoOrdenDeRetiro(api);
 				listado.setVisible(true);
 				dispose();
-			} catch (SintaxisSQLException e) {
-				
-			}
+		
 		});
 		botonVolver.setBounds(175, 227, 89, 23);
 		contentPane.add(botonVolver);
@@ -148,7 +149,7 @@ public class SeleccionResiduosRetirados extends JFrame{
 				else {
 					JOptionPane.showMessageDialog(null,"No se eligió ningun residuo", "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
 				}
-			} catch (NotNullException | CreationValidationException | StateException | SintaxisSQLException | WasteException | CollectorException e) {
+			} catch (NotNullException | CreationValidationException | StateException | SintaxisSQLException | WasteException | CollectorException | AppException | InstanceException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			}
 		
@@ -160,19 +161,24 @@ public class SeleccionResiduosRetirados extends JFrame{
 		contentPane.add(scrollPane);
 		
 		
-		
-		residuos = api.obtenerResiduos();
-		
 		jListResiduos = new JList();
 		jListResiduos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
 		DefaultListModel modelo = new DefaultListModel();
-	
+		try {
+			residuos = api.obtenerResiduos();
 			for(ResiduoDTO r : residuos) {
 				modelo.addElement(r.obtenerTipo());
 			}
 	
 		jListResiduos.setModel(modelo);
 		scrollPane.setViewportView(jListResiduos);
+		
+		} catch (AppException | InstanceException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
+		}
+		
+		
+	
 		
 		
 		JLabel lblSeleccioneUnResiduo = new JLabel("Seleccione un residuo:");
@@ -236,7 +242,7 @@ public class SeleccionResiduosRetirados extends JFrame{
 					JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun residuo", "Error", JOptionPane.INFORMATION_MESSAGE); 
 				}
 			}
-			catch(NumberFormatException e) {
+			catch(NumberFormatException | HeadlessException | AppException | InstanceException e) {
 				JOptionPane.showMessageDialog(null, "Ingrese un peso correcto", "Error", JOptionPane.ERROR_MESSAGE); 
 			}
 			
@@ -329,17 +335,7 @@ public class SeleccionResiduosRetirados extends JFrame{
 		return existe;
 	}
 
-	private void cargarResiduos() throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
-		List<ResiduoDTO> residuos = api.obtenerResiduos();
 
-		
-		
-		
-	
-		
-//		}
-		}
-	
 	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {

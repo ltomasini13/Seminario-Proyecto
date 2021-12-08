@@ -19,6 +19,7 @@ import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
@@ -168,12 +169,9 @@ public class VentanaPrincipal extends JFrame {
 
 			JMenuItem listadoOrdenesMenuItem = new JMenuItem("Listado");
 			listadoOrdenesMenuItem.addActionListener((ActionEvent e) -> {
-				try {
 					ListadoOrdenDeRetiro listado = new ListadoOrdenDeRetiro(api);
 					listado.setVisible(true);
-				} catch (SintaxisSQLException e1) {
-					
-				}
+				
 				
 			});
 			ordenMenu.add(listadoOrdenesMenuItem);
@@ -185,13 +183,10 @@ public class VentanaPrincipal extends JFrame {
 			JMenuItem visitasMenuItemAgregar = new JMenuItem("Agregar");
 			visitasMenuItemAgregar.addActionListener((ActionEvent e) -> {
 					ListadoOrdenDeRetiro listadoOrdenes;
-					try {
 						listadoOrdenes = new ListadoOrdenDeRetiro(api);
 						listadoOrdenes.setVisible(true);
 						
-					} catch (SintaxisSQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
-					}
+					
 					
 			});
 			
@@ -291,7 +286,7 @@ public class VentanaPrincipal extends JFrame {
 					idCampaña = api.obtenerCampañaVigente().obtenerId();
 					SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idCampaña);
 					selBeneficio.setVisible(true);
-				} catch (AppException | DateException | NotNullException | DataEmptyException e1) {
+				} catch (AppException | DateException | NotNullException | DataEmptyException | InstanceException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}
 			});

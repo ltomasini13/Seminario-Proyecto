@@ -343,7 +343,7 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException {
+	public List<OrdenDeRetiroDTO> obtenerOrdenes()  {
 		// TODO Auto-generated method stub
 		return null;
 	}

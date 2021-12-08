@@ -21,6 +21,7 @@ import ar.edu.unrn.seminario.dto.CampañaDTO;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
@@ -58,7 +59,7 @@ public class ListadoCampaña extends JFrame
 			for (CampañaDTO camp : campañas) {
 				modelo.addRow(new Object[] { camp.obtenerId(), camp.obtenerNombreCampaña(), camp.obtenerFechaInicio(), camp.obtenerFechaFin(), camp.obtenerDescripcion() });
 			}
-		} catch (AppException | NotNullException | DateException | DataEmptyException e2) {
+		} catch (AppException | NotNullException | DateException | DataEmptyException | InstanceException e2) {
 			JOptionPane.showMessageDialog(null, e2.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 		}
 		

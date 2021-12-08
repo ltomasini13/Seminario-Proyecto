@@ -25,7 +25,9 @@ import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import java.awt.event.ActionListener;
@@ -278,18 +280,30 @@ public class ListadoPedidoRetiro extends JFrame{
 	
 	private void cargarEstructuraTablaReciclador() throws EmptyListException {
 		table = new JTable();
-		List<PedidoRetiroDTO> pedidosDTO= api.obtenerPedidos();
-		for (PedidoRetiroDTO p : pedidosDTO) {
-			modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
-					p.obtenerCalle()+" "+p.obtenerNumero()});
+		List<PedidoRetiroDTO> pedidosDTO;
+		try {
+			pedidosDTO = api.obtenerPedidos();
+			for (PedidoRetiroDTO p : pedidosDTO) {
+				modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
+						p.obtenerCalle()+" "+p.obtenerNumero()});
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
+		
 	}
 	
 	private void cargarEstructuraTablaReciclador(Integer idOrden) throws EmptyListException {
 		table = new JTable();
-		PedidoRetiroDTO p= api.obtenerPedidoDeLaOrden(idOrden);
-		modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
+		PedidoRetiroDTO p;
+		try {
+			p = api.obtenerPedidoDeLaOrden(idOrden);
+			modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
 					p.obtenerCalle()+" "+p.obtenerNumero()});
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 	
 
@@ -306,11 +320,17 @@ public class ListadoPedidoRetiro extends JFrame{
 		});
 		
 	
-		List<PedidoRetiroDTO> pedidosDTO= api.obtenerPedidos();
-		for (PedidoRetiroDTO p : pedidosDTO) {
-			modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
-					p.obtenerCalle()+" "+p.obtenerNumero()});
+		List<PedidoRetiroDTO> pedidosDTO;
+		try {
+			pedidosDTO = api.obtenerPedidos();
+			for (PedidoRetiroDTO p : pedidosDTO) {
+				modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
+						p.obtenerCalle()+" "+p.obtenerNumero()});
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
+		
 		
 	}
 	
@@ -325,9 +345,15 @@ public class ListadoPedidoRetiro extends JFrame{
 			}
 		});
 		
-		PedidoRetiroDTO p= api.obtenerPedidoDeLaOrden(idOrden);
-		modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
+		PedidoRetiroDTO p;
+		try {
+			p = api.obtenerPedidoDeLaOrden(idOrden);
+			modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
 					p.obtenerCalle()+" "+p.obtenerNumero()});
+		
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+		}
 		
 	}
 	
@@ -339,7 +365,7 @@ public class ListadoPedidoRetiro extends JFrame{
 				api.generarOrden(idPedido);
 				JOptionPane.showMessageDialog(null, "La orden se creo con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
 				
-			} catch (SintaxisSQLException | CreationValidationException e1) {
+			} catch (SintaxisSQLException | CreationValidationException | AppException | InstanceException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			
