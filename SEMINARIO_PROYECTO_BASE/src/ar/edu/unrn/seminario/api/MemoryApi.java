@@ -463,13 +463,6 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public void realizarCanje(Integer idBeneficio, String dni)
-			throws NumbersException, SintaxisSQLException, NotNullException, AppException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void actualizarPuntaje(double puntaje) {
 		// TODO Auto-generated method stub
 		
@@ -505,6 +498,13 @@ public class MemoryApi implements IApi {
 	public List<ResiduoDTO> obtenerResiduos() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void realizarCanje(String nombre, String dni)
+			throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

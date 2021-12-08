@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.ResiduoRetirado;
@@ -17,7 +19,7 @@ import ar.edu.unrn.seminario.modelo.Visita;
 public class VisitaDAOJDBC implements VisitaDao{
 
 	@Override
-	public void crear(Visita visita) {
+	public void crear(Visita visita) throws AppException, InstanceException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -68,14 +70,15 @@ public class VisitaDAOJDBC implements VisitaDao{
 		    if (cantidadOrdenesModificadas==1) 
 				System.out.println("La orden se modificó correctamente");
 			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-
-			
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
@@ -88,7 +91,7 @@ public class VisitaDAOJDBC implements VisitaDao{
 	
 	@Override
 	//Devuelve las visitas que tiene esa orden de retiro pasada por parametros
-	public List<Visita> listarTodas(OrdenDeRetiro orden) {   
+	public List<Visita> listarTodas(OrdenDeRetiro orden) throws AppException, InstanceException {   
 		List<Visita> visitas = new ArrayList<Visita>();
 		
 		try {
@@ -108,14 +111,15 @@ public class VisitaDAOJDBC implements VisitaDao{
 				visita.editarId(rs.getInt("v.id_visita"));
 				visitas.add(visita);
 			}
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-
-			
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		return visitas;
@@ -130,7 +134,7 @@ public class VisitaDAOJDBC implements VisitaDao{
 	
 	
 	@Override
-	public List<Visita> listarTodas() {
+	public List<Visita> listarTodas() throws AppException, InstanceException {
 		List<Visita> visitas = new ArrayList<Visita>();
 		
 		try {
@@ -152,14 +156,15 @@ public class VisitaDAOJDBC implements VisitaDao{
 				visitas.add(visita);
 			}
 			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-
-			
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		return visitas;

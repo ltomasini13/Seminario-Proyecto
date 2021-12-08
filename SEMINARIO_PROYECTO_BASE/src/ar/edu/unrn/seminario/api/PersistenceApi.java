@@ -1099,13 +1099,4 @@ public  class PersistenceApi implements IApi {
 	}
 
 
-
-	
-<<<<<<< HEAD
-
-//	private validarfechaCanje() {
-//		
-//	}
-=======
->>>>>>> 8859f5793cf8a8974acfc09eb59e9386c4c81cb2
 }

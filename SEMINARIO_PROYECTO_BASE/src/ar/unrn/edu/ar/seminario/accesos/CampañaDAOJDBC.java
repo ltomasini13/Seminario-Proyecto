@@ -15,6 +15,7 @@ import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Campaña;
@@ -27,7 +28,7 @@ public class CampañaDAOJDBC implements CampañaDao {
 	private Connection conn;
 	
 	@Override
-	public void crear(Campaña camp) throws AppException {
+	public void crear(Campaña camp) throws AppException, InstanceException {
 		try {
 
 			conn = ConnectionManager.getConnection();
@@ -59,7 +60,13 @@ public class CampañaDAOJDBC implements CampañaDao {
 			System.out.println("Error al procesar la consulta");
 			throw new AppException("No se pudo crear la campaña por un error en la Base de Datos");
 			
-		} finally {
+		} 
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
@@ -67,7 +74,7 @@ public class CampañaDAOJDBC implements CampañaDao {
 	}
 
 	@Override
-	public List<Campaña> listarTodos() throws  DateException, NotNullException, DataEmptyException, AppException {
+	public List<Campaña> listarTodos() throws AppException, InstanceException {
 		List<Campaña> campañas = new ArrayList<Campaña>();
 		try {
 
@@ -86,13 +93,14 @@ public class CampañaDAOJDBC implements CampañaDao {
 			}
 			
 		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error al procesar la consulta");
-				throw new AppException("No se pudo listar los beneficios por un error en la Base de Datos");
-			}
 			System.out.println("Error al procesar la consulta");
+			throw new AppException("No se pudo listar los beneficios por un error en la Base de Datos");
+			
+		}
+		
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
 			
 		}
 		finally {
@@ -102,7 +110,7 @@ public class CampañaDAOJDBC implements CampañaDao {
 	}
 
 	@Override
-	public Campaña buscar(Integer id) {
+	public Campaña buscar(Integer id) throws AppException, InstanceException {
 		
 		Campaña campaña = null;
 		try {
@@ -126,10 +134,10 @@ public class CampañaDAOJDBC implements CampañaDao {
 		} catch (SQLException e) {
 			
 			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
+			throw new AppException("Error en la base de datos");
 		} catch (Exception e) {
 			System.out.println("Error al buscar la campaña");
-			// TODO: disparar Exception propia
+			throw new InstanceException();
 		} finally {
 			ConnectionManager.disconnect();
 			
@@ -163,7 +171,7 @@ public class CampañaDAOJDBC implements CampañaDao {
 	}
 
 	@Override
-	public void actualizarCatalogo(Campaña camp) throws AppException {
+	public void actualizarCatalogo(Campaña camp) throws AppException, InstanceException {
 		
 		try {
 
@@ -185,8 +193,12 @@ public class CampañaDAOJDBC implements CampañaDao {
 	} catch (SQLException e) {
 		
 		System.out.println("Error al procesar consulta");
-		throw new AppException("No se pudo crear el catalogo por un error de la base de datos");
-	} finally {
+		throw new AppException("No se pudo actualizar el catalogo por un error de la base de datos");
+	} catch (Exception e) {
+		System.out.println("Error al buscar la campaña");
+		throw new InstanceException();
+	}
+		finally {
 		ConnectionManager.disconnect();
 		
 	}

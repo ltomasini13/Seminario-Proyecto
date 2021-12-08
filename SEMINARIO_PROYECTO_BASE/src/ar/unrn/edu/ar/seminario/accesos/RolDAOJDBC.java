@@ -10,7 +10,9 @@ import java.util.List;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Rol;
 
@@ -22,7 +24,7 @@ public class RolDAOJDBC implements RolDao{
 	}
 
 	@Override
-	public List<Rol> listarTodos() throws SintaxisSQLException {
+	public List<Rol> listarTodos() throws AppException, InstanceException  {
 		List<Rol> roles = new ArrayList<>();
 		try {
 
@@ -47,12 +49,13 @@ public class RolDAOJDBC implements RolDao{
 				roles.add(rol);
 			}
 			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
-			
-		}catch (Exception e) { 
-				
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
 		}
 		finally {
 			ConnectionManager.disconnect();
@@ -61,7 +64,7 @@ public class RolDAOJDBC implements RolDao{
 		
 	}
 	
-	public Rol obtenerRol(Integer codigo) throws SintaxisSQLException {
+	public Rol obtenerRol(Integer codigo) throws AppException, InstanceException {
 		Rol rol=new Rol();
 		try {
 
@@ -90,12 +93,13 @@ public class RolDAOJDBC implements RolDao{
 				
 			}
 			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear la vivienda por un error en la Base de Datos");
-			
-		}catch (Exception e) { 
-				
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
 		}
 		finally {
 			ConnectionManager.disconnect();

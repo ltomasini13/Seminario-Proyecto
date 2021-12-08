@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
@@ -19,7 +21,7 @@ import ar.edu.unrn.seminario.modelo.Visita;
 public class ResiduosDAOJDBC  implements ResiduosDao{
 
 	@Override
-	public List<ResiduoARetirar> listarTodosResiduosARetirar() {
+	public List<ResiduoARetirar> listarTodosResiduosARetirar() throws AppException, InstanceException {
 		List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
 		
 		try {
@@ -39,22 +41,22 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar vivienda");
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return residuosARetirar;
 	}
 
 	@Override
-	public List<ResiduoRetirado> listarTodosResiduosRetirados() {
+	public List<ResiduoRetirado> listarTodosResiduosRetirados() throws AppException, InstanceException {
 		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
 		
 		try {
@@ -77,22 +79,22 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar vivienda");
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return residuosRetirados;
 	}
 
 	@Override
-	public List<ResiduoRetirado> buscarResiduosRetiradosEnTotal(Integer idOrden) { //cuanto de plastico se retiro, cuanto de carton, etc., para esa orden
+	public List<ResiduoRetirado> buscarResiduosRetiradosEnTotal(Integer idOrden) throws AppException, InstanceException { //cuanto de plastico se retiro, cuanto de carton, etc., para esa orden
 		List<ResiduoRetirado> residuosRestantes= new ArrayList<ResiduoRetirado>();
 		
 		try {
@@ -116,22 +118,22 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al proc consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar los residuos retirados en total");
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return residuosRestantes;
 	}
 
 	@Override
-	public List<ResiduoARetirar> buscarResiduosARetirar(Integer idPedido) {
+	public List<ResiduoARetirar> buscarResiduosARetirar(Integer idPedido) throws AppException, InstanceException {
 		List<ResiduoARetirar> residuosARetirar = new ArrayList<ResiduoARetirar>();
 		
 		try {
@@ -152,22 +154,22 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar residuos");
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return residuosARetirar;
 	}
 
 	@Override
-	public List<ResiduoRetirado> buscarResiduosRetirados(Integer idVisita) {
+	public List<ResiduoRetirado> buscarResiduosRetirados(Integer idVisita) throws AppException, InstanceException {
 		List<ResiduoRetirado> residuosRetirados = new ArrayList<ResiduoRetirado>();
 		
 		try {
@@ -191,16 +193,16 @@ public class ResiduosDAOJDBC  implements ResiduosDao{
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar vivienda");
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return residuosRetirados;
 	}

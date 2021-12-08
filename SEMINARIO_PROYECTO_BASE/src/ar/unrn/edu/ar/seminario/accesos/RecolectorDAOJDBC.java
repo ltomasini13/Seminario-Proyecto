@@ -12,7 +12,9 @@ import java.sql.Statement;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
@@ -21,7 +23,7 @@ import ar.edu.unrn.seminario.modelo.Recolector;
 public class RecolectorDAOJDBC implements RecolectorDao {
 
 	@Override
-	public void crear(Recolector recolector) throws DuplicateUniqueKeyException, SintaxisSQLException {
+	public void crear(Recolector recolector) throws AppException, InstanceException {
 		
 		try {
 
@@ -50,22 +52,21 @@ public class RecolectorDAOJDBC implements RecolectorDao {
 			miResult.next();
 		    miResult.close();
 		    
-		} catch (DuplicateUniqueKeyException e) {
-			throw new DuplicateUniqueKeyException(e.getMessage());
-			
-			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear el recolector por un error en la Base de Datos");
-			
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 	}
 
 	@Override
-	public List<Recolector> listarTodos() throws SintaxisSQLException {
+	public List<Recolector> listarTodos() throws SintaxisSQLException, AppException, InstanceException {
 		
 		List<Recolector> recolectores = new ArrayList<Recolector>();
 
@@ -84,23 +85,23 @@ public class RecolectorDAOJDBC implements RecolectorDao {
 				
 			}
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al listar los recolectores");
-			// TODO: disparar Exception propia
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		
 		return recolectores;
 	}
 
 	@Override
-	public Recolector buscar(Integer id) {
+	public Recolector buscar(Integer id) throws AppException, InstanceException {
 		Recolector recolector = null;
 		try {
 
@@ -119,16 +120,16 @@ public class RecolectorDAOJDBC implements RecolectorDao {
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al listar viviendas");
-			// TODO: disparar Exception propia
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 
 		return recolector;
