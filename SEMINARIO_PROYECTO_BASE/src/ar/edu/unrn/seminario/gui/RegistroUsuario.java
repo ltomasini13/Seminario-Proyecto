@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class RegistroUsuario extends JFrame {
@@ -41,10 +42,10 @@ public class RegistroUsuario extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroUsuario(IApi api) {
+	public RegistroUsuario(IApi api, ResourceBundle labels) {
 
 		
-		setTitle("REGISTRAR USUARIO");
+		setTitle();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setBounds(100, 100, 450, 300);

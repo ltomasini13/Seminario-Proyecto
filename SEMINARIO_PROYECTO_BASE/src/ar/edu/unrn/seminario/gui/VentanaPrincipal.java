@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -36,7 +37,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 
 	 */
-	public VentanaPrincipal(IApi api) {
+	public VentanaPrincipal(IApi api, ResourceBundle labels) {
 		
 		setTitle("SISTEMA GRU");
 		getContentPane().setLayout(null);
@@ -387,7 +388,7 @@ public class VentanaPrincipal extends JFrame {
 		salirMenuItem.addActionListener((ActionEvent e) -> {
 			api.cerrarSesion();
 			dispose();
-			Loguin loguin = new Loguin(api);
+			Loguin loguin = new Loguin(api, labels);
 			loguin.setVisible(true);
 			
 		});

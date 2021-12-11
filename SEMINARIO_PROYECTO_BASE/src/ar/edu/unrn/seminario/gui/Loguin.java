@@ -24,6 +24,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class Loguin extends JFrame {
@@ -32,29 +33,13 @@ public class Loguin extends JFrame {
 	private JTextField usuarioTextField;
 	private JPasswordField contrasenaPasswordField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IApi api = new PersistenceApi();
-					Loguin frame = new Loguin(api);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public Loguin(IApi api) {
+	public Loguin(IApi api, ResourceBundle labels) {
 
-		setTitle("INICIAR SESIÓN");
+		setTitle(labels.getString("loguin"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -62,11 +47,11 @@ public class Loguin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel usuarioLabel = new JLabel("Usuario: ");
+		JLabel usuarioLabel = new JLabel(labels.getString("loguin.usuario"));
 		usuarioLabel.setBounds(65, 65, 69, 14);
 		contentPane.add(usuarioLabel);
 		
-		JLabel contrasenaLabel = new JLabel("Contrase\u00F1a:");
+		JLabel contrasenaLabel = new JLabel(labels.getString("loguin.contrasena"));
 		contrasenaLabel.setBounds(65, 122, 69, 14);
 		contentPane.add(contrasenaLabel);
 		
@@ -79,11 +64,11 @@ public class Loguin extends JFrame {
 		contrasenaPasswordField.setBounds(157, 119, 140, 20);
 		contentPane.add(contrasenaPasswordField);
 		
-		JButton botonAceptar = new JButton("Aceptar");
-		botonAceptar.addActionListener((ActionEvent e) -> {
+		JButton botonIniciarSesion = new JButton(labels.getString("loguin.iniciar.sesion"));
+		botonIniciarSesion.addActionListener((ActionEvent e) -> {
 			try {
 				api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
-				VentanaPrincipal vp = new VentanaPrincipal(api);
+				VentanaPrincipal vp = new VentanaPrincipal(api, labels);
 				vp.setVisible(true);
 				dispose();
 				
@@ -101,16 +86,16 @@ public class Loguin extends JFrame {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		botonAceptar.setBounds(137, 184, 89, 23);
-		contentPane.add(botonAceptar);
+		botonIniciarSesion.setBounds(65, 184, 161, 23);
+		contentPane.add(botonIniciarSesion);
 		
-		JButton registrarseBoton = new JButton("Registrarse");
+		JButton registrarseBoton = new JButton(labels.getString("loguin.registrarse"));
 		registrarseBoton.addActionListener((ActionEvent e) -> {
-			RegistroUsuario registro = new RegistroUsuario(api);
+			RegistroUsuario registro = new RegistroUsuario(api, labels);
 			registro.setVisible(true);
 			
 		});
-		registrarseBoton.setBounds(275, 184, 112, 23);
+		registrarseBoton.setBounds(252, 184, 161, 23);
 		contentPane.add(registrarseBoton);
 	}
 }
