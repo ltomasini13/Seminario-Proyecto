@@ -14,6 +14,7 @@ import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
@@ -26,7 +27,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	private Connection conn;
 	
 	@Override
-	public void crear(Beneficio beneficio) throws AppException {
+	public void crear(Beneficio beneficio) throws AppException, InstanceException {
 		
 		try {
 
@@ -52,7 +53,12 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		    
 		} catch (SQLException e1) {
 			System.out.println("Error al procesar la consulta");
-			throw new AppException("No se pudo crear el beneficio por un error en la Base de Datos");
+			throw new AppException("No se pudo crear el beneficio por un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
 		}
 		finally {
 			ConnectionManager.disconnect();
@@ -61,7 +67,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public List<Beneficio> listarTodos() throws AppException, DataEmptyException, NotNullException, NumbersException {
+	public List<Beneficio> listarTodos() throws AppException, InstanceException {
 		List<Beneficio> beneficios = new ArrayList<Beneficio>();
 		try {
 
@@ -82,6 +88,12 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 				System.out.println("Error al procesar la consulta");
 				throw new AppException("No se pudo listar los beneficios por un error en la Base de Datos");
 		}
+		
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
+		}
 		finally {
 			ConnectionManager.disconnect();
 		}
@@ -89,7 +101,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public Beneficio buscar(Integer id) throws AppException, DataEmptyException, NotNullException, NumbersException {
+	public Beneficio buscar(Integer id) throws AppException, InstanceException {
 		Beneficio beneficio = null;
 		try {
 
@@ -110,16 +122,15 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		} catch (SQLException e) {
 			
 			System.out.println("Error al procesar consulta");
-<<<<<<< HEAD
 			throw new AppException("No se pudo buscar el beneficio por un error en la Base de Datos");
 		}
 		
-		
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
+		}
 		finally {
-=======
-			throw new AppException("No se puede buscar el beneficio por un error en la base de datos");
-		} finally {
->>>>>>> 8859f5793cf8a8974acfc09eb59e9386c4c81cb2
 			ConnectionManager.disconnect();
 			
 		}
@@ -147,7 +158,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public List<Beneficio> ListarCatalogo(Campaña camp) throws NotNullException, DataEmptyException, DateException, NumbersException, AppException {
+	public List<Beneficio> ListarCatalogo(Campaña camp) throws AppException, InstanceException {
 		List<Beneficio> catalogo = new ArrayList<Beneficio>();
 		try {
 
@@ -171,6 +182,11 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			throw new AppException("No se pudo listar los catalogos por un error en la Base de Datos");
 	
 		}
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
+		}
 		finally {
 			ConnectionManager.disconnect();
 		}
@@ -179,7 +195,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException {
+	public List<Beneficio> buscarNombreBeneficio(String nombre) throws AppException, InstanceException{
 		List<Beneficio> catalogos = new ArrayList<Beneficio>();
 		
 		try {
@@ -204,7 +220,11 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			
 			System.out.println("Error al procesar consulta");
 			throw new AppException("No se pudo buscar el beneficio por un error en la base de datos");
-		
+		}	
+		catch (Exception e) {
+				System.out.print("Error en la base de datos");
+				throw new InstanceException();	
+			
 		} finally {
 			ConnectionManager.disconnect();
 			
@@ -214,7 +234,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 	
 	@Override
-	public Beneficio buscarBeneficio(String nombre) throws AppException, DataEmptyException, NotNullException, NumbersException {
+	public Beneficio buscarBeneficio(String nombre) throws AppException, InstanceException{
 		Beneficio beneficio = null;
 		
 		try {
@@ -239,7 +259,13 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			System.out.println("Error al procesar consulta");
 			throw new AppException("No se pudo buscar el beneficio por un error en la base de datos");
 		
-		} finally {
+		} 
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
+		}
+		finally {
 			ConnectionManager.disconnect();
 			
 		}

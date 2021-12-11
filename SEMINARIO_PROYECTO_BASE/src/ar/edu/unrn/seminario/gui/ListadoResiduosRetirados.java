@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
 import ar.edu.unrn.seminario.dto.ResiduoRetiradoDTO;
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 
 public class ListadoResiduosRetirados extends JFrame {
 
@@ -45,16 +48,22 @@ public class ListadoResiduosRetirados extends JFrame {
 		String[] titulos = {"ID", "TIPO DE RESIDUO", "CANTIDAD RETIRADA"};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-		List<ResiduoRetiradoDTO> residuosRetiradosDTO= api.obtenerResiduosRetirados(idVisita);
-		for (ResiduoRetiradoDTO r : residuosRetiradosDTO) {
-			modelo.addRow(new Object[] { r.obtenerId(), r.obtenerTipo(), r.obtenerCantidadKg()});
+		List<ResiduoRetiradoDTO> residuosRetiradosDTO;
+		try {
+			residuosRetiradosDTO = api.obtenerResiduosRetirados(idVisita);
+			for (ResiduoRetiradoDTO r : residuosRetiradosDTO) {
+				modelo.addRow(new Object[] { r.obtenerId(), r.obtenerTipo(), r.obtenerCantidadKg()});
+			}
+			
+			table.setModel(modelo);
+			table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+			scrollPane.setViewportView(table);
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		table.setModel(modelo);
-		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
-		scrollPane.setViewportView(table);
+	
 		
 		
 		JPanel pnlBotonesOperaciones = new JPanel();

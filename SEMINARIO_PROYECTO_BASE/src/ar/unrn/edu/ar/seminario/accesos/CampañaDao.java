@@ -5,16 +5,17 @@ import java.util.List;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.modelo.Campaña;
 
 public interface CampañaDao {
 
-	void crear(Campaña camp)throws AppException;
+	void crear(Campaña camp)throws AppException, InstanceException;
 	
-	List<Campaña> listarTodos()throws DateException, NotNullException, DataEmptyException, AppException;
+	List<Campaña> listarTodos()throws AppException, InstanceException;
 
-	Campaña buscar(Integer id);
+	Campaña buscar(Integer id) throws AppException, InstanceException;
 	
 	Campaña buscarCampaña();
 	
@@ -24,5 +25,5 @@ public interface CampañaDao {
 
 	void eliminar(Campaña camp);
 	
-	void actualizarCatalogo(Campaña camp) throws AppException;
+	void actualizarCatalogo(Campaña camp) throws AppException, InstanceException;
 }

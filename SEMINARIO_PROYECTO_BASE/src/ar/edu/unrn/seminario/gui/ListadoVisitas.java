@@ -22,7 +22,9 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.VisitaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Visita;
 
@@ -117,20 +119,32 @@ public class ListadoVisitas extends JFrame {
 
 
 	private void cargarDatosTabla() throws EmptyListException {
-		List<VisitaDTO> visitas = api.obtenerVisitas();
-		for (VisitaDTO v : visitas) {
-			modelo.addRow(new Object[] {v.obtenerId(), v.obtenerFechaVisita(), v.obtenerObservacion(), v.obtenerFechaOrden()});
-			
+		List<VisitaDTO> visitas;
+		try {
+			visitas = api.obtenerVisitas();
+			for (VisitaDTO v : visitas) {
+				modelo.addRow(new Object[] {v.obtenerId(), v.obtenerFechaVisita(), v.obtenerObservacion(), v.obtenerFechaOrden()});
+				
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
+		
 	}
 
 
 	private void cargarDatosTabla(Integer idOrden) throws EmptyListException {
-		List<VisitaDTO> visitas = api.obtenerVisitasDeLaOrden(idOrden);
-		for (VisitaDTO vis : visitas) {
-			modelo.addRow(new Object[] {vis.obtenerId(), vis.obtenerFechaVisita(), vis.obtenerObservacion(), vis.obtenerFechaOrden()});
-			
+		List<VisitaDTO> visitas;
+		try {
+			visitas = api.obtenerVisitasDeLaOrden(idOrden);
+			for (VisitaDTO vis : visitas) {
+				modelo.addRow(new Object[] {vis.obtenerId(), vis.obtenerFechaVisita(), vis.obtenerObservacion(), vis.obtenerFechaOrden()});
+				
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
+		
 	}
 	
 	

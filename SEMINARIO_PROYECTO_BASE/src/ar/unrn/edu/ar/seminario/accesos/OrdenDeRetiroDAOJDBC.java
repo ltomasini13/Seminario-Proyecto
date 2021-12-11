@@ -12,6 +12,8 @@ import java.util.List;
 
 import com.sun.org.apache.bcel.internal.generic.Type;
 
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
@@ -23,7 +25,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 
 	@Override
-	public void crear(OrdenDeRetiro orden) throws SintaxisSQLException {
+	public void crear(OrdenDeRetiro orden) throws AppException, InstanceException {
 		try {
 
 			
@@ -41,20 +43,22 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 					if (cantidad==1) 
 						System.out.println("La orden se creo correctamente");
 			
-		}  catch (SQLException e) {
-			
-			System.out.println("Error al procesar la consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
 	}
 
 	@Override
-	public List<OrdenDeRetiro> listarTodos() throws SintaxisSQLException {
+	public List<OrdenDeRetiro> listarTodos() throws AppException, InstanceException  {
 		List<OrdenDeRetiro> ordenes=new ArrayList<OrdenDeRetiro>();
 		
 		try {
@@ -86,25 +90,25 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 				ordenes.add(orden);
 				
 			}
-		
-
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al listar viviendas");
-			// TODO: disparar Exception propia
-		} finally {
-			ConnectionManager.disconnect();
-			
 		}
+
+			catch (SQLException sq){
+				System.out.println("Error al procesar consulta");	
+				throw new AppException("Hubo un error en la base de datos");
+			}
+			catch (Exception e) {
+				System.out.print("Error en la bd");
+				throw new InstanceException();
+			}
+			finally {
+				ConnectionManager.disconnect();
+			}
 		return ordenes;
 	}
 
 	@Override
 
-	public OrdenDeRetiro buscar(Integer idOrden) {
+	public OrdenDeRetiro buscar(Integer idOrden) throws AppException, InstanceException {
 
 		OrdenDeRetiro orden=null;
 		try {
@@ -147,22 +151,22 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al buscar ordenn");
-			// TODO: disparar Exception propia
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return orden;
 		
 	}
 
-	public List<OrdenDeRetiro> buscarPedido(Integer idPedido) {
+	public List<OrdenDeRetiro> buscarPedido(Integer idPedido) throws AppException, InstanceException {
 		List<OrdenDeRetiro> ordenes=new ArrayList<OrdenDeRetiro>();
 		
 		try {
@@ -190,21 +194,21 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar vivienda");
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return ordenes;
 	}
 	@Override
-	public void actualizar(OrdenDeRetiro orden) {
+	public void actualizar(OrdenDeRetiro orden) throws AppException, InstanceException {
 		Connection conn = ConnectionManager.getConnection();
 		
 		try {
@@ -232,12 +236,15 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 	
 		}
 		catch (SQLException sq){
-			//throw new SintaxisSQLException("Hubo un error con la base de datos");
-			System.out.println("Error al procesar consulta");
-			
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
 		}
-		catch(Exception e) {
-			System.out.println("Error en la base de dato");
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
+			ConnectionManager.disconnect();
 		}
 		
 	}
@@ -255,7 +262,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 	}
 
 	@Override
-	public OrdenDeRetiro buscarPorVisita(Integer idVisita) {
+	public OrdenDeRetiro buscarPorVisita(Integer idVisita) throws AppException, InstanceException {
 		OrdenDeRetiro orden=null;
 		try {
 
@@ -293,22 +300,22 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al buscar orden");
-			// TODO: disparar Exception propia
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return orden;
 	}
 
 	@Override
-	public OrdenDeRetiro buscarOrdenPorPedido(PedidoRetiro pedido) {
+	public OrdenDeRetiro buscarOrdenPorPedido(PedidoRetiro pedido) throws AppException, InstanceException {
 		OrdenDeRetiro orden=null;
 		
 		try {
@@ -334,16 +341,16 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao {
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al buscar vivienda");
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return orden;
 	}

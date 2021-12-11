@@ -11,7 +11,9 @@ import java.util.List;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.ResiduoARetirar;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -65,7 +67,7 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 	}
 
 	@Override
-	public List<TipoResiduo> listarTodos() {
+	public List<TipoResiduo> listarTodos() throws AppException, InstanceException {
 		List<TipoResiduo> residuos = new ArrayList<>();
 		try {
 
@@ -81,11 +83,13 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 				residuos.add(residuo);
 			}
 			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-			
-		}catch (Exception e) { 
-				
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
 		}
 		finally {
 			ConnectionManager.disconnect();
@@ -94,7 +98,7 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 	}
 
 	@Override
-	public TipoResiduo buscar(String tipoResiduo) {
+	public TipoResiduo buscar(String tipoResiduo) throws AppException, InstanceException {
 			TipoResiduo residuo = null;
 			try {
 
@@ -111,11 +115,13 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 				
 				}
 				
-			} catch (SQLException e) {
-				System.out.println("Error al procesar la consulta");
-				
-			}catch (Exception e) { 
-					
+			}catch (SQLException sq){
+				System.out.println("Error al procesar consulta");	
+				throw new AppException("Hubo un error en la base de datos");
+			}
+			catch (Exception e) {
+				System.out.print("Error en la bd");
+				throw new InstanceException();
 			}
 			finally {
 				ConnectionManager.disconnect();

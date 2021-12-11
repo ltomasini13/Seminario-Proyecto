@@ -19,7 +19,9 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -70,18 +72,24 @@ public class SeleccionCiudadano extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		
-		List<CiudadanoDTO> ciudadanosDTO = api.obtenerCiudadanos();
+		List<CiudadanoDTO> ciudadanosDTO;
+		try {
+			ciudadanosDTO = api.obtenerCiudadanos();
+			for (CiudadanoDTO c : ciudadanosDTO) {
+				modelo.addRow(new Object[] {c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni()});
+				
+			}
 		
-		for (CiudadanoDTO c : ciudadanosDTO) {
-			modelo.addRow(new Object[] {c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni()});
-			
+			table.setModel(modelo);
+			table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+			scrollPane.setViewportView(table);
+		} catch (AppException | InstanceException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-	
-		table.setModel(modelo);
-		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
-		scrollPane.setViewportView(table);
+		
+		
 		
 		
 		JPanel pnlBotonesOperaciones = new JPanel();
@@ -91,22 +99,26 @@ public class SeleccionCiudadano extends JFrame {
 		botonElegir = new JButton("Elegir");
 		botonElegir.addActionListener((ActionEvent arg0)-> {
 			this.dniCiudadano=(String)modelo.getValueAt(table.getSelectedRow(), 3);
-			ViviendaDTO viviendaDTO = api.obtenerVivienda(idVivienda);
-			
-			int seleccion = JOptionPane.showOptionDialog(null, "DATOS DE LA VIVIENDA\n\nDireccion: "+viviendaDTO.obtenerCalle()+
-					" "+viviendaDTO.obtenerNumero()+"\nLatitud: "+viviendaDTO.obtenerLatitud()+"\nLongitud: "+viviendaDTO.obtenerLongitud()+"\n\n", "CONFIRMACION", JOptionPane.YES_NO_CANCEL_OPTION,
-					   JOptionPane.INFORMATION_MESSAGE, null,
-					   new Object[] { "CONFIRMAR", "CANCELAR"}, null);
-					
-					if (seleccion != -1) {
-						if(seleccion==0) {
-							api.cambiarDueño(idVivienda, dniCiudadano);
-							JOptionPane.showMessageDialog(null, "El cambio de dueño se realizó exitosamente", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
-							dispose();
-						}
+			ViviendaDTO viviendaDTO;
+			try {
+				viviendaDTO = api.obtenerVivienda(idVivienda);
+				int seleccion = JOptionPane.showOptionDialog(null, "DATOS DE LA VIVIENDA\n\nDireccion: "+viviendaDTO.obtenerCalle()+
+						" "+viviendaDTO.obtenerNumero()+"\nLatitud: "+viviendaDTO.obtenerLatitud()+"\nLongitud: "+viviendaDTO.obtenerLongitud()+"\n\n", "CONFIRMACION", JOptionPane.YES_NO_CANCEL_OPTION,
+						   JOptionPane.INFORMATION_MESSAGE, null,
+						   new Object[] { "CONFIRMAR", "CANCELAR"}, null);
 						
-					}
-			
+						if (seleccion != -1) {
+							if(seleccion==0) {
+								api.cambiarDueño(idVivienda, dniCiudadano);
+								JOptionPane.showMessageDialog(null, "El cambio de dueño se realizó exitosamente", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+								dispose();
+							}
+							
+						}
+				
+			} catch (AppException | InstanceException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
 			
 		});
 		

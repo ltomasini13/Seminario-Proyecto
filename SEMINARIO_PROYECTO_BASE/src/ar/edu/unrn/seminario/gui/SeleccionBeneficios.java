@@ -19,6 +19,7 @@ import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -56,7 +57,7 @@ public class SeleccionBeneficios extends JFrame{
 			for (BeneficioDTO beneficio : beneficios) {
 			modelo.addRow(new Object[] {beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
 			}
-		} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException e2) {
+		} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | InstanceException e2) {
 			JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
@@ -121,7 +122,7 @@ public class SeleccionBeneficios extends JFrame{
 			for (BeneficioDTO beneficio : beneficios) {
 			modelo.addRow(new Object[] {beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
 			}
-		} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException e2) {
+		} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | InstanceException e2) {
 			JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		

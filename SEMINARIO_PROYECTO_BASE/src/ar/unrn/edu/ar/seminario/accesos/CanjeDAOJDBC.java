@@ -11,6 +11,7 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
@@ -24,7 +25,7 @@ public class CanjeDAOJDBC implements CanjeDao{
 	private Connection conn;
 	
 	@Override
-	public void crear(Canje canje) throws AppException {
+	public void crear(Canje canje) throws AppException, InstanceException {
 		try {
 
 			conn = ConnectionManager.getConnection();
@@ -52,6 +53,11 @@ public class CanjeDAOJDBC implements CanjeDao{
 		} catch (SQLException e1) {
 			System.out.println("Error al procesar la consulta");
 			throw new AppException("No se pudo crear el canje por un error en la Base de Datos");
+			
+		} catch (Exception e) {
+			System.out.println("Error al buscar la campaña");
+			throw new InstanceException();
+			
 		} finally {
 			ConnectionManager.disconnect();
 		}
@@ -60,7 +66,7 @@ public class CanjeDAOJDBC implements CanjeDao{
 	}
 
 	@Override
-	public List<Canje> listarTodos() throws DataEmptyException, NotNullException, NumbersException, AppException {
+	public List<Canje> listarTodos() throws AppException, InstanceException {
 		List<Canje> canjes = new ArrayList<Canje>();
 		try {
 
@@ -93,7 +99,9 @@ public class CanjeDAOJDBC implements CanjeDao{
 		} catch (SQLException e) {
 				System.out.println("Error al procesar la consulta");
 				throw new AppException("No se pudo listar los canjes por un error en la Base de Datos");
-			
+		} catch (Exception e) {
+			System.out.println("Error al buscar la campaña");
+			throw new InstanceException();
 		}
 		finally {
 			ConnectionManager.disconnect();

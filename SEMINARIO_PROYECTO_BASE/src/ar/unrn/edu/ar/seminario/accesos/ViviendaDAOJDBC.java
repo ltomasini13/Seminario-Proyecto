@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Ciudadano;
 import ar.edu.unrn.seminario.modelo.Ubicacion;
@@ -23,7 +25,7 @@ import jdk.nashorn.internal.runtime.ECMAException;
 public class ViviendaDAOJDBC implements ViviendaDao {
 
 	@Override
-	public void crear(Vivienda vivienda) {
+	public void crear(Vivienda vivienda) throws AppException, InstanceException {
 		
 		try {
 
@@ -69,14 +71,15 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		  
 			
 			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-
-			
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
@@ -84,7 +87,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 
 	
 	@Override
-	public void crearParaRecic(Vivienda vivienda) {
+	public void crearParaRecic(Vivienda vivienda) throws AppException, InstanceException {
 		
 		try {
 
@@ -108,12 +111,15 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		   
 		  
 		 	
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-		
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
@@ -123,7 +129,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	
 	
 	@Override
-	public void actualizarYcrear(Vivienda vivienda) {
+	public void actualizarYcrear(Vivienda vivienda) throws AppException, InstanceException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -168,12 +174,15 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		   
 		  
 		 	
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-		
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
@@ -181,7 +190,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	
 	
 	@Override
-	public void actualizar(Vivienda vivienda) {
+	public void actualizar(Vivienda vivienda) throws AppException, InstanceException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -204,19 +213,22 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		   
 		  
 		 	
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-		
-		} catch (Exception e) {
-			System.out.println("Error en la base de datos");
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
 	}
 
 	@Override
-	public List<Vivienda> listarTodas() {
+	public List<Vivienda> listarTodas() throws AppException, InstanceException {
 
 		List<Vivienda> viviendas=new ArrayList<Vivienda>();
 		 List<Vivienda> viviendasOrdenadasPorBarrio=new ArrayList<Vivienda>();
@@ -241,16 +253,16 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		   viviendasOrdenadasPorBarrio= viviendas.stream().sorted((v1, v2) -> 
 		   v1.obtenerUbicacionBarrio().compareTo(v2.obtenerUbicacionBarrio())).collect(Collectors.toList());
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			
-		} catch (Exception e) {
-			System.out.println("Error al listar viviendas");
-			
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		
 		return viviendasOrdenadasPorBarrio;
@@ -258,7 +270,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 	
 	@Override
-	public Vivienda buscar(Vivienda vivienda) {
+	public Vivienda buscar(Vivienda vivienda) throws AppException, InstanceException {
 		Vivienda viv =null;
 		
 		try {
@@ -281,14 +293,16 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		
 		  
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-		} catch (Exception e) {
-			System.out.println("Error al listar viviendas");
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		
 		return viv;
@@ -296,7 +310,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	
 
 	@Override
-	public Vivienda buscar(Integer idVivienda) {
+	public Vivienda buscar(Integer idVivienda) throws AppException, InstanceException {
 		Vivienda vivienda =null;
 		
 		try {
@@ -319,16 +333,16 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		
 		  
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al listar viv");
-			// TODO: disparar Exception propia
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		
 		return vivienda;
@@ -336,7 +350,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 
 
 	@Override
-	public Vivienda buscarPorPedido(Integer idPedido) {
+	public Vivienda buscarPorPedido(Integer idPedido) throws AppException, InstanceException {
 		Vivienda vivienda =null;
 		
 		try {
@@ -361,16 +375,16 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		
 		  
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al listar viv");
-			// TODO: disparar Exception propia
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		
 		return vivienda;

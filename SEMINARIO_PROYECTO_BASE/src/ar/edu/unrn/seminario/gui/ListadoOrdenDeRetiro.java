@@ -23,7 +23,9 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
 
@@ -39,7 +41,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	private JPopupMenu popupMenu;
 	
 	
-	public ListadoOrdenDeRetiro(IApi api) throws SintaxisSQLException {
+	public ListadoOrdenDeRetiro(IApi api)  {
 		setTitle("LISTADO DE ORDENES");
 		this.api = api;
 
@@ -151,7 +153,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 					
 					cargarTabla();
 					
-				} catch (StateException | SintaxisSQLException e1) {
+				} catch (StateException | AppException | InstanceException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
 				}
 			}
@@ -264,18 +266,26 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	}
 	
 	
-	private void cargarTabla() throws SintaxisSQLException {
+	private void cargarTabla() {
 		
 		crearEstructuraTabla();
 		
-		List<OrdenDeRetiroDTO> ordenes = api.obtenerOrdenes();
 		
-		for (OrdenDeRetiroDTO o : ordenes) {
-			modelo.addRow(new Object[] { o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector() });
-			
+		try {
+			List<OrdenDeRetiroDTO> ordenes;
+			ordenes = api.obtenerOrdenes();
+			for (OrdenDeRetiroDTO o : ordenes) {
+				modelo.addRow(new Object[] { o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector() });
+				
+			}
+			visibilizarTabla();
+		} catch (AppException | InstanceException  e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
-		visibilizarTabla();
+		
+		
+		
 	}
 	
 	
@@ -283,11 +293,19 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		
 		crearEstructuraTabla();
 		
-		OrdenDeRetiroDTO o= api.obtenerOrden(idVisita);
+	
+		try {
+			OrdenDeRetiroDTO o;
+			o = api.obtenerOrden(idVisita);
+			modelo.addRow(new Object[] { o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector() });
+			visibilizarTabla();
+			
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+		}
 		
-		modelo.addRow(new Object[] { o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector() });
 		
-		visibilizarTabla();
+		
 	}
 	
 }

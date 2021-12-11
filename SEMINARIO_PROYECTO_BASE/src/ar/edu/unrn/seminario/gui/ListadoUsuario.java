@@ -19,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
@@ -135,22 +137,34 @@ public class ListadoUsuario extends JFrame {
 
 	private void cargarDatosTabla() {
 		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
-		// Agrega los usuarios en el model
-		for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
-			
+		List<UsuarioDTO> usuarios;
+		try {
+			usuarios = api.obtenerUsuarios();
+			// Agrega los usuarios en el model
+			for (UsuarioDTO u : usuarios) {
+				modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+				
+			}
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
+		
 
 	}
 
 	
 	private void cargarDatosTabla(String nombreUsuario) throws SintaxisSQLException, NotNullException, DataEmptyException {
 		// Obtiene el usuario para el ciudadano pasado como parametro
-		UsuarioDTO u = api.obtenerUsuario(nombreUsuario);
+		UsuarioDTO u;
+		try {
+			u = api.obtenerUsuario(nombreUsuario);
+			// Agrega el usuario en el model
+			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		// Agrega el usuario en el model
-		modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
 		
 
 	}
@@ -192,14 +206,20 @@ public class ListadoUsuario extends JFrame {
 		// Obtiene el model del table
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
-		// Resetea el model
-		modelo.setRowCount(0);
+		List<UsuarioDTO> usuarios;
+		try {
+			usuarios = api.obtenerUsuarios();
+			// Resetea el model
+			modelo.setRowCount(0);
 
-		// Agrega los usuarios en el model
-		for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			// Agrega los usuarios en el model
+			for (UsuarioDTO u : usuarios) {
+				modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			}
+
+		} catch (AppException | InstanceException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
-
+		
 	}
 }

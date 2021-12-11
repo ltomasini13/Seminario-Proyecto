@@ -26,6 +26,7 @@ import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -41,13 +42,13 @@ import ar.edu.unrn.seminario.modelo.Visita;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException, SintaxisSQLException;
-	void registrarCiudadano(String username, String password, String email, String nombre, Integer rol, String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException, NumbersException, AuthenticationException;
+	void registrarUsuario(String username, String password, String email, String nombre, Integer rol) throws DataEmptyException, NotNullException, SintaxisSQLException, AppException, InstanceException;
+	void registrarCiudadano(String username, String password, String email, String nombre, Integer rol, String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException, NumbersException, AuthenticationException, AppException, InstanceException;
 	
-	void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException;
+	void loguearUsuario(String username, String contrasena) throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException, AppException, InstanceException;
 	
 	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud, String nombreCiudadano, String apeCiudadano,
-			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, AuthenticationException;
+			String dniCiudadano)throws NotNullException, DataEmptyException, NumbersException, SintaxisSQLException, AuthenticationException, AppException, InstanceException;
 
 
 	void registrarResiduo(String tipo, String numero) throws NumbersException, NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException;
@@ -55,10 +56,10 @@ public interface IApi {
 	
 	boolean esUsuarioAdmin();
 	boolean esUsuarioReciclador();
-	UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException, NotNullException, DataEmptyException;
+	UsuarioDTO obtenerUsuario(String username) throws SintaxisSQLException, NotNullException, DataEmptyException, AppException, InstanceException;
 	void eliminarUsuario(String username);
 
-	List<RolDTO> obtenerRoles() throws SintaxisSQLException;
+	List<RolDTO> obtenerRoles() throws SintaxisSQLException, AppException, InstanceException;
 
 	List<RolDTO> obtenerRolesActivos();
 
@@ -70,87 +71,69 @@ public interface IApi {
 
 	void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
 
-	List<UsuarioDTO> obtenerUsuarios(); // recuperar todos los usuarios
+	List<UsuarioDTO> obtenerUsuarios() throws AppException, InstanceException; // recuperar todos los usuarios
 
 	void activarUsuario(String username) throws StateException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 	
 
-	List<ViviendaDTO> obtenerViviendas() throws EmptyListException; //recupera todas las viviendas registradas
-	ViviendaDTO obtenerVivienda(Integer idVivienda);
-	ViviendaDTO obtenerViviendaDelPedido(Integer idPedido);
-	List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException;
-	PedidoRetiroDTO obtenerPedidoDeLaOrden(Integer idOrden);
+	List<ViviendaDTO> obtenerViviendas() throws EmptyListException, AppException, InstanceException; //recupera todas las viviendas registradas
+	ViviendaDTO obtenerVivienda(Integer idVivienda) throws AppException, InstanceException;
+	ViviendaDTO obtenerViviendaDelPedido(Integer idPedido) throws AppException, InstanceException;
+	List<PedidoRetiroDTO> obtenerPedidos() throws EmptyListException, AppException, InstanceException;
+	PedidoRetiroDTO obtenerPedidoDeLaOrden(Integer idOrden) throws AppException, InstanceException;
 
-	List<ResiduoDTO> obtenerResiduos();
+	List<ResiduoDTO> obtenerResiduos() throws AppException, InstanceException;
 	void cerrarSesion(); 				
 	
-	void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion, List<ResiduoARetirarDTO> residuosARetirar) throws NotNullException, ZeroNegativeNumberException, EmptyListException;
-	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException;
+	void generarPedido(Integer id_vivienda, boolean cargaPesada, String observacion, List<ResiduoARetirarDTO> residuosARetirar) throws NotNullException, ZeroNegativeNumberException, EmptyListException, AppException, InstanceException;
+	void registrarVivienda(String calle, String numero, String barrio, String latitud, String longitud) throws DataEmptyException, NumbersException, NotNullException, AuthenticationException, AppException, InstanceException;
 
-	void pedidoPendiente(Integer id_vivienda) throws CreationValidationException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
+	void pedidoPendiente(Integer id_vivienda) throws CreationValidationException, AppException, InstanceException; //Dispara un error si hay algun pedido que no concluyó para la vievienda pasada por parámetro
 
-	void registrarRecolector(String nombre, String apellido, String dni, String email) throws  NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException;
+	void registrarRecolector(String nombre, String apellido, String dni, String email) throws  NotNullException, DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException, AppException, InstanceException;
 	
-	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException ;
+	List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException, AppException, InstanceException ;
 	
-	List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido);
-	List<ResiduoRetiradoDTO> obtenerResiduosRetirados(Integer idVisita);
-	List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido);
-	List<OrdenDeRetiroDTO> obtenerOrdenes() throws SintaxisSQLException;
-	void generarOrden(Integer id_pedido)throws SintaxisSQLException, CreationValidationException ;
-	void cancelarOrden(Integer idOrden) throws StateException;
-	void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException;
+	List<ResiduoARetirarDTO> obtenerResiduosARetirar(Integer idPedido) throws AppException, InstanceException;
+	List<ResiduoRetiradoDTO> obtenerResiduosRetirados(Integer idVisita) throws AppException, InstanceException;
+	List<ResiduoRestanteDTO> obtenerResiduosRestantes(Integer idPedido) throws AppException, InstanceException;
+	List<OrdenDeRetiroDTO> obtenerOrdenes() throws AppException, InstanceException;
+	void generarOrden(Integer id_pedido)throws SintaxisSQLException, CreationValidationException, AppException, InstanceException ;
+	void cancelarOrden(Integer idOrden) throws StateException, AppException, InstanceException;
+	void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException, AppException, InstanceException;
 	
-	void asignarRecolector(Integer idOrden, Integer idRecolector);
-	void cambiarDueño(Integer idVivienda, String dni);
-	void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException;
-	List<CiudadanoDTO> obtenerCiudadanos(); 
-	CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda);
+	void asignarRecolector(Integer idOrden, Integer idRecolector) throws AppException, InstanceException;
+	void cambiarDueño(Integer idVivienda, String dni) throws AppException, InstanceException;
+	void cambiarDueño(Integer idVivienda, String nombreCiudadano, String apeCiudadano, String dniCiudadano) throws NotNullException, DataEmptyException, NumbersException, AppException, InstanceException;
+	List<CiudadanoDTO> obtenerCiudadanos() throws AppException, InstanceException; 
+	CiudadanoDTO obtenerCiudadanoDeLaVivienda(Integer idVivienda) throws AppException, InstanceException;
 	
-	void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException, SintaxisSQLException;
-	List<VisitaDTO> obtenerVisitas() throws EmptyListException;
-	List<VisitaDTO> obtenerVisitasDeLaOrden(Integer idOrden) throws EmptyListException;
-	OrdenDeRetiroDTO obtenerOrden(Integer idVisita);
-	void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException;
+	void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO) throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException, SintaxisSQLException, AppException, InstanceException;
+	List<VisitaDTO> obtenerVisitas() throws EmptyListException, AppException, InstanceException;
+	List<VisitaDTO> obtenerVisitasDeLaOrden(Integer idOrden) throws EmptyListException, AppException, InstanceException;
+	OrdenDeRetiroDTO obtenerOrden(Integer idVisita) throws AppException, InstanceException;
+	void registrarBeneficio(String nombre, String puntos) throws DataEmptyException, NotNullException, NumbersException, AppException, InstanceException;
 
-	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException;
+	List<BeneficioDTO> obtenerBeneficios()throws AppException, DataEmptyException, NotNullException, NumbersException, InstanceException;
 	
-	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException;
+	void registrarCampaña(String nombre, String descripcion) throws DataEmptyException, NotNullException, AppException, DateException, CreationValidationException, InstanceException;
 	
-	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException, DateException;
+	List<CampañaDTO> obtenerCampañas()throws AppException, DataEmptyException, NotNullException, DateException, InstanceException;
 	
-	boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden);
-	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden);
+	boolean residuoEstaDeclarado(ResiduoRetiradoDTO residuoRetiradoDto, Integer idOrden) throws AppException, InstanceException;
+	double calcularResiduoRestanteDelResiduo(ResiduoRetiradoDTO residuoRetiradoDTO, Integer idOrden) throws AppException, InstanceException;
+	
+	
 
-	
-<<<<<<< HEAD
+	void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException, InstanceException;
 
-=======
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-	
-	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
 	
 	void actualizarPuntaje(double puntaje);
-	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña)
-			throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
-	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
-	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException;
-	
-	
->>>>>>> 8859f5793cf8a8974acfc09eb59e9386c4c81cb2
-	
-	void realizarCanje(Integer idBeneficio, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException;
-=======
-	void realizarCanje(String nombre, String dni) throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException;
->>>>>>> Stashed changes
-	
-	void actualizarPuntaje(double puntaje);
-	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException;
-	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException;
-	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException;
+	List<BeneficioDTO> obtenerCatalogo(Integer idCampaña) throws AppException, NotNullException, DataEmptyException, DateException, NumbersException, InstanceException;
+	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException, InstanceException;
+	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException, InstanceException;
 	
 
 

@@ -18,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 
 public class SeleccionRecolector extends JFrame {
@@ -57,31 +59,41 @@ public class SeleccionRecolector extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		
-		List<RecolectorDTO> recolectores = api.obtenerRecolectores();
-		// Agrega los usuarios en el model
-		for (RecolectorDTO r : recolectores) {
-			modelo.addRow(new Object[] { r.obtenerId(), r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail() });
-			
+		List<RecolectorDTO> recolectores;
+		try {
+			recolectores = api.obtenerRecolectores();
+			// Agrega los usuarios en el model
+			for (RecolectorDTO r : recolectores) {
+				modelo.addRow(new Object[] { r.obtenerId(), r.obtenerNombre(), r.obtenerApellido(), r.obtenerDni(), r.obtenerEmail() });
+				
+			}
+		
+			table.setModel(modelo);
+			table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+			scrollPane.setViewportView(table);
+		} catch (AppException | InstanceException e2) {
+			JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-	
-		table.setModel(modelo);
-		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
-		table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
-		scrollPane.setViewportView(table);
+		
 
 		asignar = new JButton("ELEGIR");
 		asignar.addActionListener((ActionEvent e) -> {
 			Integer idRecolector = (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
-			api.asignarRecolector(idOrden, idRecolector);
-			JOptionPane.showMessageDialog(null, "Se asigno el recolecor correctamente", "INFO", JOptionPane.INFORMATION_MESSAGE);
 			try {
-				dispose();
+				api.asignarRecolector(idOrden, idRecolector);
+				JOptionPane.showMessageDialog(null, "Se asigno el recolecor correctamente", "INFO", JOptionPane.INFORMATION_MESSAGE);
+				
 				ListadoOrdenDeRetiro listadoOrdenes = new ListadoOrdenDeRetiro(api);
 				listadoOrdenes.setVisible(true);
-			} catch (SintaxisSQLException e1) {
-				
+				dispose();
+			} catch (AppException | InstanceException  e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+			
+			
 		});
 
 		JButton cerrarButton = new JButton("Cerrar");

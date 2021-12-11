@@ -8,7 +8,9 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.CreationValidationException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.modelo.PedidoRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 
@@ -75,15 +77,16 @@ public class GenerarOrden extends JFrame {
 		JButton aceptarBoton = new JButton("ACEPTAR");
 		aceptarBoton.addActionListener((ActionEvent arg0) ->{
 			
-			try {
-				api.generarOrden(idPedido);
-				JOptionPane.showMessageDialog(null, "La orden se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
-				dispose();
-			} catch (SintaxisSQLException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (CreationValidationException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			};
+				try {
+					api.generarOrden(idPedido);
+					JOptionPane.showMessageDialog(null, "La orden se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
+					dispose();
+				} catch (AppException | SintaxisSQLException | CreationValidationException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
+					
+				}
+				
+			
 		
 		});
 		aceptarBoton.setBounds(261, 22, 97, 25);

@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.sun.media.jfxmedia.events.NewFrameEvent;
 
+import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -26,7 +28,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class UsuarioDAOJDBC implements UsuarioDao{
 
 	@Override
-	public void crear(Usuario usuario) {
+	public void crear(Usuario usuario) throws AppException, InstanceException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -42,27 +44,27 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 			statement.setString(4, usuario.obtenerEmail());
 			statement.setInt(5, usuario.obtenerCodigoRol());
 
+			int cantidad = statement.executeUpdate();
+			if (cantidad==1) 
+				System.out.println("El ciudadano se creo correctamente.");
 			
-			try {
-				int cantidad = statement.executeUpdate();
-				if (cantidad==1) 
-					System.out.println("El ciudadano se creo correctamente.");
-			}
-			catch(MySQLIntegrityConstraintViolationException e){
-		    	
-		    }
 				   
-		}catch (Exception e) {
-			
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		
 	}
 
 	@Override
-	public List<Usuario> listarTodos() {
+	public List<Usuario> listarTodos() throws AppException, InstanceException {
 		List<Usuario> usuarios=new ArrayList<Usuario>();
 		
 		try {
@@ -94,23 +96,23 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 			}
 		
 
-		} catch (SQLException e) {
-			
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al listar viviendas");
-			// TODO: disparar Exception propia
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
-			
 		}
 		return usuarios;
 		
 	}
 
 	@Override
-	public Usuario buscar(String nombreDeUsuario) throws NotNullException, DataEmptyException {
+	public Usuario buscar(String nombreDeUsuario) throws AppException, InstanceException {
 		Usuario usuario = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -128,12 +130,15 @@ public class UsuarioDAOJDBC implements UsuarioDao{
 				
 			}
 
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getSQLState(), e.getMessage());
-		
-		} finally {
+		} catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 

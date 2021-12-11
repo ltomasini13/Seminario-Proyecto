@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
+import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 
@@ -66,7 +67,7 @@ public class RegistrarBeneficio extends JFrame {
 				api.registrarBeneficio(nombreText.getText(), puntosText.getText());
 				JOptionPane.showMessageDialog(null, "Beneficio registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
 				this.dispose();
-			} catch (AppException | DataEmptyException | NotNullException | NumbersException e) {
+			} catch (AppException | DataEmptyException | NotNullException | NumbersException | InstanceException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
