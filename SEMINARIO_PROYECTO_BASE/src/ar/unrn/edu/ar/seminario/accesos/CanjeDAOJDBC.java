@@ -33,7 +33,7 @@ public class CanjeDAOJDBC implements CanjeDao{
 			
 			PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO canjes (fecha_canje, puntos_canjeados, id_beneficio, id_ciudadano)"
-							+ "VALUES (?, ?)",  Statement.RETURN_GENERATED_KEYS);
+							+ "VALUES (?, ?, ?, ?)");
 			
 			statement.setTimestamp(1, Timestamp.valueOf(canje.obtenerFechaCanje()));
 			statement.setDouble(2, canje.obtenerPuntaje());
@@ -43,12 +43,7 @@ public class CanjeDAOJDBC implements CanjeDao{
 			
 			int cantidad = statement.executeUpdate();
 			if (cantidad==1) 
-				System.out.println("El canje se creo correctamente.");
-			
-			ResultSet miResult = statement.getGeneratedKeys();
-			miResult.next();
-
-		    miResult.close(); 
+				System.out.println("El canje se creo correctamente");	
 		    
 		} catch (SQLException e1) {
 			System.out.println("Error al procesar la consulta");
@@ -73,7 +68,8 @@ public class CanjeDAOJDBC implements CanjeDao{
 			conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
 					.prepareStatement("SELECT * FROM canjes c join beneficios b on (c.id_beneficio=b.id_beneficio) "
-							+ "join ciudadanos ciu on (c.id_ciudadano=ciu.id_ciudadano)");
+							+ "join ciudadanos ciu on (c.id_ciudadano=ciu.id_ciudadano)"
+							+ " left join usuarios u on(u.id_usuario=ciu.id_usuario)");
 			
 			ResultSet rs = statement.executeQuery();
 			
@@ -81,14 +77,8 @@ public class CanjeDAOJDBC implements CanjeDao{
 				Beneficio beneficio=new Beneficio(rs.getString("b.nombre_beneficio"), rs.getInt("b.puntos"));
 				Usuario usu =null;
 				if(rs.getString("u.id_usuario")!=null) {	
-					Rol rol= new Rol(rs.getInt("r.id_rol"),rs.getString("r.nombre"));
-					 if(rs.getString("r.estado").equals("ACTIVO")) {
-							rol.activar();
-					 }
-					 else {
-							rol.desactivar();
-					 }
-					 usu = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), rol);
+					
+					 usu = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), new Rol());
 					 usu.editarId(rs.getInt("u.id_usuario"));
 				}
 				Ciudadano ciu=new Ciudadano(rs.getString("ciu.nombre"), rs.getString("ciu.apellido"), rs.getString("ciu.dni"), usu);
@@ -134,9 +124,45 @@ public class CanjeDAOJDBC implements CanjeDao{
 	}
 
 	@Override
-	public List<Canje> listarMisCanjes(Ciudadano ciudadano) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Canje> listarMisCanjes(Ciudadano ciudadano) throws AppException, InstanceException {
+		List<Canje> canjes = new ArrayList<Canje>();
+		System.out.println();
+		try {
+
+			conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT * FROM canjes c join beneficios b on (c.id_beneficio=b.id_beneficio) "
+							+ "join ciudadanos ciu on (c.id_ciudadano=ciu.id_ciudadano)"
+							+ " left join usuarios u on(u.id_usuario=ciu.id_usuario)"
+							+ " where ciu.id_ciudadano=?");
+			
+			statement.setInt(1, ciudadano.obtenerId());
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				Beneficio beneficio=new Beneficio(rs.getString("b.nombre_beneficio"), rs.getInt("b.puntos"));
+				Usuario usu =null;
+				if(rs.getString("u.id_usuario")!=null) {	
+					
+					 usu = new Usuario(rs.getString("u.usuario"), rs.getString("u.contrasena"), rs.getString("u.nombre"), rs.getString("u.email"), new Rol());
+					 usu.editarId(rs.getInt("u.id_usuario"));
+				}
+				Ciudadano ciu=new Ciudadano(rs.getString("ciu.nombre"), rs.getString("ciu.apellido"), rs.getString("ciu.dni"), usu);
+				Canje canje = new Canje(rs.getTimestamp("c.fecha_canje").toLocalDateTime().toString(), rs.getDouble("c.puntos_canjeados"), beneficio, ciu);
+				canjes.add(canje);
+			}
+			
+		} catch (SQLException e) {
+				System.out.println("Error al procesar la consulta");
+				throw new AppException("No se pudo listar los canjes por un error en la Base de Datos");
+		} catch (Exception e) {
+			System.out.println("Error al buscar la campaña");
+			throw new InstanceException();
+		}
+		finally {
+			ConnectionManager.disconnect();
+		}
+		return canjes;
 	}
 
 }

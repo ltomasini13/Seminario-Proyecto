@@ -46,7 +46,8 @@ public class SeleccionIdioma extends JFrame {
 	 * Create the frame.
 	 */
 	public SeleccionIdioma(IApi api) {
-		setTitle("SELECCI\u00D3N DE IDIOMA");
+		labels=ResourceBundle.getBundle("labels");
+		setTitle(labels.getString("seleccion.idioma"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -54,20 +55,24 @@ public class SeleccionIdioma extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JButton botonIngles = new JButton("INGLES");
+		JButton botonIngles = new JButton(labels.getString("ingles"));
 		botonIngles.addActionListener((ActionEvent arg0) ->{
 				labels= ResourceBundle.getBundle("labels", new Locale("en"));
-				Loguin loguin= new Loguin(api,labels);
+				api.asignarIdioma(labels);
+				Loguin loguin= new Loguin(api);
 				loguin.setVisible(true);
+				dispose();
 		});
 		botonIngles.setBounds(176, 93, 89, 23);
 		contentPane.add(botonIngles);
 		
-		JButton botonEspanol = new JButton("ESPA\u00D1OL");
+		JButton botonEspanol = new JButton(labels.getString("espanol"));
 		botonEspanol.addActionListener((ActionEvent arg0) ->{
 			labels= ResourceBundle.getBundle("labels", new Locale("es"));
-			Loguin loguin= new Loguin(api,labels);
+			api.asignarIdioma(labels);
+			Loguin loguin= new Loguin(api);
 			loguin.setVisible(true);
+			dispose();
 		});
 		botonEspanol.setBounds(176, 160, 89, 23);
 		contentPane.add(botonEspanol);

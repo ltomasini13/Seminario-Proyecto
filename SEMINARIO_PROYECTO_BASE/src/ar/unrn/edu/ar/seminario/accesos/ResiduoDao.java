@@ -10,7 +10,7 @@ import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
 public interface ResiduoDao {
 
-	void crear(TipoResiduo residuo) throws DuplicateUniqueKeyException, SintaxisSQLException;
+	void crear(TipoResiduo residuo) throws AppException, InstanceException;
 	
 	List<TipoResiduo> listarTodos() throws AppException, InstanceException;
 

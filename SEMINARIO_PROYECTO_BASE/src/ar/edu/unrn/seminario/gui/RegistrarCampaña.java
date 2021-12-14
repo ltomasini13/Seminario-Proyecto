@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class RegistrarCampaña extends JFrame {
@@ -25,10 +26,10 @@ public class RegistrarCampaña extends JFrame {
 	private JPanel contentPane;
 	private JTextField nombreText;
 	private JTextField descripcionText;
-	
+	private ResourceBundle labels;
 	public RegistrarCampaña(IApi api) {
-		
-		setTitle("REGISTRAR CAMPAÑA");
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("registrar.campana"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 	
@@ -37,22 +38,22 @@ public class RegistrarCampaña extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JLabel nombreLabel = new JLabel("Nombre campa\u00F1a:");
+		JLabel nombreLabel = new JLabel(labels.getString("nombre.campana"));
 		nombreLabel.setBounds(12, 13, 106, 16);
 		contentPane.add(nombreLabel);
 		
-		JLabel descripcionLabel = new JLabel("Descripci\u00F3n:");
+		JLabel descripcionLabel = new JLabel(labels.getString("descripcion"));
 		descripcionLabel.setBounds(12, 54, 78, 16);
 		contentPane.add(descripcionLabel);
 		
-		JButton aceptarBoton = new JButton("ACEPTAR");
+		JButton aceptarBoton = new JButton(labels.getString("continuar"));
 		aceptarBoton.addActionListener((ActionEvent e) -> {
 			try {
 				api.registrarCampaña(nombreText.getText(), descripcionText.getText());
-				JOptionPane.showMessageDialog(null,"¡Campaña agregada con éxito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("campana.exito"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				this.dispose();
 			} catch (AppException | DataEmptyException | NotNullException | DateException | CreationValidationException | InstanceException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 
 			}
 			this.dispose();
@@ -60,7 +61,7 @@ public class RegistrarCampaña extends JFrame {
 		aceptarBoton.setBounds(12, 193, 97, 25);
 		contentPane.add(aceptarBoton);
 		
-		JButton borrarBoton = new JButton("BORRAR");
+		JButton borrarBoton = new JButton(labels.getString("limpiar"));
 		borrarBoton.addActionListener((ActionEvent e) -> {
 			nombreText.setText(null);
 			descripcionText.setText(null);
@@ -68,7 +69,7 @@ public class RegistrarCampaña extends JFrame {
 		borrarBoton.setBounds(138, 193, 97, 25);
 		contentPane.add(borrarBoton);
 		
-		JButton cancelarBoton = new JButton("CANCELAR");
+		JButton cancelarBoton = new JButton(labels.getString("cancelar"));
 		cancelarBoton.addActionListener((ActionEvent e) -> {
 			this.dispose();
 		});

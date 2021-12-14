@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,14 +29,15 @@ import java.awt.event.ActionListener;
 
 public class ListadoResiduo extends JFrame{
 
-	JPanel contentPane;
+	private JPanel contentPane;
 	private JTable table;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
+	private ResourceBundle labels;
 	
 	public ListadoResiduo(IApi api) throws SintaxisSQLException, NotNullException, DataEmptyException, NumbersException {
 		
-
-		setTitle("LISTADO DE RESIDUOS");
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("listado.residuos"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -48,7 +50,7 @@ public class ListadoResiduo extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "ID", "TIPO RESIDUO", "PUNTOS"};
+		String[] titulos = { "ID", labels.getString("titulo.tipo.residuo"), labels.getString("puntos.beneficio")};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
@@ -65,7 +67,7 @@ public class ListadoResiduo extends JFrame{
 			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 			scrollPane.setViewportView(table);
 		} catch (AppException | InstanceException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -73,7 +75,7 @@ public class ListadoResiduo extends JFrame{
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		JButton botonCerrar = new JButton("Cerrar");
+		JButton botonCerrar = new JButton(labels.getString("cerrar"));
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			dispose();
 		});

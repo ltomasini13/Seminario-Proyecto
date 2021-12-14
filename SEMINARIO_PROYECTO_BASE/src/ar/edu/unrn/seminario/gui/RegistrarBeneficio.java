@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class RegistrarBeneficio extends JFrame {
@@ -23,10 +24,10 @@ public class RegistrarBeneficio extends JFrame {
 	private JPanel contentPane;
 	private JTextField nombreText;
 	private JTextField puntosText;
-	
+	private ResourceBundle labels;
 	public RegistrarBeneficio(IApi api) {
-		
-		setTitle("REGISTRAR BENEFICIO");
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("registrar.beneficio"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 	
@@ -35,11 +36,11 @@ public class RegistrarBeneficio extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JLabel nombreLabel = new JLabel("Nombre de beneficio:");
+		JLabel nombreLabel = new JLabel(labels.getString("nombre.beneficio"));
 		nombreLabel.setBounds(12, 29, 138, 16);
 		contentPane.add(nombreLabel);
 		
-		JLabel puntosLabel = new JLabel("Puntos:");
+		JLabel puntosLabel = new JLabel(labels.getString("puntos"));
 		puntosLabel.setBounds(12, 72, 56, 16);
 		contentPane.add(puntosLabel);
 		
@@ -53,28 +54,28 @@ public class RegistrarBeneficio extends JFrame {
 		contentPane.add(puntosText);
 		puntosText.setColumns(10);
 		
-		JButton btnCerrar = new JButton("CERRAR");
+		JButton btnCerrar = new JButton(labels.getString("cerrar"));
 		btnCerrar.addActionListener((ActionEvent arg0) ->{
 			this.dispose();
 		});
 		btnCerrar.setBounds(299, 181, 97, 25);
 		contentPane.add(btnCerrar);
 		
-		JButton btnAceptar = new JButton("ACEPTAR");
+		JButton btnAceptar = new JButton(labels.getString("continuar"));
 		btnAceptar.addActionListener((ActionEvent arg0) ->{
 			
 			try {
 				api.registrarBeneficio(nombreText.getText(), puntosText.getText());
-				JOptionPane.showMessageDialog(null, "Beneficio registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("beneficio.exito"),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				this.dispose();
 			} catch (AppException | DataEmptyException | NotNullException | NumbersException | InstanceException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		btnAceptar.setBounds(24, 181, 97, 25);
 		contentPane.add(btnAceptar);
 		
-		JButton btnBorrar = new JButton("BORRAR");
+		JButton btnBorrar = new JButton(labels.getString("limpiar"));
 		btnBorrar.addActionListener((ActionEvent arg0) ->{
 			nombreText.setText(null);
 			puntosText.setText(null);
