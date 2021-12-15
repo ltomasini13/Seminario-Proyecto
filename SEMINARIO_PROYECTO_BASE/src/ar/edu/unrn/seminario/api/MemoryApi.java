@@ -6,12 +6,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
-import ar.edu.unrn.seminario.dto.CanjeDTO;
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
@@ -32,7 +30,6 @@ import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
 import ar.edu.unrn.seminario.exception.EmptyListException;
-import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -213,7 +210,7 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void registrarCiudadano(String username, String password, String email, String nombre, Integer rol,
-			String apellido, String dni) throws  DataEmptyException, NotNullException,
+			String apellido, String dni) throws SintaxisSQLException, DataEmptyException, NotNullException,
 			NumbersException, AuthenticationException {
 		// TODO Auto-generated method stub
 		
@@ -252,7 +249,7 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void loguearUsuario(String username, String contrasena)
-			throws  AuthenticationException, NotNullException, DataEmptyException {
+			throws SintaxisSQLException, AuthenticationException, NotNullException, DataEmptyException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -316,13 +313,13 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void registrarRecolector(String nombre, String apellido, String dni, String email) throws NotNullException,
-			DataEmptyException, DuplicateUniqueKeyException, NumbersException {
+			DataEmptyException, DuplicateUniqueKeyException, SintaxisSQLException, NumbersException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<RecolectorDTO> obtenerRecolectores()  {
+	public List<RecolectorDTO> obtenerRecolectores() throws SintaxisSQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -352,7 +349,7 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public void generarOrden(Integer id_pedido) throws  CreationValidationException {
+	public void generarOrden(Integer id_pedido) throws SintaxisSQLException, CreationValidationException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -364,7 +361,7 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public void concretarOrden(Integer idOrden) throws StateException {
+	public void concretarOrden(Integer idOrden) throws StateException, SintaxisSQLException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -402,7 +399,8 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void agregarVisita(Integer idOrden, String observacion, List<ResiduoRetiradoDTO> residuosretiradosDTO)
-			throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException {
+			throws NotNullException, CreationValidationException, StateException, WasteException, CollectorException,
+			SintaxisSQLException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -504,11 +502,12 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void realizarCanje(String nombre, String dni)
-			throws NumbersException, NotNullException, AppException, DataEmptyException {
+			throws NumbersException, SintaxisSQLException, NotNullException, AppException, DataEmptyException {
 		// TODO Auto-generated method stub
 		
 	}
 
+<<<<<<< HEAD
 	@Override
 	public CiudadanoDTO obtenerCiudadanoSesion() {
 		// TODO Auto-generated method stub
@@ -552,4 +551,6 @@ public class MemoryApi implements IApi {
 		
 	}
 
+=======
+>>>>>>> parent of 4977a25 (INTERNACIONALIZACION)
 }

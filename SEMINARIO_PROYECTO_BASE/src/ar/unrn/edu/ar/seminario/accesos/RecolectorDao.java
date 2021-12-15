@@ -12,7 +12,7 @@ public interface RecolectorDao {
 
 	void crear(Recolector recolector) throws AppException, InstanceException;
 	
-	List<Recolector> listarTodos()throws AppException, InstanceException;
+	List<Recolector> listarTodos()throws SintaxisSQLException, AppException, InstanceException;
 
 	Recolector buscar(Integer id) throws AppException, InstanceException;
 	

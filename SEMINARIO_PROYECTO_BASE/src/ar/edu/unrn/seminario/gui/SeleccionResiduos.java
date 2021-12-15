@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -78,12 +77,10 @@ public class SeleccionResiduos extends JFrame{
 	private JFormattedTextField formatoCantidad ;
 	private boolean cargaPesada;
 	private JPopupMenu popupMenu ;
-	private ResourceBundle labels;
 	
 	public SeleccionResiduos(IApi api, Integer id_vivienda) {
 		this.api=api;
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("pedido.recoleccion"));
+		setTitle("PEDIDO DE RECOLECCIÓN");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -94,15 +91,15 @@ public class SeleccionResiduos extends JFrame{
 		
 		
 		
-		JLabel cargaPesadaLabel = new JLabel(labels.getString("texto.carga.pesada"));
+		JLabel cargaPesadaLabel = new JLabel("Carga Pesada:");
 		cargaPesadaLabel.setBounds(12, 22, 84, 16);
 		contentPane.add(cargaPesadaLabel);
 		
-		JLabel observacionLabel = new JLabel(labels.getString("texto.observacion"));
+		JLabel observacionLabel = new JLabel("Observaci\u00F3n:");
 		observacionLabel.setBounds(12, 180, 84, 16);
 		contentPane.add(observacionLabel);
 		
-		JButton cancelarBoton = new JButton(labels.getString("cancelar"));
+		JButton cancelarBoton = new JButton("CANCELAR");
 		cancelarBoton.addActionListener((ActionEvent arg0) ->{
 			popupMenu.setVisible(false);
 			dispose();
@@ -115,7 +112,7 @@ public class SeleccionResiduos extends JFrame{
 		contentPane.add(observacionText);
 		observacionText.setColumns(10);
 		
-		 siRadioButton = new JRadioButton(labels.getString("radio.si"));
+		 siRadioButton = new JRadioButton("SI");
 		siRadioButton.addActionListener((ActionEvent arg0) ->{
 			if (noRadioButton.isSelected()) {
 				noRadioButton.setSelected(false);
@@ -125,7 +122,7 @@ public class SeleccionResiduos extends JFrame{
 		siRadioButton.setBounds(102, 18, 56, 25);
 		contentPane.add(siRadioButton);
 		
-		noRadioButton = new JRadioButton(labels.getString("radio.no"));
+		noRadioButton = new JRadioButton("NO");
 		noRadioButton.setSelected(true);
 		noRadioButton.addActionListener((ActionEvent arg0) ->{
 			if (siRadioButton.isSelected()) {
@@ -141,7 +138,7 @@ public class SeleccionResiduos extends JFrame{
 		
 		
 		
-		JButton botonVolver = new JButton(labels.getString("volver"));
+		JButton botonVolver = new JButton("VOLVER");
 		botonVolver.addActionListener((ActionEvent arg0) ->{
 			try {
 				ListadoVivienda listado = new ListadoVivienda(api);
@@ -155,21 +152,21 @@ public class SeleccionResiduos extends JFrame{
 		contentPane.add(botonVolver);
 		
 		
-		JButton btnContinuar = new JButton(labels.getString("continuar"));
+		JButton btnContinuar = new JButton("CONTINUAR");
 		contentPane.add(btnContinuar);
 		btnContinuar.addActionListener((ActionEvent arg0) ->{
 			
 			try {
 				if(!residuosAgregados.isEmpty()) {
 					api.generarPedido(id_vivienda, cargaPesada, observacionText.getText(), residuosAgregados);
-					JOptionPane.showMessageDialog(null, labels.getString("pedido.exito"),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE); 
+					JOptionPane.showMessageDialog(null, "El pedido se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
 					dispose();
 				}
 				else {
-					JOptionPane.showMessageDialog(null,labels.getString("ningun.residuo"),labels.getString("informacion"), JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null,"No se eligió ningun residuo", "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
 				}
 			} catch (NotNullException | ZeroNegativeNumberException | EmptyListException | AppException | InstanceException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE); 
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			};
 		
 		});
@@ -192,15 +189,15 @@ public class SeleccionResiduos extends JFrame{
 			jListResiduos.setModel(modelo);
 			scrollPane.setViewportView(jListResiduos);
 		} catch (AppException | InstanceException e1) {
-			JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("informacion"), JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null,e1.getMessage(), "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
 		}
 		
 		
 		
-		JLabel lblSeleccioneUnResiduo = new JLabel(labels.getString("seleccione.residuo"));
+		JLabel lblSeleccioneUnResiduo = new JLabel("Seleccione un residuo:");
 		scrollPane.setColumnHeaderView(lblSeleccioneUnResiduo);
 		
-		JLabel labelCantidad = new JLabel(labels.getString("ingrese.peso"));
+		JLabel labelCantidad = new JLabel("Ingrese el peso:");
 		labelCantidad.setBounds(164, 61, 110, 14);
 		contentPane.add(labelCantidad);
 		
@@ -215,14 +212,14 @@ public class SeleccionResiduos extends JFrame{
 		formatoCantidad.setBounds(164, 86, 89, 20);
 		contentPane.add(formatoCantidad);
 		
-		JButton btnAgregar = new JButton(labels.getString("menu.agregar"));
+		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener((ActionEvent arg0) ->{
 			
 			try {
 				
 				Double peso=Double.parseDouble(formatoCantidad.getText());
 				if(peso<=0) {
-					throw new ZeroNegativeNumberException(labels.getString("peso.mayor"));
+					throw new ZeroNegativeNumberException("Ingrese un peso mayor a cero");
 				}
 				
 				if(!jListResiduos.isSelectionEmpty()) {
@@ -231,7 +228,7 @@ public class SeleccionResiduos extends JFrame{
 					
 					if(estaAgregado(residuoARetirarDTO)) {
 
-						JOptionPane.showMessageDialog(null, labels.getString("res.agregado")+" "+tipoResiduo, labels.getString("informacion"), JOptionPane.WARNING_MESSAGE); 
+						JOptionPane.showMessageDialog(null, "Ya se agrego el residuo de tipo "+tipoResiduo, "Error", JOptionPane.WARNING_MESSAGE); 
 					}
 					else {
 						residuosAgregados.add(residuoARetirarDTO);
@@ -243,13 +240,13 @@ public class SeleccionResiduos extends JFrame{
 					
 				}
 				else {
-					JOptionPane.showMessageDialog(null, labels.getString("no.seleccionado.residuo"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE); 
+					JOptionPane.showMessageDialog(null, "No se ha seleccionado ningun residuo", "Error", JOptionPane.INFORMATION_MESSAGE); 
 				}
 			}
 			catch(NumberFormatException e) {
-				JOptionPane.showMessageDialog(null, labels.getString("peso.correcto"), labels.getString("error"), JOptionPane.ERROR_MESSAGE); 
+				JOptionPane.showMessageDialog(null, "Ingrese un peso correcto", "Error", JOptionPane.ERROR_MESSAGE); 
 			} catch (ZeroNegativeNumberException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE); 
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
 			}
 			
 			
@@ -262,7 +259,7 @@ public class SeleccionResiduos extends JFrame{
 		scrollPaneResiduosAgregados.setBounds(284, 60, 140, 98);
 		contentPane.add(scrollPaneResiduosAgregados);
 		
-		 JLabel lblResiduosAgregados = new JLabel(labels.getString("res.agregados"));
+		 JLabel lblResiduosAgregados = new JLabel("Residuos agregados:");
 		scrollPaneResiduosAgregados.setColumnHeaderView(lblResiduosAgregados);
 		
 		
@@ -290,9 +287,9 @@ public class SeleccionResiduos extends JFrame{
 		scrollPaneResiduosAgregados.setViewportView(jListResAgregados);
 		
 		popupMenu = new JPopupMenu();
-		JMenuItem menuItemPopupMenu = new JMenuItem(labels.getString("eliminar"));
+		JMenuItem menuItemPopupMenu = new JMenuItem("Eliminar");
 		menuItemPopupMenu.addActionListener((ActionEvent arg0) ->{
-			int confirmacion = JOptionPane.showConfirmDialog(null, labels.getString("eliminar.confirmacion"));
+			int confirmacion = JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar la seleccion?");
 			
 			if(confirmacion==0) {
 				popupMenu.setVisible(false);

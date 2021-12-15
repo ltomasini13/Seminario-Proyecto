@@ -3,7 +3,6 @@ package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,10 +30,10 @@ public class SeleccionBeneficios extends JFrame{
 	private JTable table;
 	private DefaultTableModel modelo;
 	private JButton elegirBeneficioBoton, realizarCanjeBoton, cerrarBoton;
-	private ResourceBundle labels;
+
 	public SeleccionBeneficios (IApi api, Integer idCampaña) {
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("catalogo"));
+		
+		setTitle("CATÁLOGO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -47,7 +46,7 @@ public class SeleccionBeneficios extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "ID", labels.getString("nombre.beneficio"), labels.getString("puntos.beneficio")};
+		String[] titulos = { "ID BENEFICIO", "NOMBRE BENEFICIO", "PUNTOS"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
@@ -59,7 +58,7 @@ public class SeleccionBeneficios extends JFrame{
 			modelo.addRow(new Object[] {beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
 			}
 		} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | InstanceException e2) {
-			JOptionPane.showMessageDialog(null, e2.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		table.setModel(modelo);
@@ -70,32 +69,17 @@ public class SeleccionBeneficios extends JFrame{
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
 		scrollPane.setViewportView(table);
 
-		realizarCanjeBoton = new JButton(labels.getString("realizar.canje"));
+		realizarCanjeBoton = new JButton("REALIZAR CANJE");
 		realizarCanjeBoton.addActionListener((ActionEvent e) -> {
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
-				String nombreBeneficio=(String)modelo.getValueAt(table.getSelectedRow(), 1);
-				if(api.esUsuarioAdmin()) {
-					
-					ListadoCiudadano listado = new ListadoCiudadano(nombreBeneficio, api);
-					listado.setVisible(true);
-					dispose();
-				}
-				else {
-					if(api.esUsuarioReciclador()) {
-						try {
-							api.realizarCanje(nombreBeneficio);
-							JOptionPane.showMessageDialog(null, labels.getString("canje.exito"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
-							dispose();
-						} catch (AppException | InstanceException | NumbersException | NotNullException e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
-						}
-						
-					}
-				}
+				String nombre =(String)modelo.getValueAt(table.getSelectedRow(), 1);
+				ListadoCiudadano listado = new ListadoCiudadano(nombre, api);
+				listado.setVisible(true);
+				dispose();
 			}	
 		});
 		
@@ -105,7 +89,7 @@ public class SeleccionBeneficios extends JFrame{
 		
 		panelBotones.add(realizarCanjeBoton);
 		
-		cerrarBoton = new JButton(labels.getString("cerrar"));
+		cerrarBoton = new JButton("CERRAR");
 		cerrarBoton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
@@ -114,9 +98,8 @@ public class SeleccionBeneficios extends JFrame{
 	}
 
 	public SeleccionBeneficios (IApi api, Integer idBeneficio, Integer idCampaña) {
-		labels=api.obtenerIdioma();
 		
-		setTitle(labels.getString("catalogo"));
+		setTitle("CATÁLOGO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -129,7 +112,7 @@ public class SeleccionBeneficios extends JFrame{
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "ID", labels.getString("nombre.beneficio"), labels.getString("puntos.beneficio")};
+		String[] titulos = { "ID BENEFICIO", "NOMBRE BENEFICIO", "PUNTOS"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
@@ -140,7 +123,7 @@ public class SeleccionBeneficios extends JFrame{
 			modelo.addRow(new Object[] {beneficio.obtenerId(), beneficio.obtenerNombreBeneficio(), beneficio.obtenerPuntos() });
 			}
 		} catch (AppException | NotNullException | DataEmptyException | DateException | NumbersException | InstanceException e2) {
-			JOptionPane.showMessageDialog(null, e2.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		table.setModel(modelo);
@@ -155,7 +138,7 @@ public class SeleccionBeneficios extends JFrame{
 		panelBotones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
 		
-		cerrarBoton = new JButton(labels.getString("cerrar"));
+		cerrarBoton = new JButton("CERRAR");
 		cerrarBoton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
@@ -164,14 +147,14 @@ public class SeleccionBeneficios extends JFrame{
 		
 		
 		if(api.esUsuarioAdmin()) {
-			elegirBeneficioBoton = new JButton(labels.getString("agregar.beneficio"));
+			elegirBeneficioBoton = new JButton("AGREGAR BENEFICIO");
 			elegirBeneficioBoton.addActionListener((ActionEvent e) -> {
 				try {
 					ListadoBeneficio listado = new ListadoBeneficio(api, idCampaña);
 					listado.setVisible(true);
 					dispose();
 				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			});

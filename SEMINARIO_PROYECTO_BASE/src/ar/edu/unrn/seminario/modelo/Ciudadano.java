@@ -10,7 +10,7 @@ public class Ciudadano {
 	private String apellido;
 	private String dni;
 	private Usuario usuario;
-	private Double puntaje;
+	private double puntaje;
 	
 	public Ciudadano (String nombre, String apellido, String dni, Usuario usuario) throws NotNullException, DataEmptyException, NumbersException {
 		
@@ -28,7 +28,7 @@ public class Ciudadano {
 		this.apellido = apellido;
 		this.dni = dni;
 		this.usuario=usuario;
-		this.puntaje = 0.0;
+		this.puntaje = 0;
 	} 	
  
 	public Ciudadano() {
@@ -78,14 +78,17 @@ public class Ciudadano {
 		this.id = id;
 	}   
 	
-
-	
-	public void sumarPuntos(double puntos) {
-		 this.puntaje = this.puntaje+ puntos;
+	public double puntaje() {
+		return this.puntaje();
 	}
 	
-	public void  restarPuntos(double puntos) {
-		 this.puntaje= this.puntaje - puntos; 
+	
+	public double sumarPuntos(double puntos) {
+		return this.puntaje = this.puntaje+ puntos;
+	}
+	
+	public double restarPuntos(double puntos) {
+		return this.puntaje= this.puntaje - puntos; 
 	}
 
 

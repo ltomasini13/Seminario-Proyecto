@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,11 +33,10 @@ public class ListadoCampaña extends JFrame
 	private DefaultTableModel modelo;
 	private Integer idCampaña;
 	private List<BeneficioDTO> beneficiosDTO=new ArrayList<BeneficioDTO>();
-	private ResourceBundle labels;
 	
 	public ListadoCampaña(IApi api) {
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("listado.campanas"));
+		
+		setTitle("LISTADO DE CAMPAÑAS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -51,7 +49,7 @@ public class ListadoCampaña extends JFrame
 		contentPane.add(scrollPane);
 
 		table = new JTable();
-		String[] titulos = { "ID",labels.getString("nombre.campana"),labels.getString("fecha.campana"), labels.getString("fecha.fin.campana"), labels.getString("descripcion.campana")};
+		String[] titulos = { "ID CAMPAÑA","NOMBRE CAMPAÑA", "FECHA INICIO", "FECHA FIN", "DESCRIPCIÓN"};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
 		
@@ -62,7 +60,7 @@ public class ListadoCampaña extends JFrame
 				modelo.addRow(new Object[] { camp.obtenerId(), camp.obtenerNombreCampaña(), camp.obtenerFechaInicio(), camp.obtenerFechaFin(), camp.obtenerDescripcion() });
 			}
 		} catch (AppException | NotNullException | DateException | DataEmptyException | InstanceException e2) {
-			JOptionPane.showMessageDialog(null, e2.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e2.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		table.setModel(modelo);
@@ -77,15 +75,15 @@ public class ListadoCampaña extends JFrame
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		JButton botonCerrar = new JButton(labels.getString("cerrar"));
+		JButton botonCerrar = new JButton("CERRAR");
 		botonCerrar.addActionListener((ActionEvent e)-> {
-			dispose();
+			this.dispose();
 		});
 		
-		JButton crearCatalogoBoton = new JButton(labels.getString("crear.catalogo"));
+		JButton crearCatalogoBoton = new JButton("CREAR CAT\u00C1LOGO");
 		crearCatalogoBoton.addActionListener((ActionEvent e)-> {
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), "", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna campaña", "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				
@@ -95,8 +93,7 @@ public class ListadoCampaña extends JFrame
 					beneficio.setVisible(true);
 					dispose();
 				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
-					
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				};
 			}
 		});

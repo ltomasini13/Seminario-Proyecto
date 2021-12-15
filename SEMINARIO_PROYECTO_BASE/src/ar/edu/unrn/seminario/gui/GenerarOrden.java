@@ -19,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class GenerarOrden extends JFrame {
@@ -30,13 +29,12 @@ public class GenerarOrden extends JFrame {
 	private JTextField dniText;
 	private JTextField emailText;
 	private JTextField estadoText;
-	private List<PedidoRetiro> listaPedido = null;
-	private List<Recolector> listaRecolector = null;
-	private ResourceBundle labels;
+	List<PedidoRetiro> listaPedido = null;
+	List<Recolector> listaRecolector = null;
+	
 	
 	public GenerarOrden(IApi api, Integer idPedido) {
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("generar.orden"));
+		setTitle("GENERAR ORDEN DE RETIRO");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -45,7 +43,7 @@ public class GenerarOrden extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JLabel estadoLabel = new JLabel(labels.getString("estado.orden"));
+		JLabel estadoLabel = new JLabel("Estado:");
 		estadoLabel.setBounds(12, 26, 56, 16);
 		contentPane.add(estadoLabel);
 		
@@ -54,33 +52,37 @@ public class GenerarOrden extends JFrame {
 		contentPane.add(estadoText);
 		estadoText.setColumns(10);
 		
-		JButton asignarBoton = new JButton(labels.getString("asignar.recolector"));
+		JButton asignarBoton = new JButton("ASIGNAR RECOLECTOR");
 		asignarBoton.addActionListener((ActionEvent e) -> {
 			ListadoRecolector listado;
+			try {
 				listado = new ListadoRecolector(api);	
 				listado.setVisible(true);
 				this.dispose();
-			
+			} catch (SintaxisSQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		asignarBoton.setBounds(12, 124, 177, 25);
 		contentPane.add(asignarBoton);
 		
-		JButton cancelarBoton = new JButton(labels.getString("cancelar"));
+		JButton cancelarBoton = new JButton("CANCELAR");
 		cancelarBoton.addActionListener((ActionEvent e) -> {
 			this.dispose();
 		});
 		cancelarBoton.setBounds(261, 124, 97, 25);
 		contentPane.add(cancelarBoton);
 		
-		JButton aceptarBoton = new JButton(labels.getString("continuar"));
+		JButton aceptarBoton = new JButton("ACEPTAR");
 		aceptarBoton.addActionListener((ActionEvent arg0) ->{
 			
 				try {
 					api.generarOrden(idPedido);
-					JOptionPane.showMessageDialog(null, labels.getString("orden.exito"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE); 
+					JOptionPane.showMessageDialog(null, "La orden se generó con éxito", "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
 					dispose();
-				} catch (AppException | CreationValidationException | InstanceException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.INFORMATION_MESSAGE); 
+				} catch (AppException | SintaxisSQLException | CreationValidationException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Confirmar", JOptionPane.INFORMATION_MESSAGE); 
 					
 				}
 				

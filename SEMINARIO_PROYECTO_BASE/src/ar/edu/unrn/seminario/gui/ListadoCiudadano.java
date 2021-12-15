@@ -8,7 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -44,26 +43,28 @@ public class ListadoCiudadano extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel pnlBotonesOperaciones;
+	private String[] titulos= {"ID", "NOMBRE", "APELLIDO", "DNI", "NOMBRE DE USUARIO", "PUNTOS OBTENIDOS"};
 	private DefaultTableModel modelo;
 	private JTable table;
 	private IApi api;
 	private JScrollPane scrollPane;
 	private JButton botonCerrar, botonElegir;
 	private JPopupMenu popupMenu;
+<<<<<<< HEAD
 	private ResourceBundle labels;
 	private JButton btnAplicar;
 	private JPanel panel;
 	private JLabel lblFiltros;
 	private JCheckBox chckbxNewCheckBox;
 	private JButton botonAplicar;
+=======
+>>>>>>> parent of 4977a25 (INTERNACIONALIZACION)
 	
 	/**
 	 * Create the frame.
 	 * @wbp.parser.constructor
 	 */
 	public ListadoCiudadano(IApi api) {
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("listado.ciudadanos"));
 		this.api=api;
 		inicializarVentana();
 		cargarEstructuraDeLaTabla();
@@ -74,8 +75,6 @@ public class ListadoCiudadano extends JFrame {
 	}
 	
 	public ListadoCiudadano(IApi api, Integer idVivienda) {
-		setTitle(labels.getString("info.ciudadano"));
-		labels=api.obtenerIdioma();
 		this.api=api;
 		inicializarVentana();
 		cargarEstructuraDeLaTabla();
@@ -86,8 +85,6 @@ public class ListadoCiudadano extends JFrame {
 	}
 	
 	public ListadoCiudadano(String nombreBeneficio, IApi api) {
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("listado.ciudadanos"));
 		this.api=api;
 		inicializarVentana();
 		cargarEstructuraDeLaTabla();
@@ -100,7 +97,6 @@ public class ListadoCiudadano extends JFrame {
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(5, 5, 424, 251);
 		contentPane.add(scrollPane);
-		String[] titulos= {"ID", labels.getString("titulo.nombre"), labels.getString("titulo.apellido"), labels.getString("titulo.dni"), labels.getString("titulo.nombre.usuario"), labels.getString("titulo.puntos.obtenidos")};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
@@ -121,7 +117,7 @@ public class ListadoCiudadano extends JFrame {
 				modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 	}
@@ -134,7 +130,7 @@ public class ListadoCiudadano extends JFrame {
 				modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
 				
 			} catch (AppException | InstanceException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 	}
@@ -223,7 +219,7 @@ public class ListadoCiudadano extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		botonCerrar = new JButton(labels.getString("cerrar"));
+		botonCerrar = new JButton("CERRAR");
 		
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			popupMenu.setVisible(false);
@@ -239,27 +235,26 @@ public class ListadoCiudadano extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		botonElegir = new JButton(labels.getString("elegir"));
+		botonElegir = new JButton("ELEGIR");
 		botonElegir.addActionListener((ActionEvent e)-> {
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
 				try {
 					String dni=(String)modelo.getValueAt(table.getSelectedRow(), 3);
 					api.realizarCanje(nombreBeneficio, dni);
-					JOptionPane.showMessageDialog(null,labels.getString("canje.exito"), labels.getString("informacion"),JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 					
-				} catch (NumbersException  | AppException | NotNullException | DataEmptyException | InstanceException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				} catch (NumbersException | SintaxisSQLException | AppException | NotNullException | DataEmptyException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}			
 			}
 		});
 		pnlBotonesOperaciones.add(botonElegir);
 		
-		botonCerrar = new JButton(labels.getString("cerrar"));
+		botonCerrar = new JButton("CERRAR");
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			dispose();
 		});
@@ -279,11 +274,11 @@ public class ListadoCiudadano extends JFrame {
 	
 	private void cargarMenuPopop() {
 		popupMenu= new JPopupMenu();
-		JMenuItem menuItemResiduosARetirar = new JMenuItem(labels.getString("info.usuario"));
+		JMenuItem menuItemResiduosARetirar = new JMenuItem("Mas info. del usuario");
 		menuItemResiduosARetirar.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null,labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
@@ -293,7 +288,7 @@ public class ListadoCiudadano extends JFrame {
 					listadoUsuario = new ListadoUsuario(api, usuario);
 					listadoUsuario.setVisible(true);
 				} catch (SintaxisSQLException | NotNullException | DataEmptyException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			}

@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,15 +34,14 @@ public class AltaCiudadano extends JFrame {
 	private JTextField dniText;
 	private JTextField emailText;
 	private Integer idVivienda;
-	private ResourceBundle labels;
+
 
 	/**
 	 * Create the frame.
 	 */
 	public AltaCiudadano(IApi api, Integer idVivienda) {
-		labels=api.obtenerIdioma();
 		this.idVivienda=idVivienda;
-		setTitle(labels.getString("nuevo.ciudadano"));
+		setTitle("NUEVO CIUDADANO");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -51,19 +49,19 @@ public class AltaCiudadano extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JLabel nombreLabel = new JLabel(labels.getString("nombre"));
+		JLabel nombreLabel = new JLabel("Nombre:");
 		nombreLabel.setBounds(12, 44, 56, 25);
 		contentPane.add(nombreLabel);
 		
-		JLabel apellidoLabel = new JLabel(labels.getString("apellido"));
+		JLabel apellidoLabel = new JLabel("Apellido:");
 		apellidoLabel.setBounds(12, 84, 56, 16);
 		contentPane.add(apellidoLabel);
 		
-		JLabel dniLabel = new JLabel(labels.getString("dni"));
+		JLabel dniLabel = new JLabel("DNI:");
 		dniLabel.setBounds(12, 124, 56, 16);
 		contentPane.add(dniLabel);
 		
-		JLabel lblEmail = new JLabel(labels.getString("email"));
+		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(12, 164, 56, 16);
 		contentPane.add(lblEmail);
 		
@@ -87,20 +85,20 @@ public class AltaCiudadano extends JFrame {
 		contentPane.add(emailText);
 		emailText.setColumns(10);
 		
-		JButton aceptarButton = new JButton(labels.getString("continuar"));
+		JButton aceptarButton = new JButton("ACEPTAR");
 		aceptarButton.addActionListener((ActionEvent e) -> {
 			
 			try {
 				ViviendaDTO viviendaDTO = api.obtenerVivienda(idVivienda);
-				int seleccion = JOptionPane.showOptionDialog(null,labels.getString("dialog.datos.vivienda")+"\n\n"+labels.getString("dialog.direccion")+viviendaDTO.obtenerCalle()+
-						" "+viviendaDTO.obtenerNumero()+"\n"+labels.getString("vivienda.latitud")+" "+viviendaDTO.obtenerLatitud()+labels.getString("vivienda.longitud")+" "+viviendaDTO.obtenerLongitud()+"\n\n", labels.getString("dialog.confirmacion"), JOptionPane.YES_NO_CANCEL_OPTION,
+				int seleccion = JOptionPane.showOptionDialog(null, "DATOS DE LA VIVIENDA\n\nDireccion: "+viviendaDTO.obtenerCalle()+
+						" "+viviendaDTO.obtenerNumero()+"\nLatitud: "+viviendaDTO.obtenerLatitud()+"\nLongitud: "+viviendaDTO.obtenerLongitud()+"\n\n", "CONFIRMACION", JOptionPane.YES_NO_CANCEL_OPTION,
 						   JOptionPane.INFORMATION_MESSAGE, null,
-						   new Object[] { labels.getString("confirmar"), labels.getString("cancelar")}, null);
+						   new Object[] { "CONFIRMAR", "CANCELAR"}, null);
 						
 						if (seleccion != -1) {
 							if(seleccion==0) {
 								api.cambiarDueño(idVivienda, nombreText.getText(), apellidoText.getText(), dniText.getText());
-								JOptionPane.showMessageDialog(null, labels.getString("cambio.dueno.exitoso"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "El cambio de dueño se realizó exitosamente", "INFORMACIÖN", JOptionPane.INFORMATION_MESSAGE);
 								this.dispose();
 							}
 							
@@ -109,21 +107,21 @@ public class AltaCiudadano extends JFrame {
 				
 				
 			} catch (NotNullException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (DataEmptyException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"),JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (NumbersException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"),JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (InstanceException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		aceptarButton.setBounds(286, 44, 97, 25);
 		contentPane.add(aceptarButton);
 		
-		JButton cancelarButton = new JButton(labels.getString("cancelar"));
+		JButton cancelarButton = new JButton("CANCELAR");
 		cancelarButton.addActionListener((ActionEvent e) -> {
 			this.dispose();
 			ListadoVivienda listadoViv;
@@ -131,7 +129,7 @@ public class AltaCiudadano extends JFrame {
 				listadoViv = new ListadoVivienda(api);
 				listadoViv.setVisible(true);
 			} catch (EmptyListException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 		});

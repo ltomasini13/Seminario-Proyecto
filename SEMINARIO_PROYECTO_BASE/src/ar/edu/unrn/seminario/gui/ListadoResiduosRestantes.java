@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,14 +28,13 @@ public class ListadoResiduosRestantes extends JFrame {
 	private JTable table;
 	private DefaultTableModel modelo;
 	private JButton btnCerrar;
-	private ResourceBundle labels;
+
 	/**
 	 * Create the frame.
 	 */
 	public ListadoResiduosRestantes(IApi api, Integer idPedido) {
-		labels=api.obtenerIdioma();
 		this.api=api;
-		setTitle(labels.getString("listado.residuos.restantes"));
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -49,7 +47,7 @@ public class ListadoResiduosRestantes extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
-		String[] titulos = {"ID", labels.getString("titulo.tipo.residuo"), labels.getString("titulo.cantidad.retirar")};
+		String[] titulos = {"ID", "TIPO DE RESIDUO", "CANTIDAD A RETIRAR"};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		
@@ -66,7 +64,7 @@ public class ListadoResiduosRestantes extends JFrame {
 			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 			scrollPane.setViewportView(table);
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -75,7 +73,7 @@ public class ListadoResiduosRestantes extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		btnCerrar = new JButton(labels.getString("cerrar"));
+		btnCerrar = new JButton("Cerrar");
 		btnCerrar.addActionListener((ActionEvent arg0) -> {
 			dispose();
 		});

@@ -66,7 +66,7 @@ public class RecolectorDAOJDBC implements RecolectorDao {
 	}
 
 	@Override
-	public List<Recolector> listarTodos() throws AppException, InstanceException {
+	public List<Recolector> listarTodos() throws SintaxisSQLException, AppException, InstanceException {
 		
 		List<Recolector> recolectores = new ArrayList<Recolector>();
 

@@ -24,5 +24,5 @@ public interface CanjeDao {
 
 	void eliminar(Canje canje);
 	
-	List<Canje> listarMisCanjes(Ciudadano ciudadano) throws AppException, InstanceException;
+	List<Canje> listarMisCanjes(Ciudadano ciudadano);
 }

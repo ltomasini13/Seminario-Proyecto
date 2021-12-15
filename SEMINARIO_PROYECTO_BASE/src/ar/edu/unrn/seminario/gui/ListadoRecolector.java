@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,13 +26,11 @@ public class ListadoRecolector extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private DefaultTableModel modelo;
-	private IApi api;
-	private ResourceBundle labels;
+	DefaultTableModel modelo;
+	IApi api;
 	
-	public ListadoRecolector(IApi api){
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("listado.recolectores"));
+	public ListadoRecolector(IApi api) throws SintaxisSQLException {
+		setTitle("LISTADO DE RECOLECTORES");
 		this.api = api;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -47,7 +44,7 @@ public class ListadoRecolector extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
-		String[] titulos = { labels.getString("titulo.nombre"), labels.getString("titulo.apellido"), labels.getString("titulo.dni"), labels.getString("titulo.email") };
+		String[] titulos = { "NOMBRE", "APELLIDO", "DNI", "EMAIL" };
 
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
@@ -67,12 +64,12 @@ public class ListadoRecolector extends JFrame {
 			scrollPane.setViewportView(table);
 
 		} catch (AppException | InstanceException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	
 
-		JButton cerrarButton = new JButton(labels.getString("cerrar"));
+		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});

@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -40,25 +39,18 @@ public class ListadoVivienda extends JFrame {
 	private IApi api;
 	private JButton botonCambiarDueno;
 	private JPopupMenu popupMenu;
-	
-	
+	private String[] adminTitulos = { "ID", "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD", "DUEÑO"};
+	private String[] recicTitulos = {"ID", "CALLE", "NUMERO", "BARRIO", "LATITUD", "LONGITUD"};
 	private JScrollPane scrollPane;
 	private List<ViviendaDTO> viviendas=new ArrayList<ViviendaDTO>();
 	private ViviendaDTO viv = null;
-	private ResourceBundle labels;
 
 	/**
 	 * Create the frame.
 	 */
 	public ListadoVivienda(IApi api) throws EmptyListException {
-		labels=api.obtenerIdioma();
-		
-		setTitle(labels.getString("listado.viviendas"));
+		setTitle("LISTADO DE VIVIENDAS");
 		this.api=api;
-		String[] adminTitulos= {"ID", labels.getString("titulo.calle"),labels.getString("titulo.numero"), labels.getString("titulo.barrio"),
-				labels.getString("titulo.latitud"), labels.getString("titulo.longitud"),labels.getString("titulo.dueno")};
-		String[] recicTitulos = {"ID", labels.getString("titulo.calle"),labels.getString("titulo.numero"), labels.getString("titulo.barrio"),
-				labels.getString("titulo.latitud"), labels.getString("titulo.longitud")};
 		
 		inicializarVentana();
 		if(api.esUsuarioAdmin()) {
@@ -87,11 +79,11 @@ public class ListadoVivienda extends JFrame {
 				}
 			});
 			popupMenu= new JPopupMenu();
-			JMenuItem menuItemInfoDueño = new JMenuItem(labels.getString("info.dueno"));
+			JMenuItem menuItemInfoDueño = new JMenuItem("Mas info. del dueño");
 			menuItemInfoDueño.addActionListener((ActionEvent arg0) ->{
 				
 				if(table.getSelectedRow()==-1) {
-					JOptionPane.showMessageDialog(null,labels.getString("ninguna.fila"),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					popupMenu.setVisible(false);
@@ -121,15 +113,11 @@ public class ListadoVivienda extends JFrame {
 
 
 	public ListadoVivienda(IApi api, Integer idPedido) throws EmptyListException {
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("info.vivienda"));
+		setTitle("INFORMACIÓN DE LA VIVIENDA");
 		this.api=api;
 		inicializarVentana();
 		
-		String[] adminTitulos= {"ID", labels.getString("titulo.calle"),labels.getString("titulo.numero"), labels.getString("titulo.barrio"),
-				labels.getString("titulo.latitud"), labels.getString("titulo.longitud"),labels.getString("titulo.dueno")};
-		String[] recicTitulos = {"ID", labels.getString("titulo.calle"),labels.getString("titulo.numero"), labels.getString("titulo.barrio"),
-				labels.getString("titulo.latitud"), labels.getString("titulo.longitud")};
+		
 
 		if (api.esUsuarioAdmin()) {
 			modelo = new DefaultTableModel(new Object[][] {}, adminTitulos);
@@ -157,11 +145,11 @@ public class ListadoVivienda extends JFrame {
 				}
 			});
 			popupMenu= new JPopupMenu();
-			JMenuItem menuItemInfoDueño = new JMenuItem(labels.getString("info.dueno"));
+			JMenuItem menuItemInfoDueño = new JMenuItem("Mas info. del dueño");
 			menuItemInfoDueño.addActionListener((ActionEvent arg0) ->{
 				
 				if(table.getSelectedRow()==-1) {
-					JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), "", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					popupMenu.setVisible(false);
@@ -235,7 +223,7 @@ public class ListadoVivienda extends JFrame {
 						viv.obtenerLatitud(), viv.obtenerLongitud(), viv.obtenerNomApeDueño()});
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -247,7 +235,7 @@ public class ListadoVivienda extends JFrame {
 			modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
 					viv.obtenerLatitud(), viv.obtenerLongitud(), viv.obtenerNomApeDueño()});
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -262,7 +250,7 @@ public class ListadoVivienda extends JFrame {
 				
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),  labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -275,7 +263,7 @@ public class ListadoVivienda extends JFrame {
 			modelo.addRow(new Object[] { viv.obtenerId(), viv.obtenerCalle(), viv.obtenerNumero(),viv.obtenerBarrio(), 
 					viv.obtenerLatitud(), viv.obtenerLongitud()});
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),  labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -292,11 +280,9 @@ public class ListadoVivienda extends JFrame {
 	}
 	
 	private void cargarPanelDeOperaciones() {
-		JButton cerrarButton = new JButton(labels.getString("cerrar"));
+		JButton cerrarButton = new JButton("CERRAR");
 		cerrarButton.addActionListener((ActionEvent e) -> {
-			if(popupMenu!=null) {
 				popupMenu.setVisible(false);
-			}
 				dispose();
 		});
 		
@@ -304,7 +290,7 @@ public class ListadoVivienda extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		botonPedirRecoleccion = new JButton(labels.getString("pedir.recoleccion"));
+		botonPedirRecoleccion = new JButton("PEDIR RECOLECCIÓN");
 		botonPedirRecoleccion.addActionListener((ActionEvent e)->{
 			
 				this.id_vivienda=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
@@ -314,16 +300,16 @@ public class ListadoVivienda extends JFrame {
 					sr.setVisible(true);
 					dispose();
 				} catch (CreationValidationException | AppException | InstanceException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			
 		});
 		
-		botonCambiarDueno = new JButton(labels.getString("cambiar.dueno"));
+		botonCambiarDueno = new JButton("CAMBIAR DUEÑO");
 		botonCambiarDueno.addActionListener((ActionEvent a) -> {
-			int seleccion = JOptionPane.showOptionDialog(null, labels.getString("eleccion"), labels.getString("dialog.opciones"), JOptionPane.YES_NO_CANCEL_OPTION,
+			int seleccion = JOptionPane.showOptionDialog(null, "¿Que desea hacer?", "OPCIONES", JOptionPane.YES_NO_CANCEL_OPTION,
 					   JOptionPane.QUESTION_MESSAGE, null,
-					   new Object[] { labels.getString("opcion.elegir"), labels.getString("opcion.crear")}, null);
+					   new Object[] { "Elegir un ciudadano", "Crear uno nuevo "}, null);
 					this.id_vivienda=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 					if (seleccion != -1) {
 						if(seleccion==0) {

@@ -6,11 +6,9 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
-import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.AuthenticationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DuplicateUniqueKeyException;
-import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
@@ -21,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 
 public class RegistrarResiduo extends JFrame {
@@ -29,11 +26,11 @@ public class RegistrarResiduo extends JFrame {
 	private JPanel contentPane;
 	private JTextField tipoResiduoTextField;
 	private JTextField puntosTextField;
-	private ResourceBundle labels;
+	
 	public RegistrarResiduo(IApi api) {
 
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("registrar.residuo"));
+
+		setTitle("REGISTRAR RESIDUO");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -42,36 +39,39 @@ public class RegistrarResiduo extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JLabel lblTipoResiduo = new JLabel(labels.getString("tipo.residuo"));
+		JLabel lblTipoResiduo = new JLabel("Tipo Residuo:");
 		lblTipoResiduo.setBounds(12, 60, 86, 19);
 		contentPane.add(lblTipoResiduo);
 		
-		JLabel lblPuntos = new JLabel(labels.getString("puntos"));
+		JLabel lblPuntos = new JLabel("Puntos:");
 		lblPuntos.setBounds(12, 100, 56, 16);
 		contentPane.add(lblPuntos);
 		
-		JButton btnAceptar = new JButton(labels.getString("continuar"));
+		JButton btnAceptar = new JButton("ACEPTAR");
 		btnAceptar.addActionListener((ActionEvent e) -> {
 				
-				
+				try {
 					
-					try {
-						api.registrarResiduo(tipoResiduoTextField.getText(), puntosTextField.getText());
-						JOptionPane.showMessageDialog(null, labels.getString("residuo.exito"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
-						this.dispose();
-					} catch (AppException | NumbersException | NotNullException | DataEmptyException
-							| DuplicateUniqueKeyException | InstanceException e1) {
-						JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
-						
-					}
+					api.registrarResiduo(tipoResiduoTextField.getText(), puntosTextField.getText());
+					JOptionPane.showMessageDialog(null, "Residuo registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+					this.dispose();
 					
-					
-			
+				} catch (DataEmptyException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NotNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (SintaxisSQLException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (NumbersException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (DuplicateUniqueKeyException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
 		});
 		btnAceptar.setBounds(151, 184, 97, 25);
 		contentPane.add(btnAceptar);
 		
-		JButton btnCancelar = new JButton(labels.getString("cancelar"));
+		JButton btnCancelar = new JButton("CANCELAR");
 		btnCancelar.addActionListener((ActionEvent e) -> {
 			this.dispose();
 		});

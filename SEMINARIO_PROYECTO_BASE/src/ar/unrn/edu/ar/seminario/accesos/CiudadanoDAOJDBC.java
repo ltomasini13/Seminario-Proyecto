@@ -112,7 +112,6 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 			}
 			ciu=new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"), rs.getString("c.dni"), usu);
 			ciu.editarId(rs.getInt("c.id_ciudadano"));
-			ciu.editarPuntaje(rs.getDouble("c.puntaje"));
 		}
 		
 	  
@@ -234,7 +233,6 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 			while(rs.next()) {
 				ciu = new Ciudadano(rs.getString("c.nombre"), rs.getString("c.apellido"),rs.getString("c.dni"),  usuario);
 				ciu.editarId(rs.getInt("c.id_ciudadano"));
-				ciu.editarPuntaje(rs.getDouble("c.puntaje"));
 			}
 	 
 		}
@@ -305,7 +303,7 @@ public class CiudadanoDAOJDBC implements CiudadanoDao{
 			statement.setString(2, ciudadano.obtenerApellido());
 			statement.setString(3, ciudadano.obtenerDni());
 			if(ciudadano.obtenerUsuario()!=null) {
-				statement.setInt(4, ciudadano.obtenerUsuario().obtenerId());
+				statement.setString(4, ciudadano.obtenerNombreDeUsuario());
 			}
 			else {
 				statement.setNull(4, Types.NULL);

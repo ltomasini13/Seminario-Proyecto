@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,7 +27,6 @@ import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.modelo.Visita;
-import javafx.scene.control.Label;
 
 public class ListadoVisitas extends JFrame {
 
@@ -38,14 +36,14 @@ public class ListadoVisitas extends JFrame {
 	private JTable table;
 	private DefaultTableModel modelo;
 	private JPopupMenu popupMenu;
+	String[] titulos = { "ID", "FECHA VISITA", "OBSERVACIÓN", "FECHA ORDEN"}; 
 	private JButton cerrarButton; 
-	private ResourceBundle labels;
 	/**
 	 * Create the frame.
 	 * @throws EmptyListException 
 	 */
 	public ListadoVisitas(IApi api) throws EmptyListException {
-		labels=api.obtenerIdioma();
+		setTitle("LISTADO VISITAS");
 		this.api = api;
 
 		inicializarVentana();
@@ -58,8 +56,7 @@ public class ListadoVisitas extends JFrame {
 	}
 
 	public ListadoVisitas(IApi api, Integer idOrden) throws EmptyListException {
-		labels=api.obtenerIdioma();
-		setTitle("listado.visitas");
+		setTitle("LISTADO VISITAS");
 		this.api = api;
 
 		inicializarVentana();
@@ -74,7 +71,7 @@ public class ListadoVisitas extends JFrame {
 
 
 	private void cargarPanelDeOperaciones() {
-		cerrarButton = new JButton(labels.getString("cerrar"));
+		cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
 				popupMenu.setVisible(false);
 				dispose();
@@ -130,7 +127,7 @@ public class ListadoVisitas extends JFrame {
 				
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -145,7 +142,7 @@ public class ListadoVisitas extends JFrame {
 				
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -155,7 +152,7 @@ public class ListadoVisitas extends JFrame {
 		scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		table = new JTable();
-		String[] titulos = { "ID", labels.getString("titulo.fecha.visita"),labels.getString("observacion"), labels.getString("fecha.orden")}; 
+		
 
 //		table.addMouseListener(new MouseAdapter() {
 //			@Override
@@ -185,11 +182,11 @@ public class ListadoVisitas extends JFrame {
 
 	private void cargarMenuPopup() {
 		popupMenu= new JPopupMenu();
-		JMenuItem menuItemPopopInfoDeLaOrden = new JMenuItem(labels.getString("info.orden"));
+		JMenuItem menuItemPopopInfoDeLaOrden = new JMenuItem("Mas info. de la orden");
 		menuItemPopopInfoDeLaOrden.addActionListener((ActionEvent arg0) ->{
 			popupMenu.setVisible(false);
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				
@@ -205,11 +202,11 @@ public class ListadoVisitas extends JFrame {
 		});
 		popupMenu.add(menuItemPopopInfoDeLaOrden);
 		
-		JMenuItem menuItemPopupResiduosRetirados = new JMenuItem(labels.getString("ver.residuos.retirados"));
+		JMenuItem menuItemPopupResiduosRetirados = new JMenuItem("Ver los residuos retirados");
 		menuItemPopupResiduosRetirados.addActionListener((ActionEvent arg0) ->{
 			popupMenu.setVisible(false);
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				

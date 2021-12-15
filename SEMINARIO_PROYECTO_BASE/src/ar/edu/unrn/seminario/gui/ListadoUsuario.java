@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +25,6 @@ import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
-import jdk.nashorn.internal.ir.Labels;
 
 public class ListadoUsuario extends JFrame {
 
@@ -35,16 +33,15 @@ public class ListadoUsuario extends JFrame {
 	DefaultTableModel modelo;
 	IApi api;
 	JButton activarButton, desactivarButton,cerrarButton ;
+
 	private JScrollPane scrollPane;
-	private ResourceBundle labels;
 
 	/**
 	 * Create the frame.
 	 */
 	public ListadoUsuario(IApi api) {
 		this.api = api;
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("listado.usuarios"));
+		setTitle("LISTADO DE USUARIOS");
 		
 		inicializarVentana();
 		
@@ -63,8 +60,7 @@ public class ListadoUsuario extends JFrame {
 	
 	public ListadoUsuario(IApi api, String nombreUsuario) throws SintaxisSQLException, NotNullException, DataEmptyException {
 		this.api = api;
-		labels=api.obtenerIdioma();
-		setTitle(labels.getString("info.usuario"));
+		setTitle("INFORMACIÓN DEL USUARIO");
 		
 		inicializarVentana();
 		
@@ -79,10 +75,10 @@ public class ListadoUsuario extends JFrame {
 
 	
 	private void cargarPanelDeOperaciones() {
-		activarButton = new JButton(labels.getString("listado.activar"));
+		activarButton = new JButton("Activar");
 		activarButton.addActionListener((ActionEvent e) -> {
 				int reply = JOptionPane.showConfirmDialog(null,
-						labels.getString("listado.confirmacion"), labels.getString("listado.confirmacion.dialogo"),
+						"Estas seguro que queres cambiar el estado del Usuario?", "Confirmar cambio de estado.",
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
 					String username = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
@@ -91,16 +87,16 @@ public class ListadoUsuario extends JFrame {
 						api.activarUsuario(username);
 						reloadGrid();
 					} catch (StateException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"),JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 
 				}
 		});
 
-		desactivarButton = new JButton(labels.getString("listado.desactivar"));
+		desactivarButton = new JButton("Desactivar");
 		desactivarButton.addActionListener((ActionEvent e) -> {
 				int reply = JOptionPane.showConfirmDialog(null,
-						labels.getString("listado.confirmacion"), labels.getString("listado.confirmacion.dialogo"),
+						"Estas seguro que queres cambiar el estado del Usuario?", "Confirmar cambio de estado.",
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
 					String username = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
@@ -109,14 +105,14 @@ public class ListadoUsuario extends JFrame {
 						api.desactivarUsuario(username);
 						reloadGrid();
 					} catch (StateException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 
 				}
 		
 		});
 
-		cerrarButton = new JButton(labels.getString("cerrar"));
+		cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
@@ -150,7 +146,7 @@ public class ListadoUsuario extends JFrame {
 				
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 
@@ -166,7 +162,7 @@ public class ListadoUsuario extends JFrame {
 			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
 			
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -178,9 +174,8 @@ public class ListadoUsuario extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
-		String[] titulos = {labels.getString("titulo.usuario"),labels.getString("titulo.nombre"), labels.getString("titulo.email"),
-				labels.getString("titulo.estado"), labels.getString("titulo.rol")};
-		
+		String[] titulos = { "USUARIO", "NOMBRE", "EMAIL", "ESTADO", "ROL" };
+
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -223,7 +218,7 @@ public class ListadoUsuario extends JFrame {
 			}
 
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
