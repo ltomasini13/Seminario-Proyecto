@@ -22,7 +22,7 @@ import ar.edu.unrn.seminario.modelo.TipoResiduo;
 public class ResiduoDAOJDBC implements ResiduoDao{
 
 	@Override
-	public void crear(TipoResiduo residuo) throws DuplicateUniqueKeyException, SintaxisSQLException {
+	public void crear(TipoResiduo residuo) throws AppException, InstanceException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -50,16 +50,15 @@ public class ResiduoDAOJDBC implements ResiduoDao{
 		    miResult.close(); 
 		    
 		    
-		} catch (DuplicateUniqueKeyException e) {
-			throw new DuplicateUniqueKeyException(e.getMessage());
-			
-			
-		} catch (SQLException e) {
-			System.out.println("Error al procesar la consulta");
-			throw new SintaxisSQLException("No se pudo crear el residuo por un error en la Base de Datos");
-			
-		
-		} finally {
+		}catch (SQLException sq){
+			System.out.println("Error al procesar consulta");	
+			throw new AppException("Hubo un error en la base de datos");
+		}
+		catch (Exception e) {
+			System.out.print("Error en la bd");
+			throw new InstanceException();
+		}
+		finally {
 			ConnectionManager.disconnect();
 		}
 		

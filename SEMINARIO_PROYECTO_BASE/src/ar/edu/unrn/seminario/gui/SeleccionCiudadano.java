@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,6 +37,7 @@ public class SeleccionCiudadano extends JFrame {
 	private IApi api;
 	private JButton btnCerrar;
 	private String dniCiudadano ;
+	private ResourceBundle labels;
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +47,9 @@ public class SeleccionCiudadano extends JFrame {
 	 * Create the frame.
 	 */
 	public SeleccionCiudadano(IApi api, Integer idVivienda) {
-		setTitle("SELECCION CIUDADANO");
+		labels=api.obtenerIdioma();
+		this.api=api;
+		setTitle(labels.getString("seleccion.ciudadano"));
 		
 		
 		this.api=api;
@@ -59,7 +63,7 @@ public class SeleccionCiudadano extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
-		String[] titulos = { "ID", "NOMBRE", "APELLIDO", "DNI"};
+		String[] titulos = { "ID", labels.getString("titulo.nombre"), labels.getString("titulo.apellido"), labels.getString("titulo.dni")};
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -86,7 +90,7 @@ public class SeleccionCiudadano extends JFrame {
 			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 			scrollPane.setViewportView(table);
 		} catch (AppException | InstanceException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -96,35 +100,35 @@ public class SeleccionCiudadano extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		botonElegir = new JButton("Elegir");
+		botonElegir = new JButton(labels.getString("elegir"));
 		botonElegir.addActionListener((ActionEvent arg0)-> {
 			this.dniCiudadano=(String)modelo.getValueAt(table.getSelectedRow(), 3);
 			ViviendaDTO viviendaDTO;
 			try {
 				viviendaDTO = api.obtenerVivienda(idVivienda);
-				int seleccion = JOptionPane.showOptionDialog(null, "DATOS DE LA VIVIENDA\n\nDireccion: "+viviendaDTO.obtenerCalle()+
-						" "+viviendaDTO.obtenerNumero()+"\nLatitud: "+viviendaDTO.obtenerLatitud()+"\nLongitud: "+viviendaDTO.obtenerLongitud()+"\n\n", "CONFIRMACION", JOptionPane.YES_NO_CANCEL_OPTION,
+				int seleccion = JOptionPane.showOptionDialog(null, labels.getString("datos.vivienda")+"\n\n"+labels.getString("dialog.direccion")+" "+viviendaDTO.obtenerCalle()+
+						" "+viviendaDTO.obtenerNumero()+"\n"+labels.getString("vivienda.latitud")+viviendaDTO.obtenerLatitud()+"\n"+labels.getString("vivienda.latitud")+viviendaDTO.obtenerLongitud()+"\n\n", labels.getString("dialog.confirmacion"), JOptionPane.YES_NO_CANCEL_OPTION,
 						   JOptionPane.INFORMATION_MESSAGE, null,
-						   new Object[] { "CONFIRMAR", "CANCELAR"}, null);
+						   new Object[] { labels.getString("confirmar"), labels.getString("cancelar")}, null);
 						
 						if (seleccion != -1) {
 							if(seleccion==0) {
 								api.cambiarDueño(idVivienda, dniCiudadano);
-								JOptionPane.showMessageDialog(null, "El cambio de dueño se realizó exitosamente", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, labels.getString("cambio.dueno.exitoso"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 							}
 							
 						}
 				
 			} catch (AppException | InstanceException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 			}
 			
 		});
 		
 		pnlBotonesOperaciones.add(botonElegir);
 		
-		btnCerrar = new JButton("Cerrar");
+		btnCerrar = new JButton(labels.getString("cerrar"));
 		btnCerrar.addActionListener((ActionEvent arg0)-> {
 			try {
 				
@@ -132,7 +136,7 @@ public class SeleccionCiudadano extends JFrame {
 				ListadoVivienda listadoVivienda = new ListadoVivienda(api);
 				listadoVivienda.setVisible(true);
 			} catch (EmptyListException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		pnlBotonesOperaciones.add(btnCerrar);

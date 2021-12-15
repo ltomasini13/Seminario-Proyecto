@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 
 import ar.edu.unrn.seminario.exception.EmptyListException;
@@ -33,14 +34,14 @@ import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 public class VentanaPrincipal extends JFrame {
 
 	private JPanel ventanaPrincipalContentPane;
-
+	private ResourceBundle labels;
 	/**
 	 * Create the frame.
 
 	 */
-	public VentanaPrincipal(IApi api, ResourceBundle labels) {
-		
-		setTitle("SISTEMA GRU");
+	public VentanaPrincipal(IApi api) {
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("sistema"));
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -49,10 +50,10 @@ public class VentanaPrincipal extends JFrame {
 		setJMenuBar(menuBar);
 		
 		if(api.esUsuarioAdmin()) { // pregunta que tipo de usuario es  para mostrar el menu
-			JMenu adminUsuarioMenu = new JMenu("Usuarios");
+			JMenu adminUsuarioMenu = new JMenu(labels.getString("principal.menu.usuarios"));
 			menuBar.add(adminUsuarioMenu);
 
-			JMenuItem adminAltaUsuarioMenuItem = new JMenuItem("Alta/Modificaci\u00F3n");
+			JMenuItem adminAltaUsuarioMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			adminAltaUsuarioMenuItem.addActionListener((ActionEvent e) -> {
 					AltaUsuario alta = new AltaUsuario(api);
 					alta.setLocationRelativeTo(null);
@@ -61,7 +62,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			adminUsuarioMenu.add(adminAltaUsuarioMenuItem);
 
-			JMenuItem listadoUsuarioMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoUsuarioMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoUsuarioMenuItem.addActionListener((ActionEvent e) -> {
 					ListadoUsuario listado= new ListadoUsuario(api);
 					listado.setLocationRelativeTo(null);
@@ -69,7 +70,6 @@ public class VentanaPrincipal extends JFrame {
 			});
 			adminUsuarioMenu.add(listadoUsuarioMenuItem);
 			
-<<<<<<< HEAD
 			JMenu adminCiudadanoMenu = new JMenu(labels.getString("ciudadano"));
 			menuBar.add(adminCiudadanoMenu);
 
@@ -82,12 +82,9 @@ public class VentanaPrincipal extends JFrame {
 			adminCiudadanoMenu.add(adminListadoCiuMenuItem);
 			
 			JMenu viviendasMenu = new JMenu(labels.getString("menu.vivienda"));
-=======
-			JMenu viviendasMenu = new JMenu("Viviendas");
->>>>>>> parent of 4977a25 (INTERNACIONALIZACION)
 			menuBar.add(viviendasMenu);
 			
-			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
+			JMenuItem altaModificacionMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
 					AltaVivienda altaViv = new AltaVivienda(api);
 					altaViv.setLocationRelativeTo(null);
@@ -95,7 +92,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			viviendasMenu.add(altaModificacionMenuItem);
 			
-			JMenuItem listadoMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoMenuItem.addActionListener((ActionEvent e) -> {
 					ListadoVivienda listadoViv;
 					try {
@@ -103,16 +100,16 @@ public class VentanaPrincipal extends JFrame {
 						listadoViv.setLocationRelativeTo(null);
 						listadoViv.setVisible(true);
 					} catch (EmptyListException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});
 			viviendasMenu.add(listadoMenuItem);
 
-			JMenu residuosMenu = new JMenu("Residuos");
+			JMenu residuosMenu = new JMenu(labels.getString("menu.residuo"));
 			menuBar.add(residuosMenu);
 			
-			JMenuItem registrarMenuItem = new JMenuItem("Registrar");
+			JMenuItem registrarMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			registrarMenuItem.addActionListener((ActionEvent e) -> {
 				RegistrarResiduo residuo = new RegistrarResiduo(api);
 				residuo.setLocationRelativeTo(null);
@@ -120,7 +117,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			residuosMenu.add(registrarMenuItem);
 			
-			JMenuItem listadoResiduosMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoResiduosMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoResiduosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoResiduo residuos;
 				try {
@@ -128,16 +125,16 @@ public class VentanaPrincipal extends JFrame {
 					residuos.setLocationRelativeTo(null);
 					residuos.setVisible(true);
 				} catch (SintaxisSQLException | NotNullException | DataEmptyException | NumbersException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 				}
 				
 			});
 			residuosMenu.add(listadoResiduosMenuItem);
 			
-			JMenu pedidosMenu = new JMenu("Pedidos");
+			JMenu pedidosMenu = new JMenu(labels.getString("menu.pedido"));
 			menuBar.add(pedidosMenu);
 			
-			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoVivienda altaPedido;
 				try {
@@ -145,13 +142,13 @@ public class VentanaPrincipal extends JFrame {
 					altaPedido.setLocationRelativeTo(null);
 					altaPedido.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			});
 			pedidosMenu.add(altaModificacionPedidosMenuItem);
 			
-			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoPedidosMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoPedidoRetiro pedidos;
 				try {
@@ -159,17 +156,17 @@ public class VentanaPrincipal extends JFrame {
 					pedidos.setLocationRelativeTo(null);
 					pedidos.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 
 				}
 				
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 	
-			JMenu ordenMenu = new JMenu("Ordenes");
+			JMenu ordenMenu = new JMenu(labels.getString("menu.orden"));
 			menuBar.add(ordenMenu);
 			
-			JMenuItem ordenesMenuItem = new JMenuItem("Generar");
+			JMenuItem ordenesMenuItem = new JMenuItem(labels.getString("menu.orden.generar"));
 			ordenesMenuItem.addActionListener((ActionEvent e) -> {
 					ListadoPedidoRetiro listado;
 					try {
@@ -177,14 +174,14 @@ public class VentanaPrincipal extends JFrame {
 						listado.setVisible(true);
 						
 					} catch (EmptyListException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});
 			
 			ordenMenu.add(ordenesMenuItem);
 
-			JMenuItem listadoOrdenesMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoOrdenesMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoOrdenesMenuItem.addActionListener((ActionEvent e) -> {
 					ListadoOrdenDeRetiro listado = new ListadoOrdenDeRetiro(api);
 					listado.setVisible(true);
@@ -194,10 +191,10 @@ public class VentanaPrincipal extends JFrame {
 			ordenMenu.add(listadoOrdenesMenuItem);
 			
 			
-			JMenu visitaMenu = new JMenu("Visitas");
+			JMenu visitaMenu = new JMenu(labels.getString("menu.visita"));
 			menuBar.add(visitaMenu);
 			
-			JMenuItem visitasMenuItemAgregar = new JMenuItem("Agregar");
+			JMenuItem visitasMenuItemAgregar = new JMenuItem(labels.getString("menu.agregar"));
 			visitasMenuItemAgregar.addActionListener((ActionEvent e) -> {
 					ListadoOrdenDeRetiro listadoOrdenes;
 						listadoOrdenes = new ListadoOrdenDeRetiro(api);
@@ -210,13 +207,13 @@ public class VentanaPrincipal extends JFrame {
 			visitaMenu.add(visitasMenuItemAgregar);
 			
 			
-			JMenuItem visitasMenuItemListado = new JMenuItem("Listado");
+			JMenuItem visitasMenuItemListado = new JMenuItem(labels.getString("menu.listado"));
 			visitasMenuItemListado.addActionListener((ActionEvent e) -> {
 					try {
 						ListadoVisitas listadoVisitas = new ListadoVisitas(api);
 						listadoVisitas.setVisible(true);
 					} catch (EmptyListException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});
@@ -224,10 +221,10 @@ public class VentanaPrincipal extends JFrame {
 			visitaMenu.add(visitasMenuItemListado);
 			
 			
-			JMenu recolectorMenu = new JMenu("Recolectores");
+			JMenu recolectorMenu = new JMenu(labels.getString("menu.recolector"));
 			menuBar.add(recolectorMenu);
 			
-			JMenuItem registrarRecolectorMenuItem = new JMenuItem("Registrar Recolector");
+			JMenuItem registrarRecolectorMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			registrarRecolectorMenuItem.addActionListener((ActionEvent e) -> {
 				RegistrarRecolector regRecolector = new RegistrarRecolector(api);
 				regRecolector.setLocationRelativeTo(null);
@@ -235,24 +232,21 @@ public class VentanaPrincipal extends JFrame {
 			});
 			recolectorMenu.add(registrarRecolectorMenuItem);
 			
-			JMenuItem listadoRecolectoresMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoRecolectoresMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoRecolectoresMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoRecolector recolectores;
-				try {
 					recolectores = new ListadoRecolector(api);
 					recolectores.setLocationRelativeTo(null);
 					recolectores.setVisible(true);
-				} catch (SintaxisSQLException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
-				}
+				
 				
 			});
 			recolectorMenu.add(listadoRecolectoresMenuItem);
 			
-			JMenu beneficioMenu = new JMenu("Beneficios");
+			JMenu beneficioMenu = new JMenu(labels.getString("menu.beneficio"));
 			menuBar.add(beneficioMenu);
 			
-			JMenuItem registrarBeneficioMenuItem = new JMenuItem("Registrar");
+			JMenuItem registrarBeneficioMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			registrarBeneficioMenuItem.addActionListener((ActionEvent e) -> {
 				RegistrarBeneficio regBeneficio = new RegistrarBeneficio(api);
 				regBeneficio.setLocationRelativeTo(null);
@@ -260,7 +254,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			beneficioMenu.add(registrarBeneficioMenuItem);
 			
-			JMenuItem listadoBeneficiosMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoBeneficiosMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoBeneficiosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoBeneficio beneficios;
 				try {
@@ -268,40 +262,35 @@ public class VentanaPrincipal extends JFrame {
 					beneficios.setLocationRelativeTo(null);
 					beneficios.setVisible(true);
 				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
-<<<<<<< HEAD
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 
-=======
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
->>>>>>> parent of 4977a25 (INTERNACIONALIZACION)
 				}
 				
 			});
 			beneficioMenu.add(listadoBeneficiosMenuItem);
 
-			JMenu campañaMenu = new JMenu("Campañas");
+			JMenu campañaMenu = new JMenu(labels.getString("menu.campana"));
 			menuBar.add(campañaMenu);
 			
-			JMenuItem registrarCampañaMenuItem = new JMenuItem("Registrar");
+			JMenuItem registrarCampañaMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			registrarCampañaMenuItem.addActionListener((ActionEvent e) -> {
 				RegistrarCampaña regCampaña = new RegistrarCampaña(api);
 				regCampaña.setVisible(true);
 			});
 			campañaMenu.add(registrarCampañaMenuItem);
 			
-			JMenuItem listadoCampañasMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoCampañasMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoCampañasMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoCampaña listaCampaña = new ListadoCampaña(api);
 				listaCampaña.setVisible(true);
-				this.dispose();
 			});
 			campañaMenu.add(listadoCampañasMenuItem);
 			
 			
-			JMenu canjeMenu = new JMenu("Canjes");
+			JMenu canjeMenu = new JMenu(labels.getString("menu.canje"));
 			menuBar.add(canjeMenu);
 			
-			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
+			JMenuItem elegirCanjeMenuItem = new JMenuItem(labels.getString("menu.canjear"));
 			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
 				Integer idCampaña;
 				try {
@@ -309,24 +298,36 @@ public class VentanaPrincipal extends JFrame {
 					SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idCampaña);
 					selBeneficio.setVisible(true);
 				} catch (AppException | DateException | NotNullException | DataEmptyException | InstanceException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			});
 			canjeMenu.add(elegirCanjeMenuItem);
 			
-			JMenuItem listadoCanjesMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoCanjesMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoCanjesMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoCanjes listadoCanjes;
+				try {
+					listadoCanjes = new ListadoCanjes(api);
+					listadoCanjes.setVisible(true);
+				} catch (EmptyListException | AppException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				}
 				
 			});
 			canjeMenu.add(listadoCanjesMenuItem);
 		}
-
+		
+		
+		
+		
+		
+		//pregunta si el usuario es de rol RECICLADOR
 		if(api.esUsuarioReciclador()) {
 			
-			JMenu viviendasMenu = new JMenu("Mis Viviendas");
+			JMenu viviendasMenu = new JMenu(labels.getString("menu.mis.viviendas"));
 			menuBar.add(viviendasMenu);
 			
-			JMenuItem altaModificacionMenuItem = new JMenuItem("Alta/Modificacion");
+			JMenuItem altaModificacionMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			altaModificacionMenuItem.addActionListener((ActionEvent e) -> {
 					AltaVivienda altaViv = new AltaVivienda(api);
 					altaViv.setLocationRelativeTo(null);
@@ -334,7 +335,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			viviendasMenu.add(altaModificacionMenuItem);
 			
-			JMenuItem listadoMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoMenuItem.addActionListener((ActionEvent e) -> {
 					ListadoVivienda listadoViv;
 					try {
@@ -342,16 +343,16 @@ public class VentanaPrincipal extends JFrame {
 						listadoViv.setLocationRelativeTo(null);
 						listadoViv.setVisible(true);
 					} catch (EmptyListException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("menu.listado"), JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 			});
 			viviendasMenu.add(listadoMenuItem);
 			
-			JMenu pedidosMenu = new JMenu("Mis Pedidos");
+			JMenu pedidosMenu = new JMenu(labels.getString("menu.mis.pedidos"));
 			menuBar.add(pedidosMenu);
 			
-			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem("Alta/Modificacion");
+			JMenuItem altaModificacionPedidosMenuItem = new JMenuItem(labels.getString("menu.alta.modificacion"));
 			altaModificacionPedidosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoVivienda altaPedido;
 				try {
@@ -359,13 +360,13 @@ public class VentanaPrincipal extends JFrame {
 					altaPedido.setLocationRelativeTo(null);
 					altaPedido.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			});
 			pedidosMenu.add(altaModificacionPedidosMenuItem);
 			
-			JMenuItem listadoPedidosMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoPedidosMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoPedidosMenuItem.addActionListener((ActionEvent e) -> {
 				ListadoPedidoRetiro pedidos;
 				try {
@@ -373,43 +374,64 @@ public class VentanaPrincipal extends JFrame {
 					pedidos.setLocationRelativeTo(null);
 					pedidos.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			});
 			pedidosMenu.add(listadoPedidosMenuItem);
 		
-			JMenu canjeMenu = new JMenu("Mis Canjes");
+			JMenu canjeMenu = new JMenu(labels.getString("menu.mis.canjes"));
 			menuBar.add(canjeMenu);
 			
-			JMenuItem elegirCanjeMenuItem = new JMenuItem("Elegir");
+			JMenuItem elegirCanjeMenuItem = new JMenuItem(labels.getString("menu.canjear"));
 			elegirCanjeMenuItem.addActionListener((ActionEvent e) -> {
+				Integer idCampaña;
 				try {
-					ListadoBeneficio listado = new ListadoBeneficio(api);
-					listado.setVisible(true);
-				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+					idCampaña = api.obtenerCampañaVigente().obtenerId();
+					SeleccionBeneficios selBeneficio = new SeleccionBeneficios(api, idCampaña);
+					selBeneficio.setVisible(true);
+				} catch (AppException | DateException | NotNullException | DataEmptyException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			});
 			canjeMenu.add(elegirCanjeMenuItem);
 			
-			JMenuItem listadoCanjesMenuItem = new JMenuItem("Listado");
+			JMenuItem listadoCanjesMenuItem = new JMenuItem(labels.getString("menu.listado"));
 			listadoCanjesMenuItem.addActionListener((ActionEvent e) -> {
+				ListadoCanjes listadoCanjes;
+				try {
+					listadoCanjes = new ListadoCanjes(api);
+					listadoCanjes.setVisible(true);
+				} catch (EmptyListException | AppException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				}
+				
 			});
 			canjeMenu.add(listadoCanjesMenuItem);
+			
+			
+			JMenu puntosMenu = new JMenu(labels.getString("menu.mis.puntos"));
+			menuBar.add(puntosMenu);
+			
+			JMenuItem verPuntoseMenuItem = new JMenuItem(labels.getString("menu.ver.puntos"));
+			verPuntoseMenuItem.addActionListener((ActionEvent e) -> {
+				CiudadanoDTO ciudadano= api.obtenerCiudadanoSesion();
+				JOptionPane.showMessageDialog(null, "Puntos acumulados: "+ciudadano.obtenerPuntosObtenidos(), labels.getString("mis.puntos"), JOptionPane.INFORMATION_MESSAGE);
+			});
+			puntosMenu.add(verPuntoseMenuItem);
 		}
 		
 		
 		
 		
-		JMenu configuracionMenu = new JMenu("Configuraci\u00F3n");
+		JMenu configuracionMenu = new JMenu(labels.getString("menu.config"));
 		menuBar.add(configuracionMenu);
-		JMenuItem salirMenuItem = new JMenuItem("Salir");
+		JMenuItem salirMenuItem = new JMenuItem(labels.getString("menu.salir"));
 		salirMenuItem.addActionListener((ActionEvent e) -> {
 			api.cerrarSesion();
 			dispose();
-			Loguin loguin = new Loguin(api, labels);
+			Loguin loguin = new Loguin(api);
 			loguin.setVisible(true);
 			
 		});

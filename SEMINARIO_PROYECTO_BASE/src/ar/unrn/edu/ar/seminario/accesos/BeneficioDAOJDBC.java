@@ -278,6 +278,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			while(rs.next()) {
 				
 				beneficio = new Beneficio(rs.getString("b.nombre_beneficio"), rs.getInt("b.puntos"));
+				beneficio.editarId(rs.getInt("b.id_beneficio"));
 			}
 		
 

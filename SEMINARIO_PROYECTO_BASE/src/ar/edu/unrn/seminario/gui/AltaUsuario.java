@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,25 +33,25 @@ public class AltaUsuario extends JFrame {
 	private JComboBox rolComboBox;
 	private JPasswordField contrasenaField;
 	private List<RolDTO> roles = new ArrayList<>();
-	
+	private ResourceBundle labels;
 
 	/**
 	 * Create the frame.
 	 */
 	public AltaUsuario(IApi api) {
-
+		labels=api.obtenerIdioma();
 		// Obtengo los roles
 		try {
 			this.roles = api.obtenerRoles();
-		} catch (AppException | SintaxisSQLException | InstanceException e2) {
-			JOptionPane.showMessageDialog(null,e2.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+		} catch (AppException  | InstanceException e2) {
+			JOptionPane.showMessageDialog(null,e2.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 			
 		}
 			
 		
 
 
-		setTitle("ALTA USUARIO");
+		setTitle(labels.getString("alta.usuario"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
@@ -59,11 +60,11 @@ public class AltaUsuario extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 
-		JLabel usuarioLabel = new JLabel("Usuario:");
+		JLabel usuarioLabel = new JLabel(labels.getString("loguin.usuario"));
 		usuarioLabel.setBounds(43, 16, 76, 16);
 		contentPane.add(usuarioLabel);
 
-		JLabel contrasenaLabel = new JLabel("Contrase\u00F1a:");
+		JLabel contrasenaLabel = new JLabel(labels.getString("loguin.contrasena"));
 		contrasenaLabel.setBounds(43, 56, 93, 16);
 		contentPane.add(contrasenaLabel);
 
@@ -72,7 +73,7 @@ public class AltaUsuario extends JFrame {
 		contentPane.add(usuarioTextField);
 		usuarioTextField.setColumns(10);
 
-		JButton aceptarButton = new JButton("Aceptar");
+		JButton aceptarButton = new JButton(labels.getString("continuar"));
 		aceptarButton.addActionListener((ActionEvent e) -> {
 
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
@@ -81,11 +82,11 @@ public class AltaUsuario extends JFrame {
 						try {
 							api.registrarUsuario(usuarioTextField.getText(), contrasenaField.getText(),
 									nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
-							JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, labels.getString("registro.usuario.exito"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 							dispose();
-						} catch (AppException | DataEmptyException | NotNullException | SintaxisSQLException
+						} catch (AppException | DataEmptyException | NotNullException
 								| InstanceException e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage(), "Info", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 						}
 						
 						
@@ -94,22 +95,22 @@ public class AltaUsuario extends JFrame {
 		aceptarButton.setBounds(218, 215, 97, 25);
 		contentPane.add(aceptarButton);
 
-		JButton cancelarButton = new JButton("Cancelar");
+		JButton cancelarButton = new JButton(labels.getString("cancelar"));
 		cancelarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
 
-		JLabel nombreLabel = new JLabel("Nombre:");
+		JLabel nombreLabel = new JLabel(labels.getString("nombre"));
 		nombreLabel.setBounds(43, 88, 56, 16);
 		contentPane.add(nombreLabel);
 
-		JLabel emailLabel = new JLabel("Email:");
+		JLabel emailLabel = new JLabel(labels.getString("email"));
 		emailLabel.setBounds(43, 125, 56, 16);
 		contentPane.add(emailLabel);
 
-		JLabel rolLabel = new JLabel("Rol:");
+		JLabel rolLabel = new JLabel(labels.getString("rol"));
 		rolLabel.setBounds(43, 154, 56, 16);
 		contentPane.add(rolLabel);
 

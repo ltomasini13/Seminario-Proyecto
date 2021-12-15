@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -46,16 +47,16 @@ public class ListadoPedidoRetiro extends JFrame{
 	private JPopupMenu popupMenu;
 	private JButton botonCerrar, botonGenerar;
 	private Integer idPedido;
-	private String[] titulos= {"ID", "FECHA EMISIÓN", "FECHA CUMPLIMIENTO", "CARGA PESADA", "OBSERVACION", "DIR. VIVIENDA"};
-	
-	
+	private ResourceBundle labels;
 	
 	/*LISTADO DE TODOS LOS PEDIDOS*/
 	public ListadoPedidoRetiro(IApi api) throws EmptyListException {
+		labels=api.obtenerIdioma();
+		String[] titulos= {"ID", labels.getString("fecha.emision"), labels.getString("fecha.cumplimiento"), labels.getString("carga.pesada"), labels.getString("observacion"), labels.getString("dir.vivienda")};
 		this.api=api;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		setTitle("LISTADO DE PEDIDOS");
+		setTitle(labels.getString("listado.pedidos"));
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -115,7 +116,7 @@ public class ListadoPedidoRetiro extends JFrame{
 		scrollPane.setViewportView(table);
 		
 		
-		botonCerrar = new JButton("CERRAR");
+		botonCerrar = new JButton(labels.getString("cerrar"));
 	
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			popupMenu.setVisible(false);
@@ -133,10 +134,11 @@ public class ListadoPedidoRetiro extends JFrame{
 	
 	/*LISTADO DEL PEDIDO PARA LA ORDEN CUYO ID SE PASA COMO PARAMETRO*/
 	public ListadoPedidoRetiro(IApi api, Integer idOrden) throws EmptyListException {
+		labels=api.obtenerIdioma();
 		this.api=api;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		setTitle("INFORMACIÓN DEL PEDIDO");
+		setTitle(labels.getString("ventana.informacion.pedido"));
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -151,7 +153,7 @@ public class ListadoPedidoRetiro extends JFrame{
 		pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
-		
+		String[] titulos= {"ID", labels.getString("fecha.emision"), labels.getString("fecha.cumplimiento"), labels.getString("carga.pesada"), labels.getString("observacion"), labels.getString("dir.vivienda")};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 		/*Pregunta si el usuario es un Administrador*/
 		if(api.esUsuarioAdmin()) {
@@ -196,7 +198,7 @@ public class ListadoPedidoRetiro extends JFrame{
 		scrollPane.setViewportView(table);
 		
 		
-		botonCerrar = new JButton("CERRAR");
+		botonCerrar = new JButton(labels.getString("cerrar"));
 	
 		botonCerrar.addActionListener((ActionEvent e)-> {
 			dispose();
@@ -213,11 +215,11 @@ public class ListadoPedidoRetiro extends JFrame{
 	private void cargarMenuPopup() {
 		popupMenu= new JPopupMenu();
 		
-		JMenuItem menuItemInfoVivienda = new JMenuItem("Más info. de la vivienda");
+		JMenuItem menuItemInfoVivienda = new JMenuItem(labels.getString("mas.info.vivienda"));
 		menuItemInfoVivienda.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
@@ -226,7 +228,7 @@ public class ListadoPedidoRetiro extends JFrame{
 					ListadoVivienda listadoVivienda = new ListadoVivienda(api, idPedido);
 					listadoVivienda.setVisible(true);
 				} catch (EmptyListException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 				
@@ -235,11 +237,11 @@ public class ListadoPedidoRetiro extends JFrame{
 		});
 		popupMenu.add(menuItemInfoVivienda);
 		
-		JMenuItem menuItemResiduosARetirar = new JMenuItem("Ver residuos a retirar");
+		JMenuItem menuItemResiduosARetirar = new JMenuItem(labels.getString("ver.residuos"));
 		menuItemResiduosARetirar.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
@@ -251,11 +253,11 @@ public class ListadoPedidoRetiro extends JFrame{
 		});
 		popupMenu.add(menuItemResiduosARetirar);
 		
-		JMenuItem menuItemResiduosRestantes = new JMenuItem("Ver residuos restantes");
+		JMenuItem menuItemResiduosRestantes = new JMenuItem(labels.getString("ver.residuos.restantes"));
 		menuItemResiduosRestantes.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
@@ -288,7 +290,7 @@ public class ListadoPedidoRetiro extends JFrame{
 						p.obtenerCalle()+" "+p.obtenerNumero()});
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -301,7 +303,7 @@ public class ListadoPedidoRetiro extends JFrame{
 			modelo.addRow(new Object[] { p.obtenerId(), p.obtenerFechaEmision(), p.obtenerFechaCumplimiento(), p.isCargaPesada(), p.obtenerObservacion(),
 					p.obtenerCalle()+" "+p.obtenerNumero()});
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -328,7 +330,7 @@ public class ListadoPedidoRetiro extends JFrame{
 						p.obtenerCalle()+" "+p.obtenerNumero()});
 			}
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -352,21 +354,21 @@ public class ListadoPedidoRetiro extends JFrame{
 					p.obtenerCalle()+" "+p.obtenerNumero()});
 		
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
 	
 	private void cargarBotonesAdmin() {
-		botonGenerar= new JButton("GENERAR ORDEN");
+		botonGenerar= new JButton(labels.getString("generar.orden"));
 		botonGenerar.addActionListener((ActionEvent e) -> {
 			this.idPedido=(Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 			try {
 				api.generarOrden(idPedido);
-				JOptionPane.showMessageDialog(null, "La orden se creo con éxito!", "", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("orden.exito"), "", JOptionPane.INFORMATION_MESSAGE);
 				
-			} catch (SintaxisSQLException | CreationValidationException | AppException | InstanceException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (  CreationValidationException | AppException | InstanceException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 			}
 			
 		});

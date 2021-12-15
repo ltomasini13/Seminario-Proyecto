@@ -42,10 +42,10 @@ public class RegistroUsuario extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroUsuario(IApi api, ResourceBundle labels) {
+	public RegistroUsuario(IApi api) {
 
 		
-		setTitle();
+		setTitle(api.obtenerIdioma().getString("registro.titulo"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setBounds(100, 100, 450, 300);
@@ -58,19 +58,19 @@ public class RegistroUsuario extends JFrame {
 		txtpnLogin.setEditable(false);
 		txtpnLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtpnLogin.setBackground(SystemColor.activeCaption);
-		txtpnLogin.setText("Datos de loguin");
+		txtpnLogin.setText(api.obtenerIdioma().getString("datos.loguin"));
 		txtpnLogin.setBounds(170, 9, 126, 22);
 		panelLogin.add(txtpnLogin);
 		
-		JLabel lblUsuario = new JLabel("Usuario:");
+		JLabel lblUsuario = new JLabel(api.obtenerIdioma().getString("loguin.usuario"));
 		lblUsuario.setBounds(39, 39, 112, 14);
 		panelLogin.add(lblUsuario);
 		
-		JLabel lblContrasea = new JLabel("Contrase\u00F1a:");
+		JLabel lblContrasea = new JLabel(api.obtenerIdioma().getString("loguin.contrasena"));
 		lblContrasea.setBounds(39, 64, 112, 14);
 		panelLogin.add(lblContrasea);
 		
-		JLabel lblConfirmar = new JLabel("Confirmar contrase\u00F1a: ");
+		JLabel lblConfirmar = new JLabel(api.obtenerIdioma().getString("registro.confirmacion.contrasena"));
 		lblConfirmar.setBounds(39, 89, 141, 14);
 		panelLogin.add(lblConfirmar);
 		
@@ -92,74 +92,65 @@ public class RegistroUsuario extends JFrame {
 		txtpnDatosPersonales.setEditable(false);
 		txtpnDatosPersonales.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtpnDatosPersonales.setBackground(SystemColor.activeCaption);
-		txtpnDatosPersonales.setText("Datos personales");
-		txtpnDatosPersonales.setBounds(170, 150, 126, 22);
+		txtpnDatosPersonales.setText(api.obtenerIdioma().getString("registro.datos.personales"));
+		txtpnDatosPersonales.setBounds(170, 150, 165, 22);
 		panelLogin.add(txtpnDatosPersonales);
 		
-		JLabel nombreLabel = new JLabel("Nombre:");
+		JLabel nombreLabel = new JLabel(api.obtenerIdioma().getString("nombre"));
 		nombreLabel.setBounds(40, 177, 74, 14);
 		panelLogin.add(nombreLabel);
 		
-		JLabel apellidoLabel = new JLabel("Apellido:");
+		JLabel apellidoLabel = new JLabel(api.obtenerIdioma().getString("apellido"));
 		apellidoLabel.setBounds(39, 202, 98, 14);
 		panelLogin.add(apellidoLabel);
 		
-		JLabel dniLabel = new JLabel("DNI:");
+		JLabel dniLabel = new JLabel(api.obtenerIdioma().getString("dni"));
 		dniLabel.setBounds(39, 233, 98, 14);
 		panelLogin.add(dniLabel);
 		
 		nombreTextField = new JTextField();
 		nombreTextField.setColumns(10);
-		nombreTextField.setBounds(170, 174, 126, 20);
+		nombreTextField.setBounds(170, 174, 165, 20);
 		panelLogin.add(nombreTextField);
 		
 		apellidoTextField = new JTextField();
 		apellidoTextField.setColumns(10);
-		apellidoTextField.setBounds(170, 199, 126, 20);
+		apellidoTextField.setBounds(170, 199, 165, 20);
 		panelLogin.add(apellidoTextField);
 		
 		dniTextField = new JTextField();
 		dniTextField.setColumns(10);
-		dniTextField.setBounds(170, 230, 126, 20);
+		dniTextField.setBounds(170, 230, 165, 20);
 		panelLogin.add(dniTextField);
 		
-		JButton aceptarButton = new JButton("Aceptar");
+		JButton aceptarButton = new JButton(api.obtenerIdioma().getString("continuar"));
 		aceptarButton.addActionListener((ActionEvent e) -> {
 			
-			try {
+			
 				
-				api.registrarCiudadano(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()),
-						emailTextField.getText(), nombreTextField.getText(), 2, apellidoTextField.getText(), dniTextField.getText());  //ver lo del codigo rol
-				JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+				try {
+					api.registrarCiudadano(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()),
+							emailTextField.getText(), nombreTextField.getText(), 2, apellidoTextField.getText(), dniTextField.getText());
+					JOptionPane.showMessageDialog(null, api.obtenerIdioma().getString("registro.usuario.exito"),api.obtenerIdioma().getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+					
+				} catch (AppException | DataEmptyException | NotNullException | NumbersException
+						| AuthenticationException | InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),api.obtenerIdioma().getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+				} 
 				
-			} catch (DataEmptyException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				e1.printStackTrace();
-			} catch (NotNullException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (SintaxisSQLException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (NumbersException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (AuthenticationException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (InstanceException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			}
+		
 		});
-		aceptarButton.setBounds(313, 52, 92, 30);
+		aceptarButton.setBounds(313, 52, 111, 30);
 		panelLogin.add(aceptarButton);
 		
-		JButton cancelarButton = new JButton("Cancelar");
+		JButton cancelarButton = new JButton(api.obtenerIdioma().getString("cancelar"));
 		cancelarButton.addActionListener((ActionEvent e) -> {
 			dispose();
 		});
-		cancelarButton.setBounds(311, 103, 94, 30);
+		cancelarButton.setBounds(311, 103, 113, 30);
 		panelLogin.add(cancelarButton);
 		
-		JLabel emailLabel = new JLabel("Email:");
+		JLabel emailLabel = new JLabel(api.obtenerIdioma().getString("email"));
 		emailLabel.setBounds(39, 119, 98, 14);
 		panelLogin.add(emailLabel);
 		

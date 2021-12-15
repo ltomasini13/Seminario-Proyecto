@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,9 +31,11 @@ public class SeleccionRecolector extends JFrame {
 	private DefaultTableModel modelo;
 	private IApi api;
 	private Integer idOrden;
+	private ResourceBundle labels;
 	
 	public SeleccionRecolector(IApi api, Integer idOrden) throws SintaxisSQLException {
-		setTitle("LISTADO DE RECOLECTORES");
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("listado.recolectores"));
 		this.api = api;
 		this.idOrden=idOrden;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,7 +49,7 @@ public class SeleccionRecolector extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
-		String[] titulos = { "ID" ,"NOMBRE", "APELLIDO", "DNI", "EMAIL" };
+		String[] titulos = { "ID" ,labels.getString("titulo.nombre"), labels.getString("titulo.apellido"), labels.getString("titulo.dni"), labels.getString("titulo.email") };
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -74,29 +77,28 @@ public class SeleccionRecolector extends JFrame {
 			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
 			scrollPane.setViewportView(table);
 		} catch (AppException | InstanceException e2) {
-			JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e2.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 
-		asignar = new JButton("ELEGIR");
+		asignar = new JButton(labels.getString("elegir"));
 		asignar.addActionListener((ActionEvent e) -> {
 			Integer idRecolector = (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 			try {
 				api.asignarRecolector(idOrden, idRecolector);
-				JOptionPane.showMessageDialog(null, "Se asigno el recolecor correctamente", "INFO", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("asignacion.recolector"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				
 				ListadoOrdenDeRetiro listadoOrdenes = new ListadoOrdenDeRetiro(api);
 				listadoOrdenes.setVisible(true);
 				dispose();
 			} catch (AppException | InstanceException  e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null,e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
 		});
 
-		JButton cerrarButton = new JButton("Cerrar");
+		JButton cerrarButton = new JButton(labels.getString("cerrar"));
 		cerrarButton.addActionListener((ActionEvent e) -> {
 				dispose();
 		});

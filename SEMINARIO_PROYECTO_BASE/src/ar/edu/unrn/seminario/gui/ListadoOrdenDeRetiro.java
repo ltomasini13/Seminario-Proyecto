@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -49,19 +50,16 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	private JButton botonCancelarOrden;
 	private JScrollPane scrollPane;
 	private JPopupMenu popupMenu;
-<<<<<<< HEAD
 	private ResourceBundle labels;
 	private JPanel panel;
 	private JLabel lblFiltros;
 	private JCheckBox checkboxOrdenConcretada;
 	private JButton botonAplicar;
 	private JCheckBox checkboxOrdenPendiente;
-=======
-	
->>>>>>> parent of 4977a25 (INTERNACIONALIZACION)
 	
 	public ListadoOrdenDeRetiro(IApi api)  {
-		setTitle("LISTADO DE ORDENES");
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("listado.ordenes"));
 		this.api = api;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -91,7 +89,8 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	
 	
 	public ListadoOrdenDeRetiro(IApi api, Integer idVisita) throws SintaxisSQLException {
-		setTitle("INFORMACIÓN DE LA ORDEN DE RETIRO");
+		labels=api.obtenerIdioma();
+		setTitle(labels.getString("info.orden"));
 		this.api = api;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -119,7 +118,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	
 	private void cargarBotones() {
 
-		botonAsignar = new JButton("ASIGNAR RECOLECTOR");
+		botonAsignar = new JButton(labels.getString("asignar.recolector"));
 		botonAsignar.addActionListener((ActionEvent e) -> {
 			
 			try {
@@ -131,16 +130,16 @@ public class ListadoOrdenDeRetiro extends JFrame {
 					seleccionRecolector.setVisible(true);
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			} catch (SintaxisSQLException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
 		});
 		
-		botonRealizarVisita = new JButton("REALIZAR VISITA");
+		botonRealizarVisita = new JButton(labels.getString("realizar.visita"));
 		botonRealizarVisita.addActionListener((ActionEvent e) -> {
 				popupMenu.setVisible(false);
 				dispose();
@@ -150,7 +149,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 			
 		});
 
-		JButton botonCerrarButton = new JButton("CERRAR");
+		JButton botonCerrarButton = new JButton(labels.getString("cerrar"));
 		botonCerrarButton.addActionListener((ActionEvent e) -> {
 				popupMenu.setVisible(false);
 				dispose();
@@ -160,20 +159,20 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
 		
-		botonCancelarOrden = new JButton("CANCELAR ORDEN");
+		botonCancelarOrden = new JButton(labels.getString("cancelar.orden"));
 		botonCancelarOrden.addActionListener((ActionEvent e) -> {
-			int confirmacion = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la orden?");
+			int confirmacion = JOptionPane.showConfirmDialog(null, labels.getString("confirmacion.orden.cancelar"));
 			
 			if(confirmacion==0) {
 				Integer idOrden= (Integer)modelo.getValueAt(table.getSelectedRow(), 0);
 				try {
 					api.cancelarOrden(idOrden);				
-					JOptionPane.showMessageDialog(null, "La orden ha sido cancelada", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, labels.getString("orden.cancelada.exito"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 					
 					cargarTabla();
 					
 				} catch (StateException | AppException | InstanceException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "INFORMACIÓN", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.WARNING_MESSAGE);
 				}
 			}
 			
@@ -199,12 +198,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 		cargarTitulos();
 		
 		table = new JTable();
-<<<<<<< HEAD
 		 // o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector()
-=======
-		String[] titulos = { "ID", "FECHA ORDEN", "ESTADO", "FECHA DEL PEDIDO", "RECOLECTOR"};  //falta agregar para que pueda ver el pedido a que esta asociada
-
->>>>>>> parent of 4977a25 (INTERNACIONALIZACION)
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -321,11 +315,11 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	
 	private void cargarMenuPopup() {
 		popupMenu= new JPopupMenu();
-		JMenuItem menuItemResiduosARetirar = new JMenuItem("Más info. del pedido");
+		JMenuItem menuItemResiduosARetirar = new JMenuItem(labels.getString("info.pedido"));
 		menuItemResiduosARetirar.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
@@ -334,18 +328,18 @@ public class ListadoOrdenDeRetiro extends JFrame {
 					ListadoPedidoRetiro listadoPedidoRetiro = new ListadoPedidoRetiro(api, idOrden);
 					listadoPedidoRetiro.setVisible(true);
 				} catch (EmptyListException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
 		popupMenu.add(menuItemResiduosARetirar);
 		
 		
-		JMenuItem menuItemVisitas = new JMenuItem("Ver las visitas");
+		JMenuItem menuItemVisitas = new JMenuItem(labels.getString("ver.visitas"));
 		menuItemVisitas.addActionListener((ActionEvent arg0) ->{
 			
 			if(table.getSelectedRow()==-1) {
-				JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("ninguna.fila"),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
 				popupMenu.setVisible(false);
@@ -354,7 +348,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 					ListadoVisitas listadoVisitas = new ListadoVisitas(api, idOrden);
 					listadoVisitas.setVisible(true);
 				} catch (EmptyListException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, e.getMessage(),  labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -378,7 +372,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 			}
 			visibilizarTabla();
 		} catch (AppException | InstanceException  e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(),  labels.getString("error"), JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -399,7 +393,7 @@ public class ListadoOrdenDeRetiro extends JFrame {
 			visibilizarTabla();
 			
 		} catch (AppException | InstanceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("error"), JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		

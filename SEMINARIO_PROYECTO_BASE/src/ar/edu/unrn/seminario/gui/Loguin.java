@@ -32,13 +32,13 @@ public class Loguin extends JFrame {
 	private JPanel contentPane;
 	private JTextField usuarioTextField;
 	private JPasswordField contrasenaPasswordField;
-
+	private ResourceBundle labels;
 
 	/**
 	 * Create the frame.
 	 */
-	public Loguin(IApi api, ResourceBundle labels) {
-
+	public Loguin(IApi api) {
+		labels=api.obtenerIdioma();
 		setTitle(labels.getString("loguin"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -66,32 +66,26 @@ public class Loguin extends JFrame {
 		
 		JButton botonIniciarSesion = new JButton(labels.getString("loguin.iniciar.sesion"));
 		botonIniciarSesion.addActionListener((ActionEvent e) -> {
-			try {
-				api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
-				VentanaPrincipal vp = new VentanaPrincipal(api, labels);
-				vp.setVisible(true);
-				dispose();
+			
+				try {
+					api.loguearUsuario(usuarioTextField.getText(), new String(contrasenaPasswordField.getPassword()));
+					VentanaPrincipal vp = new VentanaPrincipal(api);
+					vp.setVisible(true);
+					dispose();
+				} catch (AppException | AuthenticationException | NotNullException | DataEmptyException
+						| InstanceException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+				}
 				
-			} catch (SintaxisSQLException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (AuthenticationException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (NotNullException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (DataEmptyException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (InstanceException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			}
+			
+			
 		});
 		botonIniciarSesion.setBounds(65, 184, 161, 23);
 		contentPane.add(botonIniciarSesion);
 		
 		JButton registrarseBoton = new JButton(labels.getString("loguin.registrarse"));
 		registrarseBoton.addActionListener((ActionEvent e) -> {
-			RegistroUsuario registro = new RegistroUsuario(api, labels);
+			RegistroUsuario registro = new RegistroUsuario(api);
 			registro.setVisible(true);
 			
 		});
