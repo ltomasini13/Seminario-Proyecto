@@ -540,4 +540,16 @@ public class MemoryApi implements IApi {
 		return null;
 	}
 
+	@Override
+	public boolean sesionIniciada() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void eliminarBeneficio(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

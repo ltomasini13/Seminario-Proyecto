@@ -356,4 +356,6 @@ public class SeleccionResiduosRetirados extends JFrame{
 			}
 		});
 	}
+	
+	
 	}

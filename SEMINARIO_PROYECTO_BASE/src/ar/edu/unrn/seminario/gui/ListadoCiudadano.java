@@ -6,9 +6,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -23,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.CiudadanoDTO;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoRetiroDTO;
 import ar.edu.unrn.seminario.exception.AppException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
@@ -30,6 +33,12 @@ import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.NotNullException;
 import ar.edu.unrn.seminario.exception.NumbersException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
+import javax.swing.JCheckBox;
+import java.awt.event.ActionListener;
+import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 
 public class ListadoCiudadano extends JFrame {
 
@@ -42,9 +51,15 @@ public class ListadoCiudadano extends JFrame {
 	private JButton botonCerrar, botonElegir;
 	private JPopupMenu popupMenu;
 	private ResourceBundle labels;
+	private JButton btnAplicar;
+	private JPanel panel;
+	private JLabel lblFiltros;
+	private JCheckBox chckbxNewCheckBox;
+	private JButton botonAplicar;
 	
 	/**
 	 * Create the frame.
+	 * @wbp.parser.constructor
 	 */
 	public ListadoCiudadano(IApi api) {
 		labels=api.obtenerIdioma();
@@ -103,7 +118,6 @@ public class ListadoCiudadano extends JFrame {
 		try {
 			ciudadanosDTO = api.obtenerCiudadanos();
 			for (CiudadanoDTO c : ciudadanosDTO) {
-				
 				modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
 			}
 		} catch (AppException | InstanceException e) {
@@ -154,8 +168,56 @@ public class ListadoCiudadano extends JFrame {
 			}
 		});
 		scrollPane.setViewportView(table);
+		
+		panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		contentPane.add(panel, BorderLayout.WEST);
+		
+		lblFiltros = new JLabel("FILTROS");
+		lblFiltros.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFiltros.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		lblFiltros.setBackground(new Color(240, 240, 240));
+		panel.add(lblFiltros);
+		
+		chckbxNewCheckBox = new JCheckBox("Puntos>0");
+		panel.add(chckbxNewCheckBox);
+		
+		botonAplicar = new JButton(labels.getString("aplicar"));
+		botonAplicar.addActionListener((ActionEvent e) ->{
+				List<CiudadanoDTO> ciudadanosDTO=new ArrayList<>();
+				try {
+					if(chckbxNewCheckBox.isSelected()) {
+					
+							ciudadanosDTO= Filtros.filter(api.obtenerCiudadanos(), (CiudadanoDTO ciu)->ciu.obtenerPuntosObtenidos()>0);
+							
+					}
+					else {
+						ciudadanosDTO=api.obtenerCiudadanos();
+					}
+				} catch (AppException | InstanceException e2) {
+						JOptionPane.showMessageDialog(null, e2.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+				}	
+					cargarTitulos();
+					
+					for (CiudadanoDTO c : ciudadanosDTO) {
+						modelo.addRow(new Object[] { c.obtenerId(), c.obtenerNombre(), c.obtenerApellido(), c.obtenerDni(), c.obtenerNombreDeUsuario(), c.obtenerPuntosObtenidos()});
+					}
+					
+				
+				
+				table.setModel(modelo);
+				table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
+				table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
+				table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+		});
+		panel.add(botonAplicar);
 	}
 	
+	private void cargarTitulos() {
+		String[] titulos= {"ID", labels.getString("titulo.nombre"), labels.getString("titulo.apellido"), labels.getString("titulo.dni"), labels.getString("titulo.nombre.usuario"), labels.getString("titulo.puntos.obtenidos")};
+		modelo = new DefaultTableModel(new Object[][] {}, titulos);
+	}
 	private void  cargarPanelDeOperaciones() {
 		pnlBotonesOperaciones = new JPanel();
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -167,6 +229,8 @@ public class ListadoCiudadano extends JFrame {
 			popupMenu.setVisible(false);
 			dispose();
 		});
+		
+	
 		pnlBotonesOperaciones.add(botonCerrar);
 	}
 	
@@ -240,4 +304,6 @@ public class ListadoCiudadano extends JFrame {
 	private void habilitarBotones(boolean b) {
 		
 	}
+	
+
 }

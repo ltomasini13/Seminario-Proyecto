@@ -146,9 +146,36 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	@Override
-	public void eliminar(Integer id) {
-		// TODO Auto-generated method stub
+	public void eliminar(Integer id) throws AppException, InstanceException {
 		
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("DELETE FROM beneficios" + 
+							"WHERE id_beneficio=?");
+			statement.setInt(1, id);
+		
+			int cantidad = statement.executeUpdate();
+			if (cantidad==1) 
+				System.out.println("El beneficio se elimino correctamente.");
+			
+		} catch (SQLException e) {
+			
+			System.out.println("Error al procesar consulta");
+			throw new AppException("No se pudo buscar el beneficio por un error en la Base de Datos");
+		}
+		
+		catch (Exception e) {
+			System.out.print("Error en la base de datos");
+			throw new InstanceException();
+			
+		}
+		finally {
+			ConnectionManager.disconnect();
+			
+		}
+
 	}
 
 	@Override

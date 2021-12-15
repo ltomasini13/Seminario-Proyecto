@@ -58,6 +58,7 @@ public interface IApi {
 	
 	boolean esUsuarioAdmin();
 	boolean esUsuarioReciclador();
+	boolean sesionIniciada();
 	UsuarioDTO obtenerUsuario(String username) throws NotNullException, DataEmptyException, AppException, InstanceException;
 	void eliminarUsuario(String username);
 
@@ -137,6 +138,6 @@ public interface IApi {
 	CampañaDTO obtenerCampañaVigente() throws AppException, DateException, NotNullException, DataEmptyException, InstanceException;
 	void agregarBeneficio(Integer idCampaña, Integer idBeneficio) throws AppException, CreationValidationException, DataEmptyException, NotNullException, NumbersException, InstanceException;
 	
-
+	void eliminarBeneficio(Integer id) throws AppException, InstanceException;
 
 }

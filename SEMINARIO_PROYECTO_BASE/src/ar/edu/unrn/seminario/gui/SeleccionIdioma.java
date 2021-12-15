@@ -57,11 +57,20 @@ public class SeleccionIdioma extends JFrame {
 		
 		JButton botonIngles = new JButton(labels.getString("ingles"));
 		botonIngles.addActionListener((ActionEvent arg0) ->{
-				labels= ResourceBundle.getBundle("labels", new Locale("en"));
-				api.asignarIdioma(labels);
+			labels= ResourceBundle.getBundle("labels", new Locale("en"));
+			api.asignarIdioma(labels);
+			
+			if(api.sesionIniciada()) {
+				VentanaPrincipal ventanaPrincipal=new VentanaPrincipal(api);
+				ventanaPrincipal.setVisible(true);
+				dispose();
+			}
+			else {
 				Loguin loguin= new Loguin(api);
 				loguin.setVisible(true);
 				dispose();
+			}
+				
 		});
 		botonIngles.setBounds(176, 93, 89, 23);
 		contentPane.add(botonIngles);
@@ -70,11 +79,22 @@ public class SeleccionIdioma extends JFrame {
 		botonEspanol.addActionListener((ActionEvent arg0) ->{
 			labels= ResourceBundle.getBundle("labels", new Locale("es"));
 			api.asignarIdioma(labels);
-			Loguin loguin= new Loguin(api);
-			loguin.setVisible(true);
-			dispose();
+			if(api.sesionIniciada()) {
+				VentanaPrincipal ventanaPrincipal=new VentanaPrincipal(api);
+				ventanaPrincipal.setVisible(true);
+				dispose();
+			}
+			else {
+			
+				Loguin loguin= new Loguin(api);
+				loguin.setVisible(true);
+				dispose();
+			}
 		});
 		botonEspanol.setBounds(176, 160, 89, 23);
 		contentPane.add(botonEspanol);
+		
+		
+		
 	}
 }

@@ -21,7 +21,7 @@ public interface BeneficioDao {
 	
 	void actualizar(Beneficio beneficio);
 
-	void eliminar(Integer id);
+	void eliminar(Integer id) throws AppException, InstanceException;
 
 	void eliminar(Beneficio beneficio);
 	

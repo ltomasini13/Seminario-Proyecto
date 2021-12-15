@@ -23,6 +23,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.AppException;
+import ar.edu.unrn.seminario.exception.CreationValidationException;
 import ar.edu.unrn.seminario.exception.DataEmptyException;
 import ar.edu.unrn.seminario.exception.DateException;
 import ar.edu.unrn.seminario.exception.NotNullException;
@@ -68,6 +69,17 @@ public class VentanaPrincipal extends JFrame {
 					listado.setVisible(true);
 			});
 			adminUsuarioMenu.add(listadoUsuarioMenuItem);
+			
+			JMenu adminCiudadanoMenu = new JMenu(labels.getString("ciudadano"));
+			menuBar.add(adminCiudadanoMenu);
+
+			JMenuItem adminListadoCiuMenuItem = new JMenuItem(labels.getString("menu.listado"));
+			adminListadoCiuMenuItem.addActionListener((ActionEvent e) -> {
+					ListadoCiudadano lisCiudadano=new ListadoCiudadano(api);
+					lisCiudadano.setVisible(true);
+				
+			});
+			adminCiudadanoMenu.add(adminListadoCiuMenuItem);
 			
 			JMenu viviendasMenu = new JMenu(labels.getString("menu.vivienda"));
 			menuBar.add(viviendasMenu);
@@ -251,6 +263,7 @@ public class VentanaPrincipal extends JFrame {
 					beneficios.setVisible(true);
 				} catch (AppException | DataEmptyException | NotNullException | NumbersException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("informacion"), JOptionPane.INFORMATION_MESSAGE);
+
 				}
 				
 			});
@@ -422,7 +435,16 @@ public class VentanaPrincipal extends JFrame {
 			loguin.setVisible(true);
 			
 		});
+		
 		configuracionMenu.add(salirMenuItem);
+		JMenuItem cambiarIdiomaMenuItem = new JMenuItem(labels.getString("cambiar.idioma"));
+		cambiarIdiomaMenuItem.addActionListener((ActionEvent e) -> {
+			SeleccionIdioma seleccionIdioma=new SeleccionIdioma(api);
+			seleccionIdioma.setVisible(true);
+			dispose();
+			
+		});
+		configuracionMenu.add(cambiarIdiomaMenuItem);
 	}
 
 }

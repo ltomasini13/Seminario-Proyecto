@@ -1,15 +1,23 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,6 +29,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.CiudadanoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ResiduoARetirarDTO;
@@ -29,6 +38,7 @@ import ar.edu.unrn.seminario.exception.EmptyListException;
 import ar.edu.unrn.seminario.exception.InstanceException;
 import ar.edu.unrn.seminario.exception.SintaxisSQLException;
 import ar.edu.unrn.seminario.exception.StateException;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 
 public class ListadoOrdenDeRetiro extends JFrame {
 
@@ -41,6 +51,11 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	private JScrollPane scrollPane;
 	private JPopupMenu popupMenu;
 	private ResourceBundle labels;
+	private JPanel panel;
+	private JLabel lblFiltros;
+	private JCheckBox checkboxOrdenConcretada;
+	private JButton botonAplicar;
+	private JCheckBox checkboxOrdenPendiente;
 	
 	public ListadoOrdenDeRetiro(IApi api)  {
 		labels=api.obtenerIdioma();
@@ -180,9 +195,10 @@ public class ListadoOrdenDeRetiro extends JFrame {
 	
 	
 	private void crearEstructuraTabla() {
+		cargarTitulos();
+		
 		table = new JTable();
-		String[] titulos = { "ID", labels.getString("fecha.orden"), labels.getString("titulo.estado"), labels.getString("fecha.pedido"), labels.getString("recolector.orden")};  //falta agregar para que pueda ver el pedido a que esta asociada
- // o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector()
+		 // o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector()
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -191,10 +207,12 @@ public class ListadoOrdenDeRetiro extends JFrame {
 
 			}
 		});
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 	}
 	
-	
+	private void cargarTitulos() {
+		String[] titulos = { "ID", labels.getString("fecha.orden"), labels.getString("titulo.estado"), labels.getString("fecha.pedido"), labels.getString("recolector.orden")};modelo = new DefaultTableModel(new Object[][] {}, titulos);
+		modelo = new DefaultTableModel(new Object[][] {}, titulos);
+	}
 	private void visibilizarTabla() {
 		table.setModel(modelo);
 		table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
@@ -222,6 +240,77 @@ public class ListadoOrdenDeRetiro extends JFrame {
 			}
 		});
 		scrollPane.setViewportView(table);
+
+		panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		contentPane.add(panel, BorderLayout.WEST);
+		
+		lblFiltros = new JLabel("FILTROS");
+		lblFiltros.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFiltros.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		lblFiltros.setBackground(new Color(240, 240, 240));
+		panel.add(lblFiltros);
+		
+		checkboxOrdenPendiente= new JCheckBox("Ordenes Pendientes");
+		panel.add(checkboxOrdenPendiente);
+		
+		checkboxOrdenConcretada = new JCheckBox("Ordenes Concretadas");
+		panel.add(checkboxOrdenConcretada);
+		
+		
+		botonAplicar = new JButton(labels.getString("aplicar"));
+		botonAplicar.addActionListener((ActionEvent e) ->{
+				List<OrdenDeRetiroDTO> ordenesDTO=new ArrayList<>();
+				
+				try {	
+					if(checkboxOrdenConcretada.isSelected()&& checkboxOrdenPendiente.isSelected()) {
+							
+								ordenesDTO= Filtros.filter(api.obtenerOrdenes(), (OrdenDeRetiroDTO orden)->orden.obtenerEstado().equals("PENDIENTE")||orden.obtenerEstado().equals("CONCRETADA"));
+								
+						
+					}
+					else {
+						if(checkboxOrdenConcretada.isSelected()) {
+							ordenesDTO= Filtros.filter(api.obtenerOrdenes(), (OrdenDeRetiroDTO orden)->orden.obtenerEstado().equals("CONCRETADA"));
+							
+						}
+						else{
+							if(checkboxOrdenPendiente.isSelected()) {
+								ordenesDTO= Filtros.filter(api.obtenerOrdenes(), (OrdenDeRetiroDTO orden)->orden.obtenerEstado().equals("PENDIENTE"));
+							}
+							else {
+								ordenesDTO=api.obtenerOrdenes();
+							}
+						}
+						
+						
+						
+						
+					}
+			}
+				
+			catch (AppException | InstanceException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("error"), JOptionPane.ERROR_MESSAGE);
+			}
+			
+				cargarTitulos();
+				
+				for (OrdenDeRetiroDTO o : ordenesDTO) {
+					modelo.addRow(new Object[] { o.obtenerId(), o.obtenerFecha(), o.obtenerEstado(), o.obtenerFechaPedido(), o.obtenerNombreApeRecolector() });
+					
+				}
+				
+			
+			
+			table.setModel(modelo);
+			table.getColumnModel().getColumn(0).setMaxWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setMinWidth(0); //para ocultar la columna ID
+			table.getColumnModel().getColumn(0).setPreferredWidth(0);//para ocultar la columna ID
+			
+			
+		});
+		panel.add(botonAplicar);
 	}
 	
 	private void cargarMenuPopup() {

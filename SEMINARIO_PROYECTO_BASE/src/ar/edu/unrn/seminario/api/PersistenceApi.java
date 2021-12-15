@@ -694,8 +694,12 @@ public class PersistenceApi implements IApi {
 		List<CiudadanoDTO> ciudadanosDTO = new ArrayList<CiudadanoDTO>();
 
 		for (Ciudadano ciu : this.ciudadanoDao.listarTodos()) {
-			ciudadanosDTO.add(new CiudadanoDTO(ciu.obtenerId(), ciu.obtenerNombre(), ciu.obtenerApellido(),
-					ciu.obtenerDni(), ciu.obtenerPuntaje()));
+			CiudadanoDTO ciudadanoDTO=new CiudadanoDTO(ciu.obtenerId(), ciu.obtenerNombre(), ciu.obtenerApellido(),
+					ciu.obtenerDni(), ciu.obtenerPuntaje());
+			if(ciu.obtenerUsuario()!=null) {
+				ciudadanoDTO.editarNombreDeUsuario(ciu.obtenerNombreDeUsuario());
+			}
+			ciudadanosDTO.add(ciudadanoDTO);
 		}
 
 		return ciudadanosDTO;
@@ -1180,6 +1184,19 @@ System.out.println();
 	@Override
 	public ResourceBundle obtenerIdioma() {
 		return this.idioma;
+	}
+
+	@Override
+	public boolean sesionIniciada() {
+		if(sesion!=null) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void eliminarBeneficio(Integer id) throws AppException, InstanceException {
+		this.beneficioDao.eliminar(id);
 	}
 
 }

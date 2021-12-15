@@ -19,6 +19,7 @@ public class CiudadanoDTO {
 		this.apellido = apellido;
 		this.dni = dni;
 		this.puntosObtenidos=puntosObtenidos;
+		
 	} 	
 	
 	
